@@ -20,7 +20,7 @@ public class ClienteRegistradoController {
     @Operation(summary = "Crear un nuevo cliente registrado")
     @ApiResponse(responseCode = "200", description = "Cliente registrado creado exitosamente")
     @ApiResponse(responseCode = "400", description = "Error al crear el cliente registrado")
-    @PostMapping("/")
+    @PostMapping("/register")
     public ResponseEntity<String> crearClienteRegistrado(@RequestBody ClienteRegistrado clienteRegistrado) {
         ResponseEntity<String> response;
         if (servicioCliente.insert(clienteRegistrado)) {
@@ -62,15 +62,10 @@ public class ClienteRegistradoController {
     @Operation(summary = "Iniciar sesión con email y contraseña")
     @ApiResponse(responseCode = "200", description = "Login exitoso")
     @ApiResponse(responseCode = "400", description = "Credenciales incorrectas")
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String contrasenia) {
-        ResponseEntity<?> response;
-        Optional<ClienteRegistrado> cliente = servicioCliente.login(email, contrasenia);
-        if (cliente.isPresent()) {
-            response = ResponseEntity.ok(cliente);
-        } else {
-            response = ResponseEntity.badRequest().body("Credenciales incorrectas");
-        }
-        return response;
-    }
+    @GetMapping("/login")
+  	public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
+      	
+  		return ResponseEntity.ok( servicioCliente.usuarioCoincidente(username,password));
+  		
+  	}
 }

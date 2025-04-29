@@ -18,7 +18,7 @@ public class AdministradorController {
     @Autowired
     private IServicioAdministrador servicioAdministrador;
 
-    @PostMapping("/")
+    @PostMapping("/register")
     @Operation(
             summary = "Crear un nuevo administrador",
             description = "Crea un nuevo administrador en la base de datos.",
@@ -79,7 +79,6 @@ public class AdministradorController {
                 : ResponseEntity.badRequest().body("Error al eliminar el administrador");
     }
 
-    @PostMapping("/login")
     @Operation(
             summary = "Login de administrador",
             description = "Verifica las credenciales de un administrador y devuelve su información si son correctas.",
@@ -87,11 +86,11 @@ public class AdministradorController {
                     @ApiResponse(responseCode = "200", description = "Login exitoso"),
                     @ApiResponse(responseCode = "400", description = "Credenciales incorrectas")
             }
-    )
-    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String contrasenia) {
-        Administrador admin = servicioAdministrador.login(email, contrasenia);
-        return admin != null
-                ? ResponseEntity.ok(admin)
-                : ResponseEntity.badRequest().body("Credenciales incorrectas");
-    }
+    )   
+    @GetMapping("/login")
+  	public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
+      	
+  		return ResponseEntity.ok( servicioAdministrador.administradorCoincidente(username,password));
+  		
+  	}
 }

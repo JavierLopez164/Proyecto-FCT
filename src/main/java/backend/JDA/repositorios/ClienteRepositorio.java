@@ -9,9 +9,6 @@ import backend.JDA.modelo.ClienteRegistrado;
 
 @Repository
 public interface ClienteRepositorio extends CrudRepository<ClienteRegistrado, Long> {
-    
-    @Query("SELECT c FROM ClienteRegistrado c WHERE c.email = ?1 AND c.contrasenia = ?2")
-    ClienteRegistrado findByEmailAndContrasenia(String email, String contrasenia);
 
     boolean existsByEmail(String email);
 

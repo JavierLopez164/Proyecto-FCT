@@ -4,11 +4,17 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
+
+
 
 import backend.JDA.modelo.Cliente;
 import backend.JDA.modelo.ClienteRegistrado;
 import backend.JDA.repositorios.ClienteRepositorio;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class ServicioClienteRegistradoImpl implements IServicioClienteRegistrado {
@@ -25,7 +31,7 @@ public class ServicioClienteRegistradoImpl implements IServicioClienteRegistrado
 		boolean exito = false;
 		
 		if(!clienteRepositorio.existsByEmail((cliente.getEmail()))){
-			cliente.setToken(getJWTToken(cliente.getEmail()));
+			cliente.setToken(getJWTToken(cliente.getNombre()));
 			clienteRepositorio.save(cliente);
 			exito = true;
 		}
@@ -48,33 +54,24 @@ public class ServicioClienteRegistradoImpl implements IServicioClienteRegistrado
 	@Override
 	public boolean delete(String email, String password) {
 		boolean exito = false;
-		Optional<ClienteRegistrado> cliente = login(email, password);
-		
-		if(cliente.isPresent()) {
-			clienteRepositorio.delete(cliente.get());
-			exito = true;
-		}
 		
 		return exito;
 	}
 
-	@Override
-	public Optional<ClienteRegistrado> login(String email, String contrasenia) {
-		return Optional.ofNullable(clienteRepositorio.findByEmailAndContrasenia(email, contrasenia));
-	}
+
 
 	@Override
 	public String usuarioCoincidente(String email, String password) {
 		return clienteRepositorio.usuarioCoincidente(email, password);
 	}
-	private String getJWTToken(String username) {
+	private String getJWTToken(String nombre) {
 
-		List<GrantedAuthority> grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority());
+		List<GrantedAuthority> grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
 
 		String token = Jwts
 				.builder()
 				.setId(UUID.randomUUID().toString())
-				.setSubject(username)
+				.setSubject(nombre)
 				.claim("authorities",
 						grantedAuthorities.stream()
 								.map(GrantedAuthority::getAuthority)

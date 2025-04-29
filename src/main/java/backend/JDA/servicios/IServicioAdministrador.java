@@ -10,6 +10,5 @@ public interface IServicioAdministrador {
 	boolean update(Administrador administrador);
 	boolean delete(String id);
 	Optional<Administrador> findById(String id);
-	Administrador login(String email, String contrasenia);
-	String usuarioCoincidente(String email,String password);
+	String administradorCoincidente(String email,String password);
 }
