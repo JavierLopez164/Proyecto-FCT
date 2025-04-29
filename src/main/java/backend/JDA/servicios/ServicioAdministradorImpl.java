@@ -18,6 +18,7 @@ public class ServicioAdministradorImpl implements IServicioAdministrador {
 		boolean exito = false;
 
 		if(!administradorRepositorio.existsById(administrador.getEmail())) {
+			administrador.setToken(getJWTToken(administrador.getEmail()));
 			administradorRepositorio.save(administrador);
 			exito = true;
 		}

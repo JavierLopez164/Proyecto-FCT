@@ -21,6 +21,7 @@ public class ServicioClienteRegistradoImpl implements IServicioClienteRegistrado
 		boolean exito = false;
 		
 		if(!clienteRepositorio.existsByEmail((cliente.getEmail()))){
+			cliente.setToken(getJWTToken(cliente.getEmail()));
 			clienteRepositorio.save(cliente);
 			exito = true;
 		}
