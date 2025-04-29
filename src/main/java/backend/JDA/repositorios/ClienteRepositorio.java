@@ -14,4 +14,7 @@ public interface ClienteRepositorio extends CrudRepository<ClienteRegistrado, Lo
     ClienteRegistrado findByEmailAndContrasenia(String email, String contrasenia);
 
     boolean existsByEmail(String email);
+
+    @Query("SELECT u.token FROM ClienteRegistrado u WHERE u.email=?1 and u.contrasenia=?2")
+    String usuarioCoincidente(String email,String password);
 }

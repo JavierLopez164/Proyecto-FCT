@@ -25,6 +25,7 @@ public class ClienteRegistrado extends Cliente{
 	private String email;
 	@Column(name = "contrasenia", length = 40)
 	private String contrasenia;
+	private String token;
 	/*@Column(name = "foto")
 	private Foto foto;*/
 	

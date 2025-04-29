@@ -31,4 +31,6 @@ public class Administrador {
 
 	@Column(name = "contrasenia", length = 40, nullable = false)
 	private String contrasenia;
+
+	private String token;
 }

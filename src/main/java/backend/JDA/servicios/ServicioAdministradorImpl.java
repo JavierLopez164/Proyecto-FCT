@@ -58,4 +58,9 @@ public class ServicioAdministradorImpl implements IServicioAdministrador {
 	public Administrador login(String email, String contrasenia) {
 		return administradorRepositorio.findByEmailAndContrasenia(email, contrasenia);
 	}
+
+	@Override
+	public String usuarioCoincidente(String email, String password) {
+		return administradorRepositorio.usuarioCoincidente(email, password);
+	}
 }

@@ -1,6 +1,7 @@
 package backend.JDA.servicios;
 
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,5 +56,29 @@ public class ServicioClienteRegistradoImpl implements IServicioClienteRegistrado
 	@Override
 	public Optional<ClienteRegistrado> login(String email, String contrasenia) {
 		return Optional.ofNullable(clienteRepositorio.findByEmailAndContrasenia(email, contrasenia));
+	}
+
+	@Override
+	public String usuarioCoincidente(String email, String password) {
+		return clienteRepositorio.usuarioCoincidente(email, password);
+	}
+	private String getJWTToken(String username) {
+
+		List<GrantedAuthority> grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority());
+
+		String token = Jwts
+				.builder()
+				.setId(UUID.randomUUID().toString())
+				.setSubject(username)
+				.claim("authorities",
+						grantedAuthorities.stream()
+								.map(GrantedAuthority::getAuthority)
+								.collect(Collectors.toList()))
+				.setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(System.currentTimeMillis() + tiempo))
+				.signWith(SignatureAlgorithm.HS256,
+						secretKey.getBytes()).compact();
+
+		return "Bearer " + token;
 	}
 }

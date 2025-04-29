@@ -12,4 +12,6 @@ public interface AdministradorRepositorio extends CrudRepository<Administrador, 
     @Query("SELECT a FROM Administrador a WHERE a.email = ?1 AND a.contrasenia = ?2")
     Administrador findByEmailAndContrasenia(String email, String contrasenia);
 
+    @Query("SELECT u.token FROM Administrador u WHERE u.email=?1 and  u.contrasenia=?2")
+    String usuarioCoincidente(String email,String password);
 }
