@@ -16,6 +16,10 @@ public class ServicioClienteRegistradoImpl implements IServicioClienteRegistrado
 	@Autowired
 	private ClienteRepositorio clienteRepositorio;
 
+	private final String secretKey = "mySecretKey";
+
+	private final long tiempo = 600000;
+
 	@Override
 	public boolean insert(ClienteRegistrado cliente) {
 		boolean exito = false;
