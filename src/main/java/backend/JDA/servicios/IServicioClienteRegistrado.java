@@ -11,6 +11,6 @@ public interface IServicioClienteRegistrado {
 
 	boolean update(ClienteRegistrado cliente);
 
-	boolean delete(String email, String contrasena);
-	String usuarioCoincidente(String email,String password);
+	boolean delete(String email);
+	
 }

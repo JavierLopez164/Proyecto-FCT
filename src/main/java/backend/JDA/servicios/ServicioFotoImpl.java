@@ -1,5 +1,5 @@
 package backend.JDA.servicios;
-/*
+
 import java.util.List;
 import java.util.Optional;
 
@@ -66,4 +66,4 @@ public class ServicioFotoImpl implements IServicioFoto {
 		return fotoDAO.findById(id);
 	}
 	
-}*/
+}

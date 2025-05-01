@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import backend.JDA.modelo.Cliente;
 import backend.JDA.modelo.ClienteRegistrado;
+import backend.JDA.repositorios.ClienteRegistradoRepositorio;
 import backend.JDA.repositorios.ClienteRepositorio;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,19 +21,16 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class ServicioClienteRegistradoImpl implements IServicioClienteRegistrado {
 	
 	@Autowired
-	private ClienteRepositorio clienteRepositorio;
+	private ClienteRegistradoRepositorio clienteDao;
 
-	private final String secretKey = "mySecretKey";
-
-	private final long tiempo = 600000;
+	
 
 	@Override
 	public boolean insert(ClienteRegistrado cliente) {
 		boolean exito = false;
+		if(!clienteDao.existsById((cliente.getEmail()))){
 		
-		if(!clienteRepositorio.existsByEmail((cliente.getEmail()))){
-			cliente.setToken(getJWTToken(cliente.getNombre()));
-			clienteRepositorio.save(cliente);
+			clienteDao.save(cliente);
 			exito = true;
 		}
 		
@@ -43,8 +41,8 @@ public class ServicioClienteRegistradoImpl implements IServicioClienteRegistrado
 	public boolean update(ClienteRegistrado cliente) {
 		boolean exito = false;
 		
-		if(!clienteRepositorio.existsByEmail(cliente.getEmail())) {
-			clienteRepositorio.save(cliente);
+		if(!clienteDao.existsById(cliente.getEmail())) {
+			clienteDao.save(cliente);
 			exito = true;
 		}
 		
@@ -52,35 +50,15 @@ public class ServicioClienteRegistradoImpl implements IServicioClienteRegistrado
 	}
 
 	@Override
-	public boolean delete(String email, String password) {
+	public boolean delete(String email) {
 		boolean exito = false;
-		
+
+		if(clienteDao.existsById(email)) {
+			clienteDao.deleteById(email);
+			exito = true;
+		}
+
 		return exito;
 	}
 
-
-
-	@Override
-	public String usuarioCoincidente(String email, String password) {
-		return clienteRepositorio.usuarioCoincidente(email, password);
-	}
-	private String getJWTToken(String nombre) {
-
-		List<GrantedAuthority> grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-
-		String token = Jwts
-				.builder()
-				.setId(UUID.randomUUID().toString())
-				.setSubject(nombre)
-				.claim("authorities",
-						grantedAuthorities.stream()
-								.map(GrantedAuthority::getAuthority)
-								.collect(Collectors.toList()))
-				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + tiempo))
-				.signWith(SignatureAlgorithm.HS256,
-						secretKey.getBytes()).compact();
-
-		return "Bearer " + token;
-	}
 }

@@ -11,14 +11,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/api/administradores")
+@RequestMapping("api/administradores")
 @Tag(name = "Administrador", description = "Operaciones relacionadas con administradores")
 public class AdministradorController {
 
     @Autowired
     private IServicioAdministrador servicioAdministrador;
 
-    @PostMapping("/register")
+    @PostMapping("/")
     @Operation(
             summary = "Crear un nuevo administrador",
             description = "Crea un nuevo administrador en la base de datos.",
@@ -79,18 +79,5 @@ public class AdministradorController {
                 : ResponseEntity.badRequest().body("Error al eliminar el administrador");
     }
 
-    @Operation(
-            summary = "Login de administrador",
-            description = "Verifica las credenciales de un administrador y devuelve su información si son correctas.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Login exitoso"),
-                    @ApiResponse(responseCode = "400", description = "Credenciales incorrectas")
-            }
-    )   
-    @GetMapping("/login")
-  	public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
-      	
-  		return ResponseEntity.ok( servicioAdministrador.administradorCoincidente(username,password));
-  		
-  	}
+
 }

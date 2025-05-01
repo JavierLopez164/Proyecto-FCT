@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface IServicioClienteAnonimo {
 
     boolean insert(ClienteAnonimo cliente);
-    boolean delete(Long id);
-    Optional<ClienteAnonimo> findById(Long id);
+    boolean delete(String id);
+    Optional<ClienteAnonimo> findById(String id);
 }

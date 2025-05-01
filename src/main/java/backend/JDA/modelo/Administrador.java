@@ -1,6 +1,9 @@
 package backend.JDA.modelo;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
@@ -10,27 +13,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Administrador {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 
-	@EqualsAndHashCode.Include
-	@Id
-	@Email(message = "El correo debe ser válido")
-	@NotBlank(message = "El correo no puede estar vacío")
-	@Column(name = "email", length = 40, nullable = false)
-	private String email;
+@DiscriminatorValue("AD")
+public class Administrador extends Cliente{
 
-	@Column(name = "nombre", length = 20, nullable = false)
-	private String nombre;
-
-	@Column(name = "contrasenia", length = 40, nullable = false)
-	private String contrasenia;
-
-	private String token;
+	
+	 private LocalDateTime fechaCreacion;
+	 private LocalDateTime ultimoAcceso;
 }

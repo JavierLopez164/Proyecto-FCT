@@ -25,7 +25,7 @@ public class ServicioClienteAnonimoImpl implements IServicioClienteAnonimo {
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(String id) {
         if (clienteRepositorio.existsById(id)) {
             clienteRepositorio.deleteById(id);
             return true;
@@ -34,7 +34,7 @@ public class ServicioClienteAnonimoImpl implements IServicioClienteAnonimo {
     }
 
     @Override
-    public Optional<ClienteAnonimo> findById(Long id) {
+    public Optional<ClienteAnonimo> findById(String id) {
         return clienteRepositorio.findById(id);
     }
 

@@ -8,10 +8,8 @@ import backend.JDA.modelo.Cliente;
 import backend.JDA.modelo.ClienteRegistrado;
 
 @Repository
-public interface ClienteRepositorio extends CrudRepository<ClienteRegistrado, Long> {
+public interface ClienteRepositorio extends CrudRepository<Cliente, String> {
 
-    boolean existsByEmail(String email);
-
-    @Query("SELECT u.token FROM ClienteRegistrado u WHERE u.email=?1 and u.contrasenia=?2")
-    String usuarioCoincidente(String email,String password);
+	  @Query("SELECT c.token FROM Cliente c WHERE c.email=?1 and c.contrasenia=?2")
+	    String usuarioCoincidente(String email,String password);
 }

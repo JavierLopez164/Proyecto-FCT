@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/clientes-anonimos")
+@RequestMapping("api/clientes-anonimos")
 public class ClienteAnonimoController {
 
     @Autowired
@@ -35,7 +35,7 @@ public class ClienteAnonimoController {
     @ApiResponse(responseCode = "200", description = "Cliente anónimo encontrado")
     @ApiResponse(responseCode = "404", description = "Cliente anónimo no encontrado")
     @GetMapping("/{id}")
-    public ResponseEntity<?> obtenerClienteAnonimo(@PathVariable Long id) {
+    public ResponseEntity<?> obtenerClienteAnonimo(@PathVariable String id) {
         ResponseEntity<?> response;
         Optional<ClienteAnonimo> cliente = servicioCliente.findById(id)
                 .filter(c -> c instanceof ClienteAnonimo)
@@ -52,7 +52,7 @@ public class ClienteAnonimoController {
     @ApiResponse(responseCode = "200", description = "Cliente anónimo eliminado exitosamente")
     @ApiResponse(responseCode = "400", description = "Error al eliminar el cliente anónimo")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminarClienteAnonimo(@PathVariable Long id) {
+    public ResponseEntity<String> eliminarClienteAnonimo(@PathVariable String id) {
         ResponseEntity<String> response;
         if (servicioCliente.delete(id)) {
             response = ResponseEntity.ok("Cliente anónimo eliminado exitosamente");

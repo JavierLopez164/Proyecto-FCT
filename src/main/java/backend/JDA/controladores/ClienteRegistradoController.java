@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/clientes-registrados")
+@RequestMapping("api/clientes-registrados")
 public class ClienteRegistradoController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class ClienteRegistradoController {
     @Operation(summary = "Actualizar cliente registrado por ID")
     @ApiResponse(responseCode = "200", description = "Cliente registrado actualizado exitosamente")
     @ApiResponse(responseCode = "400", description = "Error al actualizar el cliente registrado")
-    @PutMapping("/")
+    @PutMapping("/actualizarRegistrado")
     public ResponseEntity<String> actualizarClienteRegistrado(@RequestBody ClienteRegistrado clienteRegistrado) {
         ResponseEntity<String> response;
         if (servicioCliente.update(clienteRegistrado)) {
@@ -49,9 +49,9 @@ public class ClienteRegistradoController {
     @ApiResponse(responseCode = "200", description = "Cliente registrado eliminado exitosamente")
     @ApiResponse(responseCode = "400", description = "Error al eliminar el cliente registrado")
     @DeleteMapping("/{email}/{contrasena}")
-    public ResponseEntity<String> eliminarClienteRegistrado(@PathVariable String email, @PathVariable String contrasena) {
+    public ResponseEntity<String> eliminarClienteRegistrado(@PathVariable String email) {
         ResponseEntity<String> response;
-        if (servicioCliente.delete(email, contrasena)) {
+        if (servicioCliente.delete(email)) {
             response = ResponseEntity.ok("Cliente registrado eliminado exitosamente");
         } else {
             response = ResponseEntity.badRequest().body("Error al eliminar el cliente registrado");
@@ -59,13 +59,5 @@ public class ClienteRegistradoController {
         return response;
     }
 
-    @Operation(summary = "Iniciar sesión con email y contraseña")
-    @ApiResponse(responseCode = "200", description = "Login exitoso")
-    @ApiResponse(responseCode = "400", description = "Credenciales incorrectas")
-    @GetMapping("/login")
-  	public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
-      	
-  		return ResponseEntity.ok( servicioCliente.usuarioCoincidente(username,password));
-  		
-  	}
+   
 }

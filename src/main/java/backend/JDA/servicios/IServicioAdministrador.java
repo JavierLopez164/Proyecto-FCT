@@ -10,5 +10,5 @@ public interface IServicioAdministrador {
 	boolean update(Administrador administrador);
 	boolean delete(String id);
 	Optional<Administrador> findById(String id);
-	String administradorCoincidente(String email,String password);
+	
 }

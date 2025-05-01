@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 
 @Repository
-public interface ClienteRepositorioAnonimo extends CrudRepository<ClienteAnonimo, Long> {
+public interface ClienteRepositorioAnonimo extends CrudRepository<ClienteAnonimo, String> {
     void deleteByFechaExpiracionBefore(LocalDateTime fecha);
 }
 
