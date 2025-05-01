@@ -11,10 +11,10 @@ public interface IServicioFoto {
 	
 	public boolean update(Foto foto);
 	
-	public boolean delete(String id);
+	public boolean delete(Long id);
 	
 	public List<Foto> findAll();
 	
-	public Optional<Foto> findById(String id);
+	public Optional<Foto> findById(Long id);
 	
 }

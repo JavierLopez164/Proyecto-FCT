@@ -6,15 +6,9 @@ import java.util.Optional;
 import backend.JDA.modelo.Administrador;
 
 public interface IServicioAdministrador {
-
-	public boolean insert(Administrador administrador);
-	
-	public boolean update(Administrador administrador);
-	
-	public boolean delete(String id);
-	
-	public List<Administrador> findAll();
-	
-	public Optional<Administrador> findById(String id);
+	boolean insert(Administrador administrador);
+	boolean update(Administrador administrador);
+	boolean delete(String id);
+	Optional<Administrador> findById(String id);
 	
 }

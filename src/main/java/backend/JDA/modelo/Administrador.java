@@ -1,32 +1,33 @@
 package backend.JDA.modelo;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-
 @Entity
-public class Administrador {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+
+@DiscriminatorValue("AD")
+public class Administrador extends Cliente{
+
 	
-	@EqualsAndHashCode.Include
-	@Id
-	@Column(name = "pk_administrador")
-	private String id;
-	@Column(name = "nombre", length = 20)
-	private String nombre;
-	@Column(name = "email", length = 40)
-	private String email;
-	@Column(name = "contrasenia", length = 40)
-	private String contrasenia;
-	
+	 private LocalDateTime fechaCreacion;
+	 private LocalDateTime ultimoAcceso;
 }

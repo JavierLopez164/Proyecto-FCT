@@ -1,69 +1,73 @@
 package backend.JDA.servicios;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-
+import backend.JDA.controladores.AdministradorController;
 import backend.JDA.modelo.Administrador;
 import backend.JDA.repositorios.AdministradorRepositorio;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class ServicioAdministradorImpl implements IServicioAdministrador {
-	
-	@Autowired
-	private AdministradorRepositorio administradorDAO;
 
+	@Autowired
+	private AdministradorRepositorio administradorDao;
+
+   
 	@Override
 	public boolean insert(Administrador administrador) {
-		// TODO Auto-generated method stub
 		boolean exito = false;
+	
+		if(!administradorDao.existsById(administrador.getEmail())) {
 		
-		if(!administradorDAO.existsById(administrador.getId())) {
-			administradorDAO.save(administrador);
+			administradorDao.save(administrador);
 			exito = true;
 		}
-		
+
 		return exito;
 	}
 
 	@Override
 	public boolean update(Administrador administrador) {
-		// TODO Auto-generated method stub
 		boolean exito = false;
-		
-		if(administradorDAO.existsById(administrador.getId())) {
-			administradorDAO.save(administrador);
+
+		if(!administradorDao.existsById(administrador.getEmail())) {
+			administradorDao.save(administrador);
 			exito = true;
 		}
-		
+
 		return exito;
 	}
 
 	@Override
-	public boolean delete(String id) {
-		// TODO Auto-generated method stub
+	public boolean delete(String email) {
 		boolean exito = false;
-		
-		if(administradorDAO.existsById(id)) {
-			administradorDAO.deleteById(id);
+
+		if(administradorDao.existsById(email)) {
+			administradorDao.deleteById(email);
 			exito = true;
 		}
-		
+
 		return exito;
 	}
 
 	@Override
-	public List<Administrador> findAll() {
-		// TODO Auto-generated method stub
-		return (List<Administrador>) administradorDAO.findAll();
+	public Optional<Administrador> findById(String email) {
+		return administradorDao.findById(email);
 	}
 
-	@Override
-	public Optional<Administrador> findById(String id) {
-		// TODO Auto-generated method stub
-		return administradorDAO.findById(id);
-	}
+
+	
+	
 
 }
