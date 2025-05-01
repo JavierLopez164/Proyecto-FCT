@@ -1,12 +1,7 @@
 package backend.JDA.modelo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Data
 @Builder
@@ -16,10 +11,13 @@ import lombok.NoArgsConstructor;
 
 @Entity
 public class Foto {
-	
-	@Column(name = "pk_id")
-	private String id;
-	@Column(name = "url")
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@EqualsAndHashCode.Include
+	@Column(name = "foto_id")
+	private Long id;
+
+	@Column(name = "url", nullable = false)
 	private String url;
-	
 }

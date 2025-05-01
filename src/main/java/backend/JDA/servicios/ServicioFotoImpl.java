@@ -42,7 +42,7 @@ public class ServicioFotoImpl implements IServicioFoto {
 	}
 
 	@Override
-	public boolean delete(String id) {
+	public boolean delete(Long id) {
 		// TODO Auto-generated method stub
 		boolean exito = false;
 		
@@ -61,7 +61,7 @@ public class ServicioFotoImpl implements IServicioFoto {
 	}
 
 	@Override
-	public Optional<Foto> findById(String id) {
+	public Optional<Foto> findById(Long id) {
 		// TODO Auto-generated method stub
 		return fotoDAO.findById(id);
 	}

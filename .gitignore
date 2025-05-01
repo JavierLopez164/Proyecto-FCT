@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+<<<<<<< HEAD
+=======
+
+# Project exclude paths
+/out/
+>>>>>>> branch 'master' of https://github.com/JavierLopez164/Proyecto-FCT.git

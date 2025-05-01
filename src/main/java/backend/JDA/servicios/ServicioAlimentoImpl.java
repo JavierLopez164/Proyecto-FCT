@@ -2,12 +2,11 @@ package backend.JDA.servicios;
 
 import java.util.List;
 import java.util.Optional;
-
+import backend.JDA.modelo.Alimento;
+import backend.JDA.repositorios.AlimentoRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import backend.JDA.modelo.Alimento;
-import backend.JDA.repositorios.AlimentoRepositorio;
 
 @Service
 public class ServicioAlimentoImpl implements IServicioAlimento {
@@ -17,7 +16,6 @@ public class ServicioAlimentoImpl implements IServicioAlimento {
 
 	@Override
 	public boolean insert(Alimento alimento) {
-		// TODO Auto-generated method stub
 		boolean exito = false;
 		
 		if(!alimentoDAO.existsById(alimento.getId())) {
@@ -30,7 +28,6 @@ public class ServicioAlimentoImpl implements IServicioAlimento {
 
 	@Override
 	public boolean update(Alimento alimento) {
-		// TODO Auto-generated method stub
 		boolean exito = false;
 		
 		if(alimentoDAO.existsById(alimento.getId())) {
@@ -43,7 +40,6 @@ public class ServicioAlimentoImpl implements IServicioAlimento {
 
 	@Override
 	public boolean delete(String id) {
-		// TODO Auto-generated method stub
 		boolean exito = false;
 		
 		if(alimentoDAO.existsById(id)) {
@@ -56,13 +52,11 @@ public class ServicioAlimentoImpl implements IServicioAlimento {
 
 	@Override
 	public List<Alimento> findAll() {
-		// TODO Auto-generated method stub
 		return (List<Alimento>) alimentoDAO.findAll();
 	}
 
 	@Override
 	public Optional<Alimento> findById(String id) {
-		// TODO Auto-generated method stub
 		return alimentoDAO.findById(id);
 	}
 	

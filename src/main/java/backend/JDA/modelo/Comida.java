@@ -1,21 +1,9 @@
 package backend.JDA.modelo;
 
-import java.util.List;
+import jakarta.persistence.*;
+import lombok.*;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Data
 @Builder
@@ -44,8 +32,8 @@ public class Comida {
 	@Column(name = "alimentos")
 	@OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	private List<Alimento> alimentos;
-	@Column(name = "foto")
+	/*@JoinColumn(name = "foto")
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Foto foto;
+	private Foto foto;*/
 	
 }
