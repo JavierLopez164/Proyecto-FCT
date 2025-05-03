@@ -10,6 +10,4 @@ import backend.JDA.modelo.ClienteRegistrado;
 @Repository
 public interface ClienteRepositorio extends CrudRepository<Cliente, String> {
 
-	  @Query("SELECT c.token FROM Cliente c WHERE c.email=?1 and c.contrasenia=?2")
-	    String usuarioCoincidente(String email,String password);
 }
