@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -33,9 +34,9 @@ public class Cliente {
 
 	@Column(name = "contrasenia", nullable = false)
 	private String contrasenia;
-	
+	 @Builder.Default
 	 @Enumerated(EnumType.STRING)
-	 private Rol rol;
+	 private Rol rol= Rol.ROLE_USER;
 
 	 
 	
