@@ -1,4 +1,5 @@
 package backend.JDA.modelo;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -9,7 +10,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-
 @Data
 @SuperBuilder
 @NoArgsConstructor
@@ -17,10 +17,10 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Cliente {
 
-	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
+	//@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 	@EqualsAndHashCode.Include
 	@Id
 	@Email(message = "El correo debe ser válido")
@@ -31,15 +31,12 @@ public class Cliente {
 	@Column(name = "nombre", length = 20, nullable = false)
 	private String nombre;
 
-	@Column(name = "contrasenia", length = 40, nullable = false)
+	@Column(name = "contrasenia", nullable = false)
 	private String contrasenia;
-	
-	 @Enumerated(EnumType.STRING)
-	 private Rol rol;
+
+	@Enumerated(EnumType.STRING)
+	private Rol rol;
+
 	 
-	 private String token;
-	 private boolean expirado;
-	 
-	
 	
 }

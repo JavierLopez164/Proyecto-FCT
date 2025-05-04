@@ -14,17 +14,23 @@ public class MultiHttpSecurityConfig {
 	 @Autowired
 	    JWTAuthorizationFilter jwtAuthorizationFilter;
     @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+     SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
-            .csrf((csrf) -> csrf.disable())
+            .csrf((csrf) -> {
+					csrf.disable();
+			})
            
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/clientes/**").permitAll()
-                .requestMatchers("/swagger-ui/index.html").permitAll()
-                .requestMatchers("/api/clientes-registrados/actualizarRegistrado").hasRole("USER")
+                .requestMatchers("/api/clientes/login","/api/clientes/register").permitAll()
+                .requestMatchers( "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/swagger-resources/**",
+                        "/webjars/**").permitAll()
+                .requestMatchers("/api/clientes/mensaje").hasRole("USER")).
+                
           
-                .anyRequest().authenticated()).
-                addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+                addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
             ;
 
         return http.build();

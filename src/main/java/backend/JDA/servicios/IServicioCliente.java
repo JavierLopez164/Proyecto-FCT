@@ -1,8 +1,13 @@
 package backend.JDA.servicios;
 
+import java.util.Optional;
+
 import backend.JDA.modelo.Cliente;
+
 
 public interface IServicioCliente {
 	boolean registrarCliente(Cliente c);
-	String login(String email,String password);
+
+	public Optional<Cliente> findById(String email);
+
 }
