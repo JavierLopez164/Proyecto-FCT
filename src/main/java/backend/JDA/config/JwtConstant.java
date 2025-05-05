@@ -19,7 +19,11 @@ public class JwtConstant {
     public static final long TOKEN_EXPIRATION_TIME = 864_000_000; // 10 dias
 
    
+
     //obtener clave criptografica
+
+
+
     public static Key getSigningKey(String secret) {
 		byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
 		return Keys.hmacShaKeyFor(keyBytes);
