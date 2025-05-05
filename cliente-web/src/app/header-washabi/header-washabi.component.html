@@ -1,0 +1,102 @@
+<header class="bg-purple-700 shadow-xl p-4">
+  <div class="mx-auto  px-2 sm:px-6 lg:px-8">
+    <div class="flex h-14.5 items-center justify-between">
+      <!-- Botón menú móvil -->
+      <div class="sm:hidden">
+        <button (click)="prender=!prender" type="button"
+          class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset">
+          <!--Icono del movil para desplegar el menú-->
+          <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+
+        </button>
+      </div>
+
+      <!-- Logotipo -->
+      <div class=" flex justify-center sm:justify-start w-full sm:w-auto relative bottom-1.5">
+        <a routerLink="/"><img class="h-18 sm:h-20 object-contain mx-auto sm:mx-0 " src="img/logotipo-washabi.png"
+            alt="Logotipo" /></a>
+      </div>
+
+      <!-- Enlaces de navegación (solo visible en escritorio) -->
+      <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-center ">
+        <nav class="flex space-x-4 text-md">
+          <a routerLink="/" class="rounded-md hover:bg-orange-500 px-3 py-2 font-medium text-white hover:font-playfair"
+            aria-current="page">Inicio</a>
+          <a routerLink="/reserva"
+            class="rounded-md hover:bg-orange-500 px-3 py-2 font-medium text-white hover:font-playfair"
+            aria-current="page">Reserva</a>
+          <a routerLink="/chat"
+            class="rounded-md px-3 py-2  font-medium text-white hover:bg-orange-500 hover:text-white hover:font-playfair">Chat
+            en vivo</a>
+          <!--Sub menus: recomendacion,y promociones-->
+          <a routerLink="/menu"
+            class="rounded-md px-3 py-2  font-medium text-white hover:bg-orange-500 hover:text-white hover:font-playfair">Menú
+            de comida</a>
+          <a routerLink="/descargarapp"
+            class="rounded-md px-3 py-2  font-medium text-white hover:bg-orange-500 hover:text-white hover:font-playfair">App</a>
+        </nav>
+      </div>
+      <!-- Imagen de usuario -->
+      @if(estaLogeado()){
+      <div class="flex sm:ml-6 sm:static absolute right-0 top-6 ">
+        <div class="relative ">
+          <button (click)="estaPulsado=!estaPulsado" type="button"
+            class="relative flex  rounded-full " id="user-menu-button">
+            <img class="h-12 w-12  object-cover hover:animate-pulse rounded-full focus:ring-amber-400 focus:ring-2"
+              src="/img/anime.jpeg" alt="foto perfil" />
+          </button>
+          @if (estaPulsado) {
+          <div
+            class="absolute right-0  mt-2 w-48 origin-top-right rounded-md bg-purple-600 py-1 shadow-lg ring-1 ring-black/5 focus:outline-hidden text-white"
+            role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button">
+            <!--Sub menus: el perfil tendrá para ver en que número de cola se encuentra-->
+            <a routerLink="/perfil" class="block px-4 py-2 text-sm  hover:bg-orange-500 " role="menuitem"
+              id="user-menu-item-0">Perfil</a>
+            <a routerLink="/ajuste" class="block px-4 py-2 text-sm  hover:bg-orange-500" role="menuitem"
+              id="user-menu-item-1">Ajustes de Perfil</a>
+              <div class="block px-4 py-2 text-sm  hover:bg-orange-500">
+                <button (click)="logout()"  role="menuitem"
+                id="user-menu-item-2">Cerrar sesión</button>
+              </div>
+             
+          </div>
+          }
+        </div>
+      </div>
+      }@else {
+      @if (rutaActual=="/" ||rutaActual=="/menu" ||rutaActual=="/descargarapp") {
+      <div class="flex gap-1.5">
+        <div class="bg-orange-700 py-3 px-3 rounded-md animate-fade-up">
+          <a routerLink="/registrar" class="text-white text-md">Registrarse</a>
+        </div>
+        <div class="hover:bg-orange-500 py-3 px-3 rounded-md animate-fade-up">
+          <a routerLink="/login" class="text-white text-md">Login</a>
+        </div>
+      </div>
+      }
+      }
+    </div>
+  </div>
+
+  <!-- Menú móvil -->
+  <div class="sm:hidden" id="mobile-menu">
+    @if (prender) {
+    <div class="space-y-1 px-2 pt-2 pb-3 text-white">
+      <a routerLink="/" class="block rounded-md hover:bg-orange-500 px-3 py-2 text-base font-medium "
+        aria-current="page">Inicio</a>
+      <a routerLink="/reserva" class="block rounded-md hover:bg-orange-500 px-3 py-2 text-base font-medium "
+        aria-current="page">Reserva</a>
+      <a routerLink="/chat"
+        class="block rounded-md px-3 py-2 text-base font-medium  hover:bg-orange-500 hover:text-white">Chat</a>
+      <a routerLink="/menu"
+        class="block rounded-md px-3 py-2 text-base font-medium  hover:bg-orange-500 hover:text-white">Menú de
+        comida</a>
+      <a routerLink="/descargarapp"
+        class="block rounded-md px-3 py-2 text-base font-medium  hover:bg-orange-500 hover:text-white">App</a>
+    </div>
+    }
+  </div>
+</header>
