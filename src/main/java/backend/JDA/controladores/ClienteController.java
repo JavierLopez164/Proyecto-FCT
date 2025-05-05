@@ -46,11 +46,11 @@ public class ClienteController {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
-	@PostMapping("/login")
+	@GetMapping("/login")
 	@Operation(summary = "Iniciar sesión con email y contraseña")
 	@ApiResponse(responseCode = "200", description = "Login exitoso")
 	@ApiResponse(responseCode = "400", description = "Credenciales incorrectas")
-	public ResponseEntity<Map<String,String>> login( @Valid @RequestParam String email, @RequestParam String password) {
+	public ResponseEntity<Map<String,String>> login(@RequestParam String email, @RequestParam String password) {
 		Optional<Cliente> c = servicioCliente.findById(email);
 		Map<String, String> resJson = new HashMap<>();
 		String token;
@@ -71,7 +71,7 @@ public class ClienteController {
 	@ApiResponse(responseCode = "200", description = "Cliente registrado creado exitosamente")
 	@ApiResponse(responseCode = "400", description = "Error al crear el cliente registrado")
 
-	public ResponseEntity<Cliente> crearClienteRegistrado(@Valid @RequestBody Cliente client) {
+	public ResponseEntity<Cliente> crearClienteRegistrado( @RequestBody Cliente client) {
 		ResponseEntity<Cliente> response;
 		if (servicioCliente.registrarCliente(client)) {
 			response = ResponseEntity.ok(client);
