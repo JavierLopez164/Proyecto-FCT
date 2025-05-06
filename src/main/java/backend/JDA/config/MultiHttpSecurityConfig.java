@@ -11,27 +11,34 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class MultiHttpSecurityConfig {
-	 @Autowired
-	    JWTAuthorizationFilter jwtAuthorizationFilter;
+
+    @Autowired
+    private JWTAuthorizationFilter jwtAuthorizationFilter;
+
     @Bean
-     SecurityFilterChain configure(HttpSecurity http) throws Exception {
+    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
-            .csrf((csrf) -> {
-					csrf.disable();
-			})
-           
-            .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/clientes/login","/api/clientes/register").permitAll()
-                .requestMatchers( "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html",
-                        "/swagger-resources/**",
-                        "/webjars/**").permitAll()
-                .requestMatchers("/api/clientes/mensaje").hasRole("USER")).
-                
-          
-                addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
-            ;
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authz -> authz
+                        // Rutas públicas sin autenticación
+                        .requestMatchers(
+                                "/api/clientes/login",
+                                "/api/clientes/register",
+                                "/api/comentarios/crear",
+                                "/api/comentarios/eliminar",
+                                "/api/comentarios/lista"
+                        ).permitAll()
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
+                        .requestMatchers("/api/clientes/mensaje").hasRole("USER")
+                        .anyRequest().authenticated()
+                )
+                .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
