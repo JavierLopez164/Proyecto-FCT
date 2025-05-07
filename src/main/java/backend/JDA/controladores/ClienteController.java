@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import backend.JDA.config.JwtAuthentication;
 import backend.JDA.modelo.Cliente;
+
 import backend.JDA.servicios.IServicioCliente;
 import backend.JDA.servicios.ServicioCliente;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,7 +39,6 @@ import jakarta.servlet.http.HttpServletResponse;
 @CrossOrigin(origins = "http://localhost:4200")
 public class ClienteController {
 
-
 	@Autowired
 	private IServicioCliente servicioCliente;
 	@Autowired
@@ -50,7 +50,9 @@ public class ClienteController {
 	@Operation(summary = "Iniciar sesión con email y contraseña")
 	@ApiResponse(responseCode = "200", description = "Login exitoso")
 	@ApiResponse(responseCode = "400", description = "Credenciales incorrectas")
-	public ResponseEntity<Map<String,String>> login(@Valid @RequestParam String email, @RequestParam String password) {
+
+	public ResponseEntity<Map<String,String>> login(@RequestParam String email, @RequestParam String password) {
+
 		Optional<Cliente> c = servicioCliente.findById(email);
 		Map<String, String> resJson = new HashMap<>();
 		String token;
@@ -76,7 +78,7 @@ public class ClienteController {
 	@ApiResponse(responseCode = "200", description = "Cliente registrado creado exitosamente")
 	@ApiResponse(responseCode = "400", description = "Error al crear el cliente registrado")
 
-	public ResponseEntity<Cliente> crearClienteRegistrado(@Valid @RequestBody Cliente client) {
+	public ResponseEntity<Cliente> crearClienteRegistrado( @RequestBody Cliente client) {
 		ResponseEntity<Cliente> response;
 		if (servicioCliente.registrarCliente(client)) {
 			response = ResponseEntity.ok(client);
@@ -87,14 +89,11 @@ public class ClienteController {
 	}
 
 	@GetMapping("/mensaje")
-
-	@ApiResponse(responseCode = "200", description = "Mensaje creado exitosamente")
-	@ApiResponse(responseCode = "400", description = "Error al crear el mensaje")
-
 	public List<String> getMensajesToken(){
 
 		return Arrays.asList(("Paco"),("Pedro"), ("Juan"));
-
-
+	
+	
 	}
 }
+

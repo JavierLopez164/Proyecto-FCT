@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 
 @Entity
-//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@EntityListeners(PasswordListener.class)
 public class Cliente {
 
 	//@Schema(accessMode = Schema.AccessMode.READ_ONLY)
@@ -34,8 +35,9 @@ public class Cliente {
 	@Column(name = "contrasenia", nullable = false)
 	private String contrasenia;
 
-	@Enumerated(EnumType.STRING)
-	private Rol rol;
+	 @Builder.Default
+	 @Enumerated(EnumType.STRING)
+	 private Rol rol=Rol.ROLE_USER;
 
 	 
 	

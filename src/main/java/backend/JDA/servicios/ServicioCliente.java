@@ -22,8 +22,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class ServicioCliente implements IServicioCliente {
 	@Autowired ClienteRepositorio clienteDao;
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+
 
 
 	@Override
@@ -31,7 +30,7 @@ public class ServicioCliente implements IServicioCliente {
 		// TODO Auto-generated method stub
 		boolean exito = false;
 		if(!clienteDao.existsById((cliente.getEmail()))){
-			cliente.setContrasenia(passwordEncoder.encode(cliente.getContrasenia()));
+			
 			clienteDao.save(cliente);
 			exito = true;
 		}

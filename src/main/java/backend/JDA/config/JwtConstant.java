@@ -20,6 +20,10 @@ public class JwtConstant {
 
    
 
+    //obtener clave criptografica
+
+
+
     public static Key getSigningKey(String secret) {
 		byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
 		return Keys.hmacShaKeyFor(keyBytes);

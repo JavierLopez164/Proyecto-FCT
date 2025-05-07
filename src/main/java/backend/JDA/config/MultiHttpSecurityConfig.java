@@ -3,6 +3,7 @@ package backend.JDA.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -16,29 +17,28 @@ public class MultiHttpSecurityConfig {
     private JWTAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+     SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(authz -> authz
-                        // Rutas públicas sin autenticación
-                        .requestMatchers(
-                                "/api/clientes/login",
-                                "/api/clientes/register",
-                                "/api/comentarios/crear",
-                                "/api/comentarios/eliminar",
-                                "/api/comentarios/lista"
-                        ).permitAll()
-                        .requestMatchers(
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/swagger-resources/**",
-                                "/webjars/**"
-                        ).permitAll()
-                        .requestMatchers("/api/clientes/mensaje").hasRole("USER")
-                        .anyRequest().authenticated()
-                )
-                .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+            .csrf((csrf) -> {
+					csrf.disable();
+			}) .cors(Customizer.withDefaults())
+           
+            .authorizeHttpRequests(authz -> authz
+                .requestMatchers(  "/api/clientes/login",
+                        "/api/clientes/register",
+                        "/api/comentarios/crear",
+                        "/api/comentarios/eliminar",
+                        "/api/comentarios/lista").permitAll()
+                .requestMatchers( "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/swagger-resources/**",
+                        "/webjars/**").permitAll()
+                .requestMatchers("/api/clientes/mensaje").hasRole("USER")).
+                
+          
+                addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
+            ;
 
         return http.build();
     }

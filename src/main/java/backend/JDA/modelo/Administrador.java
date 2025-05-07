@@ -30,4 +30,6 @@ public class Administrador extends Cliente{
 	
 	 private LocalDateTime fechaCreacion;
 	 private LocalDateTime ultimoAcceso;
+	 
+	 
 }

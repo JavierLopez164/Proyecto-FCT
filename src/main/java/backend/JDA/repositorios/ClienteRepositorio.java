@@ -10,6 +10,6 @@ import java.time.LocalDateTime;
 
 @Repository
 public interface ClienteRepositorio extends CrudRepository<Cliente, String> {
-    //void deleteByFechaExpiracionBefore(LocalDateTime fecha);
+
 
 }
