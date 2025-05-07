@@ -82,10 +82,6 @@ public class ClienteController {
 	}
 
 	@GetMapping("/mensaje")
-
-	@ApiResponse(responseCode = "200", description = "Mensaje creado exitosamente")
-	@ApiResponse(responseCode = "400", description = "Error al crear el mensaje")
-
 	public List<String> getMensajesToken(){
 
 		return Arrays.asList(("Paco"),("Pedro"), ("Juan"));

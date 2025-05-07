@@ -37,7 +37,7 @@ public class Cliente {
 
 	 @Builder.Default
 	 @Enumerated(EnumType.STRING)
-	 private Rol rol= Rol.ROLE_USER;
+	 private Rol rol=Rol.ROLE_USER;
 
 	 
 	
