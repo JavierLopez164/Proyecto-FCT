@@ -30,7 +30,7 @@ export class RegistrarComponent {
       responseType: 'text'})
     .subscribe({
       next: res =>{
-        alert(res)
+        alert("Cliente registrado")
       this.router.navigate(['/login']);
 
       },

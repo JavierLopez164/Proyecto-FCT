@@ -7,13 +7,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { HttpClient } from '@angular/common/http';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router , RouterLink } from '@angular/router';
 import { NotificacionComponent } from '../notificacion/notificacion.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  imports: [HeaderWashabiComponent, FooterComponent,CommonModule,NotificacionComponent, MatFormFieldModule, MatInputModule, MatButtonModule, MatCardModule, ReactiveFormsModule],
+  imports: [HeaderWashabiComponent, FooterComponent, RouterLink ,CommonModule,NotificacionComponent, MatFormFieldModule, MatInputModule, MatButtonModule, MatCardModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -32,22 +32,18 @@ export class LoginComponent {
     const email = this.loginForm.get('email')?.value ?? ''; 
     const password = this.loginForm.get('contrasenia')?.value ?? ''; 
     this.http.get<{ token: string; mensaje: string }>(
-      'http://localhost:8080/api/clientes/login',
-      { params:{email,password} }
+      'http://localhost:8080/api/clientes/acceso',
+      {params:{email,password}}
     ).subscribe({
     next: res => {
-
+      // Guardamos el ultimo acceso
+      localStorage.setItem("ultimoAcceso", new Date().toLocaleDateString());
       // Guardamos el token en el localStorage
       localStorage.setItem('token', res.token);
+        // Guardamos el email
+      localStorage.setItem('email', email);
 
-      setTimeout(() => {
-        setTimeout(() => {
-          this.router.navigate(['/perfil']);
-        }, 2000);
-      }, 0); //Lo hago para se muestre la tarjeta por eso le meto retardo
-
-     this.mensaje="Cargando "+res.mensaje+"...."
-     this.tipo="exito"
+      this.router.navigate(['/perfil']);
     },
     error: err => {
       console.log(err)

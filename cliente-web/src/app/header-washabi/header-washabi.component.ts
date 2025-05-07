@@ -19,11 +19,15 @@ export class HeaderWashabiComponent {
     return localStorage.getItem('token')!=null;
   }
   logout() {
+
+    localStorage.setItem('ultimoAcceso', new Date().toLocaleDateString());
     // Eliminar el token del localStorage
     localStorage.removeItem('token');
-    
+    localStorage.removeItem('email');
     // Redirigir al login 
      this.ruta.navigate(['/login']);
+
+     
   }
 }
  
