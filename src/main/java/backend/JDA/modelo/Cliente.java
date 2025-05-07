@@ -18,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 
 @Entity
-//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@EntityListeners(PasswordListener.class)
 public class Cliente {
 
 	//@Schema(accessMode = Schema.AccessMode.READ_ONLY)

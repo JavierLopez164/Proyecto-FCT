@@ -1,33 +1,43 @@
 package backend.JDA.modelo;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import lombok.*;
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
+@Entity
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-
-@Entity
+@Builder
 public class Comentario {
-	@EqualsAndHashCode.Include
+	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 	@Id
-	@Column(name = "pk_")
-	private String id;
-	@Column(name = "", length = 255)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@Column(nullable = false, length = 255)
 	private String contenido;
-	@Column(name = "fecha")
+
+	@Column(nullable = false)
 	private LocalDateTime fecha;
-	@Column(name = "valoracion")
+
+	@Column(nullable = false)
+	@Min(value = 1, message = "La valoración mínima es 1")
+	@Max(value = 5, message = "La valoración máxima es 5")
 	private int valoracion;
-	
+
+	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "cliente_email")
+	private Cliente cliente;
+
+	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
+	@Column(nullable = false)
+	/*@ManyToOne(optional = false)
+	@JoinColumn(name = "comida_id")
+	private Comida comida;*/
+	private String comida;
 }

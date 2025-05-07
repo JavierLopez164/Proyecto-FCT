@@ -20,7 +20,7 @@ public class ServicioComidaImpl implements IServicioComida {
 		// TODO Auto-generated method stub
 		boolean exito = false;
 		
-		if(!comidaDAO.existsById(comida.getId())) {
+		if(!comidaDAO.existsById(comida.getNombre())) {
 			comidaDAO.save(comida);
 			exito = true;
 		}
@@ -33,7 +33,7 @@ public class ServicioComidaImpl implements IServicioComida {
 		// TODO Auto-generated method stub
 		boolean exito = false;
 		
-		if(comidaDAO.existsById(comida.getId())) {
+		if(comidaDAO.existsById(comida.getNombre())) {
 			comidaDAO.save(comida);
 			exito = true;
 		}

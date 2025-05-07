@@ -12,8 +12,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class MultiHttpSecurityConfig {
-	 @Autowired
-	    JWTAuthorizationFilter jwtAuthorizationFilter;
+
+    @Autowired
+    private JWTAuthorizationFilter jwtAuthorizationFilter;
+
     @Bean
      SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
@@ -22,7 +24,11 @@ public class MultiHttpSecurityConfig {
 			}) .cors(Customizer.withDefaults())
            
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/clientes/login","/api/clientes/register").permitAll()
+                .requestMatchers(  "/api/clientes/login",
+                        "/api/clientes/register",
+                        "/api/comentarios/crear",
+                        "/api/comentarios/eliminar",
+                        "/api/comentarios/lista").permitAll()
                 .requestMatchers( "/v3/api-docs/**",
                         "/swagger-ui/**",
                         "/swagger-ui.html",
