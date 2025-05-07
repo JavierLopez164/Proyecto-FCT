@@ -1,5 +1,8 @@
 package backend.JDA.modelo;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -12,7 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Data
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -38,7 +41,13 @@ public class Cliente {
 	 @Builder.Default
 	 @Enumerated(EnumType.STRING)
 	 private Rol rol=Rol.ROLE_USER;
-
-	 
+	 @Builder.Default
+	 private LocalDate fechaCreacion=LocalDate.now();
+	
+/*
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="foto_id")
+	private Foto foto;
+*/		
 	
 }
