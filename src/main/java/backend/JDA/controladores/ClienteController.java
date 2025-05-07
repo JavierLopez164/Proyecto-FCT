@@ -50,15 +50,20 @@ public class ClienteController {
 	@Operation(summary = "Iniciar sesión con email y contraseña")
 	@ApiResponse(responseCode = "200", description = "Login exitoso")
 	@ApiResponse(responseCode = "400", description = "Credenciales incorrectas")
-	public ResponseEntity<Map<String,String>> login( @Valid @RequestParam String email, @RequestParam String password) {
+	public ResponseEntity<Map<String,String>> login(@Valid @RequestParam String email, @RequestParam String password) {
 		Optional<Cliente> c = servicioCliente.findById(email);
 		Map<String, String> resJson = new HashMap<>();
 		String token;
+		Cliente copia;
 
 		if (c.isPresent() && passwordEncoder.matches(password, c.get().getContrasenia())) {
+			copia = c.get();
+
 			token = jwtAuthtenticationConfig.getJWTToken(c.get().getNombre(), c.get().getRol());
 			resJson.put("token", token);
 			resJson.put("mensaje", "Login exitoso");
+			resJson.put("nombre", copia.getNombre());
+			resJson.put("rol", copia.getRol().toString());
 			return ResponseEntity.ok(resJson);
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)

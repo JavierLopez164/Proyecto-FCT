@@ -16,8 +16,6 @@ public class Comida {
 	
 	@EqualsAndHashCode.Include
 	@Id
-	@Column(name = "pk_comida")
-	private String id;
 	@Column(name = "nombre", length = 20)
 	private String nombre;
 	@Column(name = "descripcion", length = 40)
