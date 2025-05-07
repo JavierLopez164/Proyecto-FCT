@@ -1,3 +1,59 @@
 <app-header/>
-<h1>Hola estoy en el perfil</h1>
+<mat-toolbar color="primary" class="!bg-cyan-500 !text-white shadow-md justify-center space-x-8">
+    <a href="#" class="text-white font-medium hover:text-amber-600 hover:underline transition duration-200">Cola Prioridades</a>
+    <a routerLink="/ajuste" class="text-white font-medium hover:text-amber-600 hover:underline transition duration-200">Ajustes de Perfil</a>
+    
+  </mat-toolbar>
+  <div class="max-w-6xl mx-auto mt-10 p-8 bg-white shadow-lg rounded-xl space-y-8 my-10" >
+    <h2 class="text-3xl font-bold text-center text-gray-800">Perfil del Cliente</h2>
+  
+    <!-- Imagen del Usuario -->
+    <div class="flex justify-center">
+      <img
+        [src]="perfil.imagenUrl"
+        alt="Foto de perfil"
+        class="w-36 h-36 object-cover rounded-full border-3 border-x-amber-300 shadow-cyan-300 shadow-2xl"
+      />
+    </div>
+  
+    <!-- Campos del perfil -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Nombre</mat-label>
+        <input matInput [value]="perfil.nombre" disabled>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Email</mat-label>
+        <input matInput [value]="perfil.email" disabled>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Contraseña</mat-label>
+        <input matInput [type]="mostrarPassword ? 'text' : 'password'" [value]="perfil.password" disabled>
+        <button mat-icon-button matSuffix (click)="mostrarPassword=!mostrarPassword" type="button">
+          <mat-icon>{{ mostrarPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Sala</mat-label>
+        <input matInput [value]="perfil.sala" disabled>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Rol</mat-label>
+        <input matInput [value]="perfil.rol" disabled>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Fecha de Creación</mat-label>
+        <input matInput [value]="perfil.fechaCreacion" disabled>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-full relative left-94">
+        <mat-label>Último Acceso</mat-label>
+        <input matInput [value]="perfil.ultimoAcceso" disabled>
+      </mat-form-field>
+    </div>
+  </div>
 <app-footer/>

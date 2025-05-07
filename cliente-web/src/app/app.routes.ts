@@ -12,7 +12,7 @@ import { authGuard } from './auth.guard';
 export const routes: Routes = [
     {path:"",title:"Inicio",component:InicioComponent,},   
     {path:"reserva",title:"Reserva",component:ReservaComponent,
-        canActivate: [authGuard]},//Middleware para que antes de ir a la ruta el authGuard me verifica si puede o no
+        canActivate: [authGuard]},//Middleware para que antes de ir a la ruta el authGuard me verifica si puede o no con el token
     {path:"chat",title:"Chat",component:ChatComponent,
         canActivate: [authGuard]},
     {path:"menu",title:"Menú Comida",component:MenuComponent},

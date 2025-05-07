@@ -10,7 +10,7 @@ export const authGuard: CanActivateFn = (route, state) => {
    if(token) {
    return true // acceso permitido  
   } else {
-   alert(`Bloqueado el acceso a ${state.url},para acceder a la ruta protegida (logeate)`);
+   alert(`Bloqueado el acceso a ${state.url},para acceder a la ruta protegida (inicia sesión)`);
     router.navigate(['/login']);
     return false// acceso denegado
   }
