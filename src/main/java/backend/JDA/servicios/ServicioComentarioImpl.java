@@ -24,8 +24,9 @@ public class ServicioComentarioImpl implements IServicioComentario {
 	@Override
 	public boolean crearComentario(Comentario comentario, String cliente, String comida) {
 		Optional<Cliente> clienteOpt = clienteRepo.findById(cliente);
+		//Optional<Comida> comidaOpt = comidaRepo.findById(comida);
 
-		if (clienteOpt.isPresent()) {
+		if (clienteOpt.isPresent() /*&& comidaOpt.isPresent()*/) {
 			Cliente copia = clienteOpt.get();
 			System.out.println("Cliente encontrado: " + copia.getEmail() + ", rol: " + copia.getRol());
 

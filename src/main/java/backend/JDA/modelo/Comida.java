@@ -3,6 +3,7 @@ package backend.JDA.modelo;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
@@ -12,12 +13,12 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 
 @Entity
-public class Comida {
+public class Comida implements Serializable{
 	
 	@EqualsAndHashCode.Include
-	@Id
-	@Column(name = "nombre", length = 20)
-	private String nombre;
+	@EmbeddedId
+	//Nombre + restaurante
+	private ComidaPK comidaPK;
 	@Column(name = "descripcion", length = 40)
 	private String descripcion;
 	@Column(name = "precio")
