@@ -1,5 +1,6 @@
 package backend.JDA.servicios;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import backend.JDA.modelo.Comida;
+import backend.JDA.modelo.ComidaPK;
 import backend.JDA.repositorios.ComidaRepositorio;
 
 @Service
@@ -20,7 +22,7 @@ public class ServicioComidaImpl implements IServicioComida {
 		// TODO Auto-generated method stub
 		boolean exito = false;
 		
-		if(!comidaDAO.existsById(comida.getNombre())) {
+		if(!comidaDAO.existsById(comida.getComidaPK())) {
 			comidaDAO.save(comida);
 			exito = true;
 		}
@@ -33,7 +35,7 @@ public class ServicioComidaImpl implements IServicioComida {
 		// TODO Auto-generated method stub
 		boolean exito = false;
 		
-		if(comidaDAO.existsById(comida.getNombre())) {
+		if(comidaDAO.existsById(comida.getComidaPK())) {
 			comidaDAO.save(comida);
 			exito = true;
 		}
@@ -42,12 +44,12 @@ public class ServicioComidaImpl implements IServicioComida {
 	}
 
 	@Override
-	public boolean delete(String id) {
+	public boolean delete(ComidaPK comidaPK) {
 		// TODO Auto-generated method stub
 		boolean exito = false;
 		
-		if(comidaDAO.existsById(id)) {
-			comidaDAO.deleteById(id);
+		if(comidaDAO.existsById(comidaPK)) {
+			comidaDAO.deleteById(comidaPK);
 			exito = true;
 		}
 		
@@ -61,9 +63,58 @@ public class ServicioComidaImpl implements IServicioComida {
 	}
 
 	@Override
-	public Optional<Comida> findById(String id) {
+	public Optional<Comida> findById(ComidaPK comidaPK) {
 		// TODO Auto-generated method stub
-		return comidaDAO.findById(id);
+		return comidaDAO.findById(comidaPK);
+	}
+
+	@Override
+	public boolean cambiarDescripcion(ComidaPK comidaPK, String descripcion) {
+		// TODO Auto-generated method stub
+		boolean exito = false;
+		
+		if (comidaDAO.existsById(comidaPK)) {
+			comidaDAO.actualizaDescripcion(comidaPK, descripcion);
+			exito = true;
+		}
+		
+		return exito;
+	}
+
+	@Override
+	public boolean cambiarPrecio(ComidaPK comidaPK, float precio) {
+		// TODO Auto-generated method stub
+		boolean exito = false;
+		
+		if (comidaDAO.existsById(comidaPK) && precio > 0f) {
+			comidaDAO.actualizarPrecio(comidaPK, precio);
+			exito = true;
+		}
+		
+		return exito;
+	}
+
+	@Override
+	public boolean cambiarValoracion(ComidaPK comidaPK, int valoracion) {
+		// TODO Auto-generated method stub
+		boolean exito = false;
+		
+		if (comidaDAO.existsById(comidaPK) && (valoracion >= 0 && valoracion <= 5)) {
+			comidaDAO.actualizarValoracion(comidaPK, valoracion);
+			exito = true;
+		}
+		
+		return exito;
+	}
+
+	@Override
+	public List<Comida> obtenerComidasDeUnRestaurante(String restaurante) {
+		// TODO Auto-generated method stub
+		List<Comida> listaComidas = new ArrayList<>();
+		
+		listaComidas = comidaDAO.obtenerComidasDeUnRestaurante(restaurante);
+		
+		return listaComidas;
 	}
 	
 }
