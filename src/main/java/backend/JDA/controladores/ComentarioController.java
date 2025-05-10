@@ -69,4 +69,7 @@ public class ComentarioController {
         List<Comentario> comentarios = servicioComentario.obtenerComentariosPorComida(nombreComida);
         return ResponseEntity.ok(comentarios);
     }
+    
+    
+    
 }
