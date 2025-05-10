@@ -21,7 +21,7 @@ public class MultiHttpSecurityConfig {
         http
             .csrf((csrf) -> {
 					csrf.disable();
-			}) .cors(Customizer.withDefaults())
+			}).cors(Customizer.withDefaults())
            
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers(  "/api/clientes/login",
@@ -29,16 +29,8 @@ public class MultiHttpSecurityConfig {
                         "/api/comentarios/crear",
                         "/api/comentarios/eliminar",
                         "/api/comentarios/lista",
-                        "/api/clientes/acceso",
-                        "/api/comida/crear",
-                        "/api/comida/actualizar",
-                        "/api/comida/eliminar",
-                        "/api/comida/listarComidas",
-                        "/api/comida/listarComidaPorId",
-                        "/api/comida/cambiarDescripcion",
-                        "/api/comida/cambiarPrecio",
-                        "/api/comida/cambiarValoracion",
-                        "/api/comida/obtenerComidasDeUnRestaurante").permitAll()
+                        "/api/clientes/acceso"
+                        ).permitAll().requestMatchers("/api/comida/**").permitAll()
                 .requestMatchers( "/v3/api-docs/**",
                         "/swagger-ui/**",
                         "/swagger-ui.html",
