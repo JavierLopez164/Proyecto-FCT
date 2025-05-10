@@ -14,8 +14,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-
 @Embeddable
 public class ComidaPK implements Serializable{
 	

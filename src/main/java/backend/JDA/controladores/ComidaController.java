@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +19,6 @@ import backend.JDA.modelo.Comida;
 import backend.JDA.modelo.ComidaPK;
 import backend.JDA.servicios.IServicioComida;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
@@ -41,11 +41,11 @@ public class ComidaController {
             @ApiResponse(responseCode = "200", description = "Comida creada correctamente"),
             @ApiResponse(responseCode = "403", description = "No autorizado o datos inválidos")
     })
-	public ResponseEntity<String> crearComida(@Valid @RequestBody Comida comida){
+	public ResponseEntity<String> crearComida( @RequestBody Comida comida){
 		System.out.println("Creando comida" + comida);
 		boolean creada = servicioComida.insert(comida);
 		return creada ? ResponseEntity.ok("Comida creada") :
-			ResponseEntity.status(HttpStatus.FORBIDDEN).body("No autorizado o datos inválidos");
+			ResponseEntity.status(HttpStatus.NOT_FOUND).body("No autorizado o datos inválidos");
 	}
 	
 	@PostMapping("/actualizar")
