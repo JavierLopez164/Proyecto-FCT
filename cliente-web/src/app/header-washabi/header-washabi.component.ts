@@ -20,7 +20,7 @@ export class HeaderWashabiComponent {
   }
   logout() {
 
-    localStorage.setItem('ultimoAcceso', new Date().toLocaleDateString());
+   
     // Eliminar el token del localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('email');

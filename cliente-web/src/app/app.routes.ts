@@ -9,6 +9,7 @@ import { DescargarappComponent } from './descargarapp/descargarapp.component';
 import { RegistrarComponent } from './registrar/registrar.component';
 import { LoginComponent } from './login/login.component';
 import { authGuard } from './auth.guard';
+import { noAuthGuard } from './guards/no-auth.guard';
 export const routes: Routes = [
     {path:"",title:"Inicio",component:InicioComponent,},   
     {path:"reserva",title:"Reserva",component:ReservaComponent,
@@ -21,6 +22,6 @@ export const routes: Routes = [
         canActivate: [authGuard]},
     {path:"ajuste",title:"Ajuste de Perfil",component:AjusteComponent,
         canActivate: [authGuard]},
-    {path:"registrar",title:"Registrar",component:RegistrarComponent},
-    {path:"login",title:"Login",component:LoginComponent},
+    {path:"registrar",title:"Registrar",component:RegistrarComponent,canActivate:[noAuthGuard]},
+    {path:"login",title:"Login",component:LoginComponent,canActivate:[noAuthGuard]},
 ];

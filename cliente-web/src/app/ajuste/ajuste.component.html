@@ -1,3 +1,80 @@
-<app-header/>
-<h1>Hola</h1>
-<app-footer/>
+<app-header />
+
+
+<mat-toolbar color="primary" class="!bg-cyan-500 !text-white shadow-md justify-center space-x-8">
+    <a href="#" class="text-white font-medium hover:text-amber-600 hover:underline transition duration-200">Cola
+        Prioridades</a>
+    <a routerLink="/perfil"
+        class="text-white font-medium hover:text-amber-600 hover:underline transition duration-200">Perfil</a>
+</mat-toolbar>
+<div class="max-w-6xl mx-auto mt-12 p-10 bg-white shadow-xl rounded-2xl space-y-10 m-10">
+
+    <h2 class="text-4xl font-bold text-center text-gray-800">Editar Perfil del Cliente</h2>
+  
+    <form [formGroup]="perfilForm" (ngSubmit)="guardarCambiosCliente()">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+  
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Nuevo Nombre</mat-label>
+          <input matInput formControlName="nombre" placeholder="Ingresa tu nombre">
+        </mat-form-field>
+  
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Nueva Contraseña</mat-label>
+          <input matInput type="password" formControlName="contrasenia" placeholder="Ingresa nueva contraseña">
+        </mat-form-field>
+  
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>URL de Imagen de Perfil</mat-label>
+          <input matInput formControlName="imagenUrl" placeholder="https://...">
+          
+        </mat-form-field>
+  
+      </div>
+  
+      <div class="flex justify-center mt-8">
+        <button mat-raised-button color="primary" type="submit" class="px-6 py-2 text-white font-semibold">
+          Guardar Cambios Cliente
+        </button>
+      </div>
+    </form>
+  
+    <mat-expansion-panel class="bg-gray-50 rounded-xl">
+        
+      <mat-expansion-panel-header>
+        <mat-panel-title class="text-lg font-semibold text-blue-800">Acceso solo para Administradores</mat-panel-title>
+        <mat-panel-description class="ml-14">
+            {{panelOpenState() ? '  Solo lo pueden ver los admins ' : 'Bienvenido '+perfil.nombre}}   
+          </mat-panel-description>
+          <mat-icon class="m-6">account_circle</mat-icon>
+        </mat-expansion-panel-header>
+      
+      <!-- Panel solo visible si es admin -->
+       @if (perfil.rol=="ROLE_ADMIN") {
+      <form [formGroup]="perfilForm" (ngSubmit)="guardarCambiosAdmin()">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+  
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Nueva Sala</mat-label>
+            <input matInput formControlName="sala" placeholder="Ej. Sala 101">
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Nuevo Email</mat-label>
+            <input matInput formControlName="email" placeholder="correo@ejemplo.com">
+          </mat-form-field>
+  
+        </div>
+  
+        <div class="flex justify-end mt-6">
+          <button mat-raised-button color="accent" type="submit" class="px-6 py-2 text-white font-semibold">
+            Guardar Cambios Admin
+          </button>
+        </div>
+      </form>
+       }
+    </mat-expansion-panel>
+  
+  </div>
+
+<app-footer />

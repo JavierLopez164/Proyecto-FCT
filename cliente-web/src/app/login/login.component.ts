@@ -26,6 +26,7 @@ export class LoginComponent {
     email: new FormControl('', [Validators.required, Validators.email]),
     contrasenia: new FormControl('', Validators.required)
   });
+
   constructor(private http: HttpClient,private router: Router) {}
 
    onSubmit(){
@@ -36,14 +37,14 @@ export class LoginComponent {
       {params:{email,password}}
     ).subscribe({
     next: res => {
-      // Guardamos el ultimo acceso
-      localStorage.setItem("ultimoAcceso", new Date().toLocaleDateString());
+      
       // Guardamos el token en el localStorage
       localStorage.setItem('token', res.token);
         // Guardamos el email
       localStorage.setItem('email', email);
-
+    
       this.router.navigate(['/perfil']);
+
     },
     error: err => {
       console.log(err)
