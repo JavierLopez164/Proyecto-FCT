@@ -21,7 +21,7 @@ public interface ComidaRepositorio extends CrudRepository<Comida, ComidaPK> {
 	@Query("UPDATE Comida c SET c.valoracion = ?2 WHERE c.comidaPK = ?1")
 	public int actualizarValoracion (ComidaPK id, int valoracion);
 	
-	@Query("SELECT c FROM Comida WHERE c.comidaPK.nRestaurante = ?1")
+	@Query("SELECT c FROM Comida c WHERE c.comidaPK.nRestaurante = ?1")
 	public List<Comida> obtenerComidasDeUnRestaurante(String restaurante);
 	
 }
