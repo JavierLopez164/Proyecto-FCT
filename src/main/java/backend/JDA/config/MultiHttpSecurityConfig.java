@@ -28,7 +28,17 @@ public class MultiHttpSecurityConfig {
                         "/api/clientes/register",
                         "/api/comentarios/crear",
                         "/api/comentarios/eliminar",
-                        "/api/comentarios/lista","/api/clientes/acceso").permitAll()
+                        "/api/comentarios/lista",
+                        "/api/clientes/acceso",
+                        "/api/comida/crear",
+                        "/api/comida/actualizar",
+                        "/api/comida/eliminar",
+                        "/api/comida/listarComidas",
+                        "/api/comida/listarComidaPorId",
+                        "/api/comida/cambiarDescripcion",
+                        "/api/comida/cambiarPrecio",
+                        "/api/comida/cambiarValoracion",
+                        "/api/comida/obtenerComidasDeUnRestaurante").permitAll()
                 .requestMatchers( "/v3/api-docs/**",
                         "/swagger-ui/**",
                         "/swagger-ui.html",
