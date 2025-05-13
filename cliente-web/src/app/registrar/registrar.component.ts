@@ -8,9 +8,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-registrar',
-  imports: [HeaderWashabiComponent, FooterComponent, MatFormFieldModule,MatInputModule,MatButtonModule,MatCardModule,ReactiveFormsModule],
+  imports: [HeaderWashabiComponent, FooterComponent, MatFormFieldModule,MatInputModule,MatSnackBarModule,MatButtonModule,MatCardModule,ReactiveFormsModule],
   templateUrl: './registrar.component.html',
   styleUrl: './registrar.component.css'
 })
@@ -22,7 +23,7 @@ export class RegistrarComponent {
   });
 
   //Inyecto de forma manual la dependencia para establecer conexion con el backend,es decir,construyo la instancia del objeto
-  constructor(private http: HttpClient,private router: Router) {}
+  constructor(private http: HttpClient,private router: Router, private snackBar: MatSnackBar) {}
 
   onSubmit() {
     this.http.post('http://localhost:8080/api/clientes/register', this.registroForm.value,{ 
@@ -30,13 +31,19 @@ export class RegistrarComponent {
       responseType: 'text'})
     .subscribe({
       next: res =>{
-        alert("Cliente registrado")
       this.router.navigate(['/login']);
-
       },
-      error: err => console.error('Error al registrar:', err)
+      
+      error: err => {
+      this.snackBar.open('Registro mal hecho o con cuenta ya existente', 'Cerrar', {
+        duration: 3000
+      });
+        console.error('Error al registrar:', err)
+      }
     });
-
+ this.snackBar.open('Registro hecho con éxito', 'Cerrar', {
+        duration: 3000
+      });
 
   }
 }
