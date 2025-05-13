@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { PerfilService } from '../services/perfil.service';
 
 @Component({
   selector: 'app-header',
@@ -7,13 +8,19 @@ import { Router, RouterLink } from '@angular/router';
   templateUrl: './header-washabi.component.html',
   styleUrl: './header-washabi.component.css'
 })
-export class HeaderWashabiComponent {
+export class HeaderWashabiComponent implements OnInit{
 
   prender=false;
   estaPulsado=false;
   rutaActual="";
-  constructor(private ruta: Router) {
+  perfil=""
+  constructor(private ruta: Router,private perfilService:PerfilService) {
     this.rutaActual = this.ruta.url;
+  }
+
+  ngOnInit(): void {
+     this.perfilService.obtenerPerfil().subscribe(res=>{
+      this.perfil = res.imagenUrl;})
   }
   estaLogeado():Boolean{
     return localStorage.getItem('token')!=null;
