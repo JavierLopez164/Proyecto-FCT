@@ -28,15 +28,13 @@ public class MultiHttpSecurityConfig {
                         "/api/clientes/register",
                         "/api/comentarios/crear",
                         "/api/comentarios/eliminar",
-                        "/api/comentarios/lista",
-                        "/api/clientes/acceso"
-                        ).permitAll().requestMatchers("/api/comida/**").permitAll()
+                        "/api/comentarios/lista").permitAll().requestMatchers("/api/comida/**").permitAll()
                 .requestMatchers( "/v3/api-docs/**",
                         "/swagger-ui/**",
                         "/swagger-ui.html",
                         "/swagger-resources/**",
                         "/webjars/**").permitAll()
-                .requestMatchers("/api/clientes/consultar/**").hasRole("USER")).
+                .requestMatchers("/api/clientes/consultar/**","/api/clientes/actualizar").hasAnyRole("USER", "ADMIN")).
                 
           
                 addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
