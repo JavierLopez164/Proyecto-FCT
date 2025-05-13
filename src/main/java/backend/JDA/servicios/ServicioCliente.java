@@ -13,16 +13,18 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import backend.JDA.config.DtoConverter;
 import backend.JDA.config.JwtConstant;
 import backend.JDA.modelo.Cliente;
 import backend.JDA.modelo.Rol;
+
 import backend.JDA.repositorios.ClienteRepositorio;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class ServicioCliente implements IServicioCliente {
 	@Autowired ClienteRepositorio clienteDao;
-
+	@Autowired DtoConverter dtoConverter;
 
 
 	@Override
@@ -43,6 +45,18 @@ public class ServicioCliente implements IServicioCliente {
 	public Optional<Cliente> findById(String email) {
 		// TODO Auto-generated method stub
 		return clienteDao.findById(email);
+	}
+
+
+	@Override
+	public boolean actualizarCliente(Cliente clm) {
+		// TODO Auto-generated method stub
+		boolean encontrado=false;
+		if(clienteDao.existsById(clm.getEmail())) {
+			clienteDao.save(clm);
+			encontrado=true;
+		}
+		return encontrado;
 	}
 
 
