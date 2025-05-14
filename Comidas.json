@@ -1,0 +1,30 @@
+[
+  {
+    "comidaPK": {
+      "ncomida": "string",
+      "nrestaurante": "string"
+    },
+    "descripcion": "string",
+    "precio": 0,
+    "sabor": "DULCE",
+    "valoracion": 0,
+    "alimentos": [
+      "string"
+    ]
+  },
+  {
+    "comidaPK": {
+      "ncomida": "hamburguesa",
+      "nrestaurante": "paco"
+    },
+    "descripcion": "Una hamburguesa muy buena",
+    "precio": 10.99,
+    "sabor": "SALADO",
+    "valoracion": 5,
+    "alimentos": [
+      "carne",
+      "pan",
+      "queso"
+    ]
+  }
+]

@@ -107,7 +107,7 @@ public class ComidaController {
             @ApiResponse(responseCode = "200", description = "Comidas listadas correctamente"),
             @ApiResponse(responseCode = "403", description = "No autorizado o datos inválidos")
     })
-	public ResponseEntity<Comida> obtenerUnaComidaPorId(@Valid @RequestBody ComidaPK comidaPK){
+	public ResponseEntity<Comida> obtenerUnaComidaPorId(@RequestBody ComidaPK comidaPK){
 		Optional<Comida> comida = servicioComida.findById(comidaPK);
 		ResponseEntity<Comida> response;
 		
