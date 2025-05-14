@@ -24,10 +24,7 @@ public class Alimento {
 	@Id
 	@Column(name = "pk_alimento")
 	private String id;
-	@Column(name = "", length = 20)
+	@Column(name = "nombre", length = 20)
 	private String nombre;
-	@Column(name = "tipoAlimento")
-	@Enumerated(EnumType.STRING)
-	private TipoAlimento tipoAlimento;
 	
 }

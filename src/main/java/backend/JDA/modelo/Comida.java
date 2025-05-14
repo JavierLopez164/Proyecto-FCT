@@ -23,6 +23,8 @@ public class Comida implements Serializable{
 	private String descripcion;
 	@Column(name = "precio")
 	private float precio;
+	@Column(name = "categoria")
+	private String categoria;
 	@Column(name = "sabor")
 	@Enumerated(EnumType.STRING)
 	private Sabor sabor;

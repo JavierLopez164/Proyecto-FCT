@@ -110,18 +110,28 @@ public class ComidaController {
 	public ResponseEntity<Comida> obtenerUnaComidaPorId(@Valid @RequestBody ComidaPK comidaPK){
 		Optional<Comida> comida = servicioComida.findById(comidaPK);
 		ResponseEntity<Comida> response;
-		
-		if(comida.isPresent()) {
-			response = ResponseEntity.ok(comida.get());
-		}
-		else {
-			response = (ResponseEntity<Comida>) ResponseEntity.status(HttpStatus.FORBIDDEN);
-		}
+
+        response = comida.map(ResponseEntity::ok).orElseGet(() -> (ResponseEntity<Comida>) ResponseEntity.status(HttpStatus.FORBIDDEN));
 		
 		return response;
 		
 	}
-	
+
+	@GetMapping("/obtenerComidasDeUnRestaurante")
+	@Operation(
+			summary = "Obtener las comidas de un restaurante",
+			description = "Permite a un admin obtener las comidas de un restaurante."
+			//security = @SecurityRequirement(name = "bearerAuth")
+	)
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Comidas listadas correctamente"),
+			@ApiResponse(responseCode = "403", description = "No autorizado o datos inválidos")
+	})
+	public ResponseEntity<List<Comida>> obtenerComidasDeUnRestaurante(@RequestAttribute String restaurante){
+		List<Comida> comidas = servicioComida.obtenerComidasDeUnRestaurante(restaurante);
+		return ResponseEntity.ok(comidas);
+	}
+	/*
 	@PostMapping("/cambiarDescripcion")
     @Operation(
             summary = "Cambiar la descripcion de una comida",
@@ -174,20 +184,6 @@ public class ComidaController {
 		return creada ? ResponseEntity.ok("Comida actualizada") :
 			ResponseEntity.status(HttpStatus.FORBIDDEN).body("No autorizado o datos inválidos");
 	}
-	
-	@GetMapping("/obtenerComidasDeUnRestaurante")
-    @Operation(
-            summary = "Obtener las comidas de un restaurante",
-            description = "Permite a un admin obtener las comidas de un restaurante."
-            //security = @SecurityRequirement(name = "bearerAuth")
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Comidas listadas correctamente"),
-            @ApiResponse(responseCode = "403", description = "No autorizado o datos inválidos")
-    })
-	public ResponseEntity<List<Comida>> obtenerComidasDeUnRestaurante(@RequestAttribute String restaurante){
-		List<Comida> comidas = servicioComida.obtenerComidasDeUnRestaurante(restaurante);
-		return ResponseEntity.ok(comidas);
-	}
+	*/
 	
 }
