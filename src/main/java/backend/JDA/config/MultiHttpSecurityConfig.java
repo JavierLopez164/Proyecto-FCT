@@ -34,7 +34,7 @@ public class MultiHttpSecurityConfig {
                         "/swagger-ui.html",
                         "/swagger-resources/**",
                         "/webjars/**").permitAll()
-                .requestMatchers("/api/clientes/consultar/**","/api/clientes/actualizar").hasAnyRole("USER", "ADMIN")).
+                .requestMatchers("/api/clientes/consultar/**","/api/clientes/actualizar","api/fotos/subir").hasAnyRole("USER", "ADMIN")).
                 
           
                 addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
