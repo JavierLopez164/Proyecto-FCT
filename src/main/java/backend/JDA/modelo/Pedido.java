@@ -17,13 +17,16 @@ public class Pedido {
 	@Id
 	@Column(name = "pk_pedido")
 	private String id;
-	@JoinColumn(name = "cliente")
-	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@JoinColumn(name = "cliente", nullable = false)
 	private Cliente cliente;
-	@Column(name = "comidas")
-	@OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@JoinColumn(name = "pedido_id") // o utilizar tabla intermedia si es necesario
 	private List<Comida> comidas;
-	@Column(name = "cantidadFinal")
+
 	private float cantidadFinal;
+
 	
 }

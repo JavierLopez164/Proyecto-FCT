@@ -17,28 +17,42 @@ public class MultiHttpSecurityConfig {
     private JWTAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
-     SecurityFilterChain configure(HttpSecurity http) throws Exception {
+    SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
-            .csrf((csrf) -> {
-					csrf.disable();
-			}).cors(Customizer.withDefaults())
-           
-            .authorizeHttpRequests(authz -> authz
-                .requestMatchers(  "/api/clientes/login",
-                        "/api/clientes/register",
-                        "/api/comentarios/crear",
-                        "/api/comentarios/eliminar",
-                        "/api/comentarios/lista").permitAll().requestMatchers("/api/comida/**").permitAll()
-                .requestMatchers( "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html",
-                        "/swagger-resources/**",
-                        "/webjars/**").permitAll()
-                .requestMatchers("/api/clientes/consultar/**","/api/clientes/actualizar","api/fotos/subir").hasAnyRole("USER", "ADMIN")).
-                
-          
-                addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
-            ;
+                .csrf(csrf -> csrf.disable())
+                .cors(Customizer.withDefaults())
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers(
+                                "/api/clientes/login",
+                                "/api/clientes/register",
+                                "/api/comentarios/lista",
+                                "/api/clientes/acceso"
+                        ).permitAll()
+
+                        // Rutas públicas
+                        .requestMatchers("/api/comida/**").permitAll()
+                        .requestMatchers("/api/pedidos/**").permitAll()
+
+                        // Swagger
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
+
+                        // Comentarios
+                        .requestMatchers("/api/comentarios/crear").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/comentarios/eliminar").hasRole("ADMIN")
+
+                        // Consultar clientes
+                        .requestMatchers("/api/clientes/consultar/**").hasAnyRole("USER", "ADMIN")
+
+                        // Cualquier otra petición requiere autenticación
+                        .anyRequest().authenticated()
+                )
+                .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

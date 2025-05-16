@@ -16,14 +16,14 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtAuthentication {
-	public String getJWTToken(String nombre,Rol rol) {
+	public String getJWTToken(String email,Rol rol) {
 
 		List<GrantedAuthority> grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority(rol.name()));
 
 		String token = Jwts
 				.builder()
 				.setId("WashabiJWT")
-				.setSubject(nombre)
+				.setSubject(email)
 				.claim("authorities",
 						grantedAuthorities.stream()
 								.map(GrantedAuthority::getAuthority)

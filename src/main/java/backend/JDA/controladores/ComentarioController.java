@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,36 +26,42 @@ public class ComentarioController {
     @PostMapping("/crear")
     @Operation(
             summary = "Crear un nuevo comentario",
-            description = "Permite a un usuario registrado o admin crear un comentario."
-            //security = @SecurityRequirement(name = "bearerAuth")
+            description = "Permite a un usuario registrado o admin crear un comentario.",
+            security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Comentario creado correctamente"),
             @ApiResponse(responseCode = "403", description = "No autorizado o datos inválidos")
     })
-    public ResponseEntity<String> crearComentario(@Valid @RequestBody Comentario comentario, @RequestParam String cliente, @RequestParam String comida) {
-        System.out.println("Creando comentario" + comentario + ", ++" + cliente + ", " + comida);
-        boolean creado = servicioComentario.crearComentario(comentario, cliente, comida);
-        return creado ? ResponseEntity.ok("Comentario creado") :
-                ResponseEntity.status(HttpStatus.FORBIDDEN).body("No autorizado o datos inválidos");
+    public ResponseEntity<String> crearComentario(@Valid @RequestBody Comentario comentario, @RequestParam String comida) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        boolean creado = servicioComentario.crearComentario(comentario, email, comida);
+
+        return creado
+                ? ResponseEntity.ok("Comentario creado")
+                : ResponseEntity.status(HttpStatus.FORBIDDEN).body("No autorizado o datos inválidos");
     }
 
     @DeleteMapping("/eliminar")
     @Operation(
             summary = "Eliminar comentario",
-            description = "Permite a un ADMIN eliminar un comentario."
-            //security = @SecurityRequirement(name = "bearerAuth")
+            description = "Permite a un ADMIN eliminar un comentario.",
+            security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Comentario eliminado correctamente"),
             @ApiResponse(responseCode = "403", description = "No autorizado")
     })
-    public ResponseEntity<String> eliminarComentario(
-            @RequestParam Long id,
-            @RequestParam String email) {
+    public ResponseEntity<String> eliminarComentario(@RequestParam Long id) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
         boolean eliminado = servicioComentario.eliminarComentario(id, email);
-        return eliminado ? ResponseEntity.ok("Comentario eliminado") :
-                ResponseEntity.status(HttpStatus.FORBIDDEN).body("No autorizado");
+
+        return eliminado
+                ? ResponseEntity.ok("Comentario eliminado")
+                : ResponseEntity.status(HttpStatus.FORBIDDEN).body("No autorizado");
     }
 
     @GetMapping("/lista")
