@@ -23,8 +23,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class ServicioCliente implements IServicioCliente {
-	@Autowired ClienteRepositorio clienteDao;
-	@Autowired DtoConverter dtoConverter;
+	@Autowired private ClienteRepositorio clienteDao;
+	@Autowired private DtoConverter dtoConverter;
 
 
 	@Override

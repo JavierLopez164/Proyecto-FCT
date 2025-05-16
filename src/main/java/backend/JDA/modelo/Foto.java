@@ -1,5 +1,7 @@
 package backend.JDA.modelo;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,6 +20,8 @@ public class Foto {
 	@Column(name = "foto_id")
 	private Long id;
 
-	@Column(name = "url", nullable = false)
+	@Column(name = "url")
 	private String url;
+	
+	private LocalDate fecha;
 }

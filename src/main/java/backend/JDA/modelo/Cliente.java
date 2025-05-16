@@ -2,6 +2,8 @@ package backend.JDA.modelo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -12,6 +14,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 
 @Data
@@ -23,7 +26,6 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @EntityListeners(PasswordListener.class)
 public class Cliente {
-
 	//@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 	@EqualsAndHashCode.Include
 	@Id
@@ -45,10 +47,11 @@ public class Cliente {
 	 private LocalDate fechaCreacion=LocalDate.now();
 	 @Builder.Default
 	 private String imagenUrl="/img/imagen_usuario_por_defecto.jpg";
-/*
-	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="foto_id")
-	private Foto foto;
-*/		
+	@Builder.Default
+	private List<Foto> foto=new ArrayList<>();
+	
 	
 }
