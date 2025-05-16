@@ -62,7 +62,7 @@ public class ClienteController {
 		if (c.isPresent() && passwordEncoder.matches(password, c.get().getContrasenia())) {
 			copia = c.get();
 
-			token = jwtAuthtenticationConfig.getJWTToken(c.get().getNombre(), c.get().getRol());
+			token = jwtAuthtenticationConfig.getJWTToken(c.get().getEmail(), c.get().getRol());
 			resJson.put("token", token);
 			resJson.put("mensaje", "Login exitoso");
 			resJson.put("nombre", copia.getNombre());
@@ -109,6 +109,7 @@ public class ClienteController {
 
 	public ResponseEntity<Cliente> crearClienteRegistrado( @RequestBody Cliente client) {
 		ResponseEntity<Cliente> response;
+		System.out.println(client);
 		if (servicioCliente.registrarCliente(client)) {
 			response = ResponseEntity.ok(client);
 		} else {
