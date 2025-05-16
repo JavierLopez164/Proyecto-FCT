@@ -7,20 +7,23 @@ import { HttpHeaders } from '@angular/common/http';
 })
 export class PerfilService {
    apiUrl = 'http://localhost:8080/api/clientes/'; 
-   token = localStorage.getItem('token')??"";
-   emailGuardado=localStorage.getItem('email')??"";
  
   constructor(private http: HttpClient) {}
   actualizarPerfilCliente(datos: any): Observable<any> {
-    return this.http.put(this.apiUrl, datos);
+      const headers= new HttpHeaders({
+      'Authorization': localStorage.getItem('token')??"", 'Content-Type': 'application/json',
+  'Accept': 'application/json'
+    });
+    return this.http.put(this.apiUrl+"actualizar",datos,{headers});
   }
 
   obtenerPerfil(): Observable<any> {
+    
     const headers= new HttpHeaders({
-      'Authorization': this.token, 'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('token')??"", 'Content-Type': 'application/json',
   'Accept': 'application/json'
     });
-    return this.http.get(this.apiUrl+"consultar/"+encodeURIComponent(this.emailGuardado),{headers});
+    return this.http.get(this.apiUrl+"consultar/"+encodeURIComponent(localStorage.getItem('email')??""),{headers});
   }
  
 }

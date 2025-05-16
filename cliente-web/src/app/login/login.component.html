@@ -1,9 +1,4 @@
 <app-header />
-@if (mensaje!="") {
-<div class="absolute top-0 left-0 w-full">
-  <app-notificacion [mensaje]="mensaje" [tipo]="tipo"></app-notificacion>
-</div>
-}
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6 max-w-md mx-auto my-32">
   <mat-card class="p-6 shadow-lg">
     <mat-card-title class="text-2xl font-semibold text-center text-purple-700 mb-4 py-3">Iniciar Sesión</mat-card-title>

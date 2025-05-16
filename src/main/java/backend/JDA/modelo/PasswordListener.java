@@ -11,10 +11,9 @@ public class PasswordListener {
 	private PasswordEncoder passwordEncoder;
 	@PrePersist
 	@PreUpdate
-	
 	public void traspasarPassword(Cliente cliente) {
 		
-		if(cliente!=null)
+		if(cliente!=null && !cliente.getContrasenia().startsWith("$2a$10$"))
 			cliente.setContrasenia(passwordEncoder.encode(cliente.getContrasenia()));
 	}
 }

@@ -40,10 +40,11 @@ public class Cliente {
 
 	 @Builder.Default
 	 @Enumerated(EnumType.STRING)
-	 private Rol rol=Rol.ROLE_USER;
+	 private Rol rol=Rol.ROLE_ADMIN;
 	 @Builder.Default
 	 private LocalDate fechaCreacion=LocalDate.now();
-	
+	 @Builder.Default
+	 private String imagenUrl="/img/imagen_usuario_por_defecto.jpg";
 /*
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="foto_id")

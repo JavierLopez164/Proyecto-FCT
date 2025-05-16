@@ -25,7 +25,7 @@ export class PerfilComponent implements OnInit {
     sala: "",
     rol: "",
     fechaCreacion: "",
-    imagenUrl:"/img/imagen_usuario_por_defecto.jpg"
+    imagenUrl:""
   };
 
   ngOnInit():void{
@@ -33,11 +33,10 @@ export class PerfilComponent implements OnInit {
       this.perfil.nombre = res.nombre;
       this.perfil.email = res.email;
       this.perfil.password = res.contrasenia;
-      this.perfil.sala = res.sala;
       this.perfil.rol = res.rol;
       this.perfil.fechaCreacion = res.fechaCreacion;
+      this.perfil.imagenUrl=res.imagenUrl;
     });
-  
   };
  
 }

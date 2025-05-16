@@ -1,3 +1,45 @@
-<app-header/>
-<h1>Estoy en reserva</h1>
-<app-footer/>
+<app-header />
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="max-w-xl mx-auto mt-10 p-6 bg-gray-900 rounded shadow space-y-6 text-white my-18">
+
+  <h2 class="text-2xl font-bold mb-4">Reservar </h2>
+
+  <!-- Cliente (solo lectura) -->
+  <div>
+    <label class="block text-sm font-medium mb-1">Cliente</label>
+    <input type="text" [value]="clienteNombre" readonly class="w-full p-2 border border-gray-600 rounded bg-gray-800 text-white cursor-not-allowed">
+  </div>
+
+  <!-- Restaurante -->
+  <div>
+    <label class="block text-sm font-medium mb-1">Restaurante</label>
+    <select formControlName="restauranteId" class="w-full p-2 border border-gray-600 rounded bg-gray-800 text-white">
+      <option value="">Selecciona un restaurante</option>
+      @for (rest of restaurantes; track rest.nombre) {
+        <option [value]="rest.nombre">{{ rest.nombre }}</option>
+      }
+    </select>
+  </div>
+
+  <!-- Fecha y Hora -->
+  <div>
+    <label class="block text-sm font-medium mb-1">Fecha y Hora</label>
+    <input type="datetime-local" formControlName="fechaHora"
+           class="w-full p-2 border border-gray-600 rounded bg-gray-800 text-white">
+  </div>
+
+  <!-- Número de personas -->
+  <div>
+    <label class="block text-sm font-medium mb-1">Número de Personas</label>
+    <input type="number" formControlName="nPersonas" min="1" max="5"
+           class="w-full p-2 border border-gray-600 rounded bg-gray-800 text-white">
+  </div>
+
+  <!-- Botón -->
+  <div class="text-right">
+    <button type="submit" [disabled]="form.invalid"
+      class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded text-white disabled:opacity-50">
+      Reservar
+    </button>
+  </div>
+</form>
+<app-footer />
