@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -48,10 +49,7 @@ public class Cliente {
 	 @Builder.Default
 	 private String imagenUrl="/img/imagen_usuario_por_defecto.jpg";
 
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumn(name="foto_id")
-	@Builder.Default
-	private List<Foto> foto=new ArrayList<>();
+
 	
 	
 }

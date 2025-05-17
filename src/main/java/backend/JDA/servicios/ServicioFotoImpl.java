@@ -55,9 +55,9 @@ public class ServicioFotoImpl implements IServicioFoto {
 			headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 		    HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
 		    ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
-		    Foto f=fotoDAO.save(Foto.builder().fecha(LocalDate.now()).url(response.getBody().get("secure_url").toString()).build());
-		    client.get().getFoto().add(f);
-		    clienteDao.save(client.get());
+		    Foto f=fotoDAO.save(Foto.builder().fecha(LocalDate.now()).url(response.getBody().get("secure_url").toString()).cliente(client.get()).build());
+		    System.out.println("Se hizo la petición");
+		    System.out.println(f);
 		    exitoAlSubirFoto=true;
 	
 		}
@@ -71,7 +71,7 @@ public class ServicioFotoImpl implements IServicioFoto {
 		// TODO Auto-generated method stub
 		boolean exito = false;
 		
-		if(fotoDAO.existsById(foto.getId())) {
+		if(fotoDAO.existsById(foto.getFotoId())) {
 			fotoDAO.save(foto);
 			exito = true;
 		}
@@ -80,7 +80,7 @@ public class ServicioFotoImpl implements IServicioFoto {
 	}
 
 	@Override
-	public boolean delete(Long id) {
+	public boolean delete(int id) {
 		// TODO Auto-generated method stub
 		boolean exito = false;
 		
@@ -99,7 +99,7 @@ public class ServicioFotoImpl implements IServicioFoto {
 	}
 
 	@Override
-	public Optional<Foto> findById(Long id) {
+	public Optional<Foto> findById(int id) {
 		// TODO Auto-generated method stub
 		return fotoDAO.findById(id);
 	}
