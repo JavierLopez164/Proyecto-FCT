@@ -13,10 +13,10 @@ public interface IServicioFoto {
 	
 	public boolean update(Foto foto);
 	
-	public boolean delete(Long id);
+	public boolean delete(int id);
 	
 	public List<Foto> findAll();
 	
-	public Optional<Foto> findById(Long id);
+	public Optional<Foto> findById(int id);
 	
 }
