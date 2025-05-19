@@ -12,4 +12,8 @@ public interface ComentarioRepositorio extends CrudRepository<Comentario, Long> 
 
     @Query("SELECT c FROM Comentario c WHERE c.comida = :idComida") //Cambiar por c.comida.id
     List<Comentario> findByComidaId(String idComida);
+
+    @Query("SELECT AVG(c.valoracion) FROM Comentario c WHERE c.comida = :comida")
+    Double obtenerPromedioValoracionPorComida(String comida);
+
 }

@@ -21,8 +21,7 @@ public interface IServicioComida {
 	public boolean cambiarDescripcion(ComidaPK comidaPK, String descripcion);
 	
 	public boolean cambiarPrecio(ComidaPK comidaPK, float precio);
-	
-	public boolean cambiarValoracion(ComidaPK comidaPK, int valoracion);
+
 	
 	public List<Comida> obtenerComidasDeUnRestaurante(String restaurante);
 	

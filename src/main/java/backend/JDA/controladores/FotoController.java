@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import backend.JDA.servicios.IServicioFoto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
+/*
 @RestController
 @RequestMapping("api/fotos")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -44,3 +44,4 @@ public class FotoController {
 	        
 	    }
 }
+*/

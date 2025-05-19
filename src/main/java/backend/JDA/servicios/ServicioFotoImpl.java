@@ -21,7 +21,7 @@ import backend.JDA.modelo.Cliente;
 import backend.JDA.modelo.Foto;
 import backend.JDA.repositorios.ClienteRepositorio;
 import backend.JDA.repositorios.FotoRepositorio;
-
+/*
 @Service
 public class ServicioFotoImpl implements IServicioFoto {
 
@@ -105,3 +105,4 @@ public class ServicioFotoImpl implements IServicioFoto {
 	}
 	
 }
+*/

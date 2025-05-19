@@ -45,13 +45,11 @@ public class Cliente {
 	 private Rol rol=Rol.ROLE_ADMIN;
 	 @Builder.Default
 	 private LocalDate fechaCreacion=LocalDate.now();
-	 @Builder.Default
-	 private String imagenUrl="/img/imagen_usuario_por_defecto.jpg";
 
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	/*@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="foto_id")
 	@Builder.Default
-	private List<Foto> foto=new ArrayList<>();
+	private List<Foto> foto=new ArrayList<>();*/
 	
 	
 }

@@ -1,6 +1,8 @@
 package backend.JDA.servicios;
 
+import backend.JDA.config.DtoConverter;
 import backend.JDA.modelo.*;
+import backend.JDA.modelo.dto.ComentarioDTO;
 import backend.JDA.repositorios.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,17 +22,22 @@ public class ServicioComentarioImpl implements IServicioComentario {
 
 	@Autowired
 	private ComidaRepositorio comidaRepo;
+	@Autowired
+	private DtoConverter dtoConverter;
 
 	@Override
-	public boolean crearComentario(Comentario comentario, String cliente, String comida) {
+	public boolean crearComentario(ComentarioDTO dto, String cliente, String comida) {
 		Optional<Cliente> clienteOpt = clienteRepo.findById(cliente);
 		//Optional<Comida> comidaOpt = comidaRepo.findById(comida);
+		Comentario comentario;
 
 		if (clienteOpt.isPresent() /*&& comidaOpt.isPresent()*/) {
 			Cliente copia = clienteOpt.get();
 			System.out.println("Cliente encontrado: " + copia.getEmail() + ", rol: " + copia.getRol());
 
 			if (copia.getRol().toString().equals("ROLE_ADMIN") || copia.getRol().toString().equals("ROLE_USER")) {
+				comentario = dtoConverter.map(dto, Comentario.class);
+
 				comentario.setCliente(copia);
 				comentario.setComida(comida);
 				comentario.setFecha(LocalDateTime.now());
@@ -71,4 +78,11 @@ public class ServicioComentarioImpl implements IServicioComentario {
 	public Optional<Comentario> findById(Long id) {
 		return comentarioRepo.findById(id);
 	}
+
+	@Override
+	public int obtenerPromedioValoracion(String comida) {
+		Double promedio = comentarioRepo.obtenerPromedioValoracionPorComida(comida);
+		return promedio != null ? promedio.intValue() : 0;
+	}
+
 }

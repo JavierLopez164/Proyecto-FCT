@@ -26,7 +26,8 @@ public class MultiHttpSecurityConfig {
                                 "/api/clientes/login",
                                 "/api/clientes/register",
                                 "/api/comentarios/lista",
-                                "/api/clientes/acceso"
+                                "/api/clientes/acceso",
+                                "api/comentarios/promedio"
                         ).permitAll()
 
                         // Rutas públicas
@@ -47,7 +48,7 @@ public class MultiHttpSecurityConfig {
                         .requestMatchers("/api/comentarios/eliminar").hasRole("ADMIN")
 
                         // Consultar clientes
-                        .requestMatchers("/api/clientes/consultar/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/clientes/consultar/**", "api/fotos/subir").hasAnyRole("USER", "ADMIN")
 
                         // Cualquier otra petición requiere autenticación
                         .anyRequest().authenticated()

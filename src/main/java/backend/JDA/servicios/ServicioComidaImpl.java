@@ -95,19 +95,6 @@ public class ServicioComidaImpl implements IServicioComida {
 	}
 
 	@Override
-	public boolean cambiarValoracion(ComidaPK comidaPK, int valoracion) {
-		// TODO Auto-generated method stub
-		boolean exito = false;
-		
-		if (comidaDAO.existsById(comidaPK) && (valoracion >= 0 && valoracion <= 5)) {
-			comidaDAO.actualizarValoracion(comidaPK, valoracion);
-			exito = true;
-		}
-		
-		return exito;
-	}
-
-	@Override
 	public List<Comida> obtenerComidasDeUnRestaurante(String restaurante) {
 		// TODO Auto-generated method stub
 		List<Comida> listaComidas = new ArrayList<>();

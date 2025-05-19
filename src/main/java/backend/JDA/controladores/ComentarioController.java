@@ -1,6 +1,7 @@
 package backend.JDA.controladores;
 
 import backend.JDA.modelo.Comentario;
+import backend.JDA.modelo.dto.ComentarioDTO;
 import backend.JDA.servicios.IServicioComentario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,7 +34,7 @@ public class ComentarioController {
             @ApiResponse(responseCode = "200", description = "Comentario creado correctamente"),
             @ApiResponse(responseCode = "403", description = "No autorizado o datos inválidos")
     })
-    public ResponseEntity<String> crearComentario(@Valid @RequestBody Comentario comentario, @RequestParam String comida) {
+    public ResponseEntity<String> crearComentario(@Valid @RequestBody ComentarioDTO comentario, @RequestParam String comida) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -77,7 +78,20 @@ public class ComentarioController {
         List<Comentario> comentarios = servicioComentario.obtenerComentariosPorComida(nombreComida);
         return ResponseEntity.ok(comentarios);
     }
-    
-    
-    
+    @GetMapping("/promedio")
+    @Operation(
+            summary = "Obtener promedio de valoraciones de una comida",
+            description = "Devuelve el promedio de valoraciones como un número entero"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Promedio obtenido correctamente"),
+            @ApiResponse(responseCode = "404", description = "Comida no encontrada")
+    })
+    public ResponseEntity<Integer> obtenerPromedioValoracion(@RequestParam String comida) {
+        int promedio = servicioComentario.obtenerPromedioValoracion(comida);
+        return ResponseEntity.ok(promedio);
+    }
+
+
+
 }
