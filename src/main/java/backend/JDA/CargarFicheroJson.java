@@ -26,7 +26,7 @@ public class CargarFicheroJson implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) {
-		try (Reader reader = new FileReader("comidas.json")) {
+		try (Reader reader = new FileReader("Comidas.json")) {
 
 			Gson gson = new GsonBuilder()
 					.registerTypeAdapter(new TypeToken<List<Sabor>>() {}.getType(), new SaborListDeserializer())

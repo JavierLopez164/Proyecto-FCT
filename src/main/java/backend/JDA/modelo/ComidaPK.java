@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class ComidaPK implements Serializable{
 
-	private String nComida;
-	private String nRestaurante;
-	
+    private String nComida;
+    private String nRestaurante;
+
 }

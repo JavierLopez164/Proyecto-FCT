@@ -11,13 +11,13 @@ import backend.JDA.modelo.ComidaPK;
 
 @Repository
 public interface ComidaRepositorio extends CrudRepository<Comida, ComidaPK> {
-	
+
 	@Query("UPDATE Comida c SET c.description = ?2 WHERE c.comidaPK = ?1")
 	public int actualizaDescripcion (ComidaPK id, String description);
-	
+
 	@Query("UPDATE Comida c SET c.price = ?2 WHERE c.comidaPK = ?1")
 	public int actualizarPrecio (ComidaPK id, float precio);
-	
+
 	@Query("SELECT c FROM Comida c WHERE c.comidaPK.nRestaurante = ?1")
 	public List<Comida> obtenerComidasDeUnRestaurante(String restaurante);
 

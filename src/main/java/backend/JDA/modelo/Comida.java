@@ -51,4 +51,3 @@ public class Comida implements Serializable {
 	@Column
 	private String imageUrl;
 }
-

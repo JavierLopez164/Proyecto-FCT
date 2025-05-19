@@ -26,12 +26,12 @@ public class ServicioComentarioImpl implements IServicioComentario {
 	private DtoConverter dtoConverter;
 
 	@Override
-	public boolean crearComentario(ComentarioDTO dto, String cliente, String comida) {
+	public boolean crearComentario(ComentarioDTO dto, String cliente, ComidaPK comida) {
 		Optional<Cliente> clienteOpt = clienteRepo.findById(cliente);
-		//Optional<Comida> comidaOpt = comidaRepo.findById(comida);
+		Optional<Comida> comidaOpt = comidaRepo.findById(comida);
 		Comentario comentario;
 
-		if (clienteOpt.isPresent() /*&& comidaOpt.isPresent()*/) {
+		if (clienteOpt.isPresent() && comidaOpt.isPresent()) {
 			Cliente copia = clienteOpt.get();
 			System.out.println("Cliente encontrado: " + copia.getEmail() + ", rol: " + copia.getRol());
 
@@ -39,7 +39,7 @@ public class ServicioComentarioImpl implements IServicioComentario {
 				comentario = dtoConverter.map(dto, Comentario.class);
 
 				comentario.setCliente(copia);
-				comentario.setComida(comida);
+				comentario.setComida(comidaOpt.get());
 				comentario.setFecha(LocalDateTime.now());
 				comentarioRepo.save(comentario);
 				return true;

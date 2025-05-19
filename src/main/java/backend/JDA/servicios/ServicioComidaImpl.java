@@ -21,12 +21,12 @@ public class ServicioComidaImpl implements IServicioComida {
 	public boolean insert(Comida comida) {
 		// TODO Auto-generated method stub
 		boolean exito = false;
-		
+
 		if(!comidaDAO.existsById(comida.getComidaPK())) {
 			comidaDAO.save(comida);
 			exito = true;
 		}
-		
+
 		return exito;
 	}
 
@@ -34,12 +34,12 @@ public class ServicioComidaImpl implements IServicioComida {
 	public boolean update(Comida comida) {
 		// TODO Auto-generated method stub
 		boolean exito = false;
-		
+
 		if(comidaDAO.existsById(comida.getComidaPK())) {
 			comidaDAO.save(comida);
 			exito = true;
 		}
-		
+
 		return exito;
 	}
 
@@ -47,12 +47,12 @@ public class ServicioComidaImpl implements IServicioComida {
 	public boolean delete(ComidaPK comidaPK) {
 		// TODO Auto-generated method stub
 		boolean exito = false;
-		
+
 		if(comidaDAO.existsById(comidaPK)) {
 			comidaDAO.deleteById(comidaPK);
 			exito = true;
 		}
-		
+
 		return exito;
 	}
 
@@ -72,12 +72,12 @@ public class ServicioComidaImpl implements IServicioComida {
 	public boolean cambiarDescripcion(ComidaPK comidaPK, String descripcion) {
 		// TODO Auto-generated method stub
 		boolean exito = false;
-		
+
 		if (comidaDAO.existsById(comidaPK)) {
 			comidaDAO.actualizaDescripcion(comidaPK, descripcion);
 			exito = true;
 		}
-		
+
 		return exito;
 	}
 
@@ -85,12 +85,12 @@ public class ServicioComidaImpl implements IServicioComida {
 	public boolean cambiarPrecio(ComidaPK comidaPK, float precio) {
 		// TODO Auto-generated method stub
 		boolean exito = false;
-		
+
 		if (comidaDAO.existsById(comidaPK) && precio > 0f) {
 			comidaDAO.actualizarPrecio(comidaPK, precio);
 			exito = true;
 		}
-		
+
 		return exito;
 	}
 
@@ -98,10 +98,10 @@ public class ServicioComidaImpl implements IServicioComida {
 	public List<Comida> obtenerComidasDeUnRestaurante(String restaurante) {
 		// TODO Auto-generated method stub
 		List<Comida> listaComidas = new ArrayList<>();
-		
+
 		listaComidas = comidaDAO.obtenerComidasDeUnRestaurante(restaurante);
-		
+
 		return listaComidas;
 	}
-	
+
 }

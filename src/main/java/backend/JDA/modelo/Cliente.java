@@ -45,6 +45,8 @@ public class Cliente {
 	 private Rol rol=Rol.ROLE_ADMIN;
 	 @Builder.Default
 	 private LocalDate fechaCreacion=LocalDate.now();
+	 @Column(name = "restaurante", length = 50, nullable = true)
+	 private String restaurante;
 
 	/*@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="foto_id")
