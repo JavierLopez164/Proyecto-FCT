@@ -1,10 +1,12 @@
 package backend.JDA.modelo;
 
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id;
 
 @Data
 @Builder
@@ -12,25 +14,23 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 
-@Entity
+@Document(collection = "comida")
 public class Comida implements Serializable{
 	
 	@EqualsAndHashCode.Include
-	@EmbeddedId
+	@Id
 	//Nombre + restaurante
 	private ComidaPK comidaPK;
-	@Column(name = "descripcion", length = 40)
+	//@Column(name = "descripcion", length = 40)
 	private String descripcion;
-	@Column(name = "precio")
+	//@Column(name = "precio")
 	private float precio;
-	@Column(name = "categoria")
-	private String categoria;
-	@Column(name = "sabor")
-	@Enumerated(EnumType.STRING)
+	//@Column(name = "sabor")
+	//@Enumerated(EnumType.STRING)
 	private Sabor sabor;
-	@Column(name = "valoracion")
+	//@Column(name = "valoracion")
 	private int valoracion;
-	@Column(name = "alimentos")
+	//@Column(name = "alimentos")
 	private List<String> alimentos;
 	/*@JoinColumn(name = "foto")
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

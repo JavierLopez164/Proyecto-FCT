@@ -31,7 +31,7 @@ public class ServicioPedidoImpl implements IServicioPedido {
 
 	public Optional<Pedido> crearPedidoSimple(String email, String restaurante) {
 		Optional<Cliente> clienteOpt = clienteRepo.findById(email);
-		List<Comida> comidasRest = comidaRepo.obtenerComidasDeUnRestaurante(restaurante);
+		List<Comida> comidasRest = comidaRepo.findByComidaPKNRestaurante(restaurante);
 
 		if (clienteOpt.isEmpty() || comidasRest.isEmpty()) return Optional.empty();
 
