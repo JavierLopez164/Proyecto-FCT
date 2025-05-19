@@ -71,50 +71,54 @@ public class ServicioComidaImpl implements IServicioComida {
 	@Override
 	public boolean cambiarDescripcion(ComidaPK comidaPK, String descripcion) {
 		// TODO Auto-generated method stub
-		boolean exito = false;
-		
-		if (comidaDAO.existsById(comidaPK)) {
-			comidaDAO.actualizaDescripcion(comidaPK, descripcion);
-			exito = true;
-		}
-		
-		return exito;
+        Optional<Comida> optComida = comidaDAO.findById(comidaPK);
+        boolean exito = false;
+        
+        if (optComida.isPresent()) {
+            Comida comida = optComida.get();
+            comida.setDescripcion(descripcion);
+            comidaDAO.save(comida);
+            exito = true;
+        }
+        
+        return exito;
 	}
 
 	@Override
 	public boolean cambiarPrecio(ComidaPK comidaPK, float precio) {
 		// TODO Auto-generated method stub
 		boolean exito = false;
-		
-		if (comidaDAO.existsById(comidaPK) && precio > 0f) {
-			comidaDAO.actualizarPrecio(comidaPK, precio);
-			exito = true;
-		}
-		
-		return exito;
+
+        Optional<Comida> optComida = comidaDAO.findById(comidaPK);
+        if (optComida.isPresent() && precio <= 0f) {
+            Comida comida = optComida.get();
+            comida.setPrecio(precio);
+            comidaDAO.save(comida);
+            exito = true;
+        }
+        return exito;
 	}
 
 	@Override
 	public boolean cambiarValoracion(ComidaPK comidaPK, int valoracion) {
 		// TODO Auto-generated method stub
 		boolean exito = false;
-		
-		if (comidaDAO.existsById(comidaPK) && (valoracion >= 0 && valoracion <= 5)) {
-			comidaDAO.actualizarValoracion(comidaPK, valoracion);
-			exito = true;
-		}
-		
-		return exito;
-	}
+
+        Optional<Comida> optComida = comidaDAO.findById(comidaPK);
+        if (optComida.isPresent() && (valoracion > 0 || valoracion <= 5)) {
+            Comida comida = optComida.get();
+            comida.setValoracion(valoracion);
+            comidaDAO.save(comida);
+            exito = true;
+        }
+        return exito;
+    }
+	
 
 	@Override
 	public List<Comida> obtenerComidasDeUnRestaurante(String restaurante) {
 		// TODO Auto-generated method stub
-		List<Comida> listaComidas = new ArrayList<>();
-		
-		listaComidas = comidaDAO.obtenerComidasDeUnRestaurante(restaurante);
-		
-		return listaComidas;
+		return comidaDAO.findByComidaPKNRestaurante(restaurante);
 	}
 	
 }
