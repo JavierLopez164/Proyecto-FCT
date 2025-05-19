@@ -1,6 +1,7 @@
 package backend.JDA.controladores;
 
 import backend.JDA.modelo.Comentario;
+import backend.JDA.modelo.ComidaPK;
 import backend.JDA.modelo.dto.ComentarioDTO;
 import backend.JDA.servicios.IServicioComentario;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,12 +35,14 @@ public class ComentarioController {
             @ApiResponse(responseCode = "200", description = "Comentario creado correctamente"),
             @ApiResponse(responseCode = "403", description = "No autorizado o datos inválidos")
     })
-    public ResponseEntity<String> crearComentario(@Valid @RequestBody ComentarioDTO comentario, @RequestParam String comida) {
+    public ResponseEntity<String> crearComentario(@Valid @RequestBody ComentarioDTO comentario, @RequestParam String idComida,
+                                                  @RequestParam String nombreRestaurante) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        boolean creado = servicioComentario.crearComentario(comentario, email, comida);
+        ComidaPK comidapk = new ComidaPK(idComida, nombreRestaurante);
+        boolean creado = servicioComentario.crearComentario(comentario, email, comidapk);
 
         return creado
                 ? ResponseEntity.ok("Comentario creado")
