@@ -7,13 +7,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 
-@Entity
+//@Entity
+@Document(collection = "pedido")
 public class Pedido {
 	@EqualsAndHashCode.Include
 	@Id
