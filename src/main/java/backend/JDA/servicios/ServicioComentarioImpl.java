@@ -70,8 +70,8 @@ public class ServicioComentarioImpl implements IServicioComentario {
 	}
 
 	@Override
-	public List<Comentario> obtenerComentariosPorComida(String idComida, String restaurante) {
-		return comentarioRepo.findByComidaId(idComida, restaurante);
+	public List<Comentario> obtenerComentariosPorComida(String comida, String restaurante) {
+		return comentarioRepo.findByComidaId(comida, restaurante);
 	}
 
 	@Override

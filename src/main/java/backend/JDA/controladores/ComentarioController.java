@@ -90,7 +90,7 @@ public class ComentarioController {
             @ApiResponse(responseCode = "200", description = "Promedio obtenido correctamente"),
             @ApiResponse(responseCode = "404", description = "Comida no encontrada")
     })
-    public ResponseEntity<Integer> obtenerPromedioValoracion(@RequestParam String comida, @RequestParam String restaurante) {
+    public ResponseEntity<Integer> obtenerPromedioValoracion(@RequestParam String comida,@RequestParam String restaurante) {
         int promedio = servicioComentario.obtenerPromedioValoracion(comida, restaurante);
         return ResponseEntity.ok(promedio);
     }
