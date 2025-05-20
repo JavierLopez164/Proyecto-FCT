@@ -1,6 +1,8 @@
 package backend.JDA.controladores;
 
 import backend.JDA.modelo.Comentario;
+import backend.JDA.modelo.ComidaPK;
+import backend.JDA.modelo.dto.ComentarioDTO;
 import backend.JDA.servicios.IServicioComentario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,12 +35,14 @@ public class ComentarioController {
             @ApiResponse(responseCode = "200", description = "Comentario creado correctamente"),
             @ApiResponse(responseCode = "403", description = "No autorizado o datos inválidos")
     })
-    public ResponseEntity<String> crearComentario(@Valid @RequestBody Comentario comentario, @RequestParam String comida) {
+    public ResponseEntity<String> crearComentario(@Valid @RequestBody ComentarioDTO comentario, @RequestParam String comida,
+                                                  @RequestParam String restaurante) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        boolean creado = servicioComentario.crearComentario(comentario, email, comida);
+        ComidaPK comidapk = new ComidaPK(comida, restaurante);
+        boolean creado = servicioComentario.crearComentario(comentario, email, comidapk);
 
         return creado
                 ? ResponseEntity.ok("Comentario creado")
@@ -73,11 +77,24 @@ public class ComentarioController {
             @ApiResponse(responseCode = "200", description = "Comentarios obtenidos correctamente"),
             @ApiResponse(responseCode = "404", description = "Comida no encontrada")
     })
-    public ResponseEntity<List<Comentario>> obtenerComentariosPorComida(@RequestParam String nombreComida) {
-        List<Comentario> comentarios = servicioComentario.obtenerComentariosPorComida(nombreComida);
+    public ResponseEntity<List<Comentario>> obtenerComentariosPorComida(@RequestParam String comida,@RequestParam String restaurante) {
+        List<Comentario> comentarios = servicioComentario.obtenerComentariosPorComida(comida, restaurante);
         return ResponseEntity.ok(comentarios);
     }
-    
-    
-    
+    @GetMapping("/promedio")
+    @Operation(
+            summary = "Obtener promedio de valoraciones de una comida",
+            description = "Devuelve el promedio de valoraciones como un número entero"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Promedio obtenido correctamente"),
+            @ApiResponse(responseCode = "404", description = "Comida no encontrada")
+    })
+    public ResponseEntity<Integer> obtenerPromedioValoracion(@RequestParam String comida,@RequestParam String restaurante) {
+        int promedio = servicioComentario.obtenerPromedioValoracion(comida, restaurante);
+        return ResponseEntity.ok(promedio);
+    }
+
+
+
 }

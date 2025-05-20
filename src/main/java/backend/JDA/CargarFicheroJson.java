@@ -1,50 +1,48 @@
 package backend.JDA;
 
+import backend.JDA.modelo.Comida;
+import backend.JDA.modelo.Sabor;
+import backend.JDA.servicios.IServicioComida;
+
+import com.nimbusds.jose.shaded.gson.Gson;
+import com.nimbusds.jose.shaded.gson.GsonBuilder;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-//import com.google.gson.Gson;
-//import com.google.gson.GsonBuilder;
-
-import backend.JDA.modelo.Comida;
-import backend.JDA.servicios.IServicioComida;
-import backend.JDA.servicios.ServicioComidaImpl;
-
-import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.Reader;
+import java.lang.reflect.Type;
 import java.util.List;
 
 //@Component
-//@Order(value = 1)
+//@Order(1)
 public class CargarFicheroJson implements CommandLineRunner {
-	
+
 	@Autowired
-	static IServicioComida servicioComida;
+	private IServicioComida servicioComida;
 
 	@Override
-	public void run(String... args) throws Exception {
-//		// TODO Auto-generated method stub
-//		List<Comida> comidas;
-//		
-//		GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
-//		
-//		Gson gson = builder.create();
-//		
-//		Reader reader = new FileReader(new File("Comidas.json"));
-//		
-//		comidas = gson.fromJson(reader, List.class);
-//		
-//		reader.close();
-//		
-//		System.out.println("Cargando comidas del json");
-//		
-//		for (int i = 0; i < comidas.size(); i++) {
-//			servicioComida.insert(comidas.get(i));
-//		}
-	}
+	public void run(String... args) {
+		try (Reader reader = new FileReader("Comidas.json")) {
 
+			Gson gson = new GsonBuilder()
+					.registerTypeAdapter(new TypeToken<List<Sabor>>() {}.getType(), new SaborListDeserializer())
+					.create();
+
+			Type listType = new TypeToken<List<Comida>>() {}.getType();
+			List<Comida> comidas = gson.fromJson(reader, listType);
+
+			System.out.println("Cargando comidas desde JSON...");
+			for (Comida comida : comidas) {
+				servicioComida.insert(comida);
+			}
+
+		} catch (Exception e) {
+			System.err.println("Error cargando el fichero de comidas: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
 }

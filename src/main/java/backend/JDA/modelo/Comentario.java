@@ -35,9 +35,6 @@ public class Comentario {
 	private Cliente cliente;
 
 	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
-	@Column(nullable = false)
-	/*@ManyToOne(optional = false)
-	@JoinColumn(name = "comida_id")
-	private Comida comida;*/
-	private String comida;
+	@ManyToOne(optional = false)
+	private Comida comida;
 }

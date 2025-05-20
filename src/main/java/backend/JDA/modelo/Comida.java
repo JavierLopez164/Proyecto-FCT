@@ -11,29 +11,46 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-
 @Entity
-public class Comida implements Serializable{
-	
+public class Comida implements Serializable {
+
 	@EqualsAndHashCode.Include
 	@EmbeddedId
-	//Nombre + restaurante
 	private ComidaPK comidaPK;
-	@Column(name = "descripcion", length = 40)
-	private String descripcion;
-	@Column(name = "precio")
-	private float precio;
-	@Column(name = "categoria")
-	private String categoria;
-	@Column(name = "sabor")
+
+	@Column(length = 200)
+	private String description;
+
+	@Column
+	private float price;
+
+	@Column
+	private String category;
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "comida_attributes", joinColumns = {
+			@JoinColumn(name = "nombre", referencedColumnName = "nComida"),
+			@JoinColumn(name = "restaurante", referencedColumnName = "nRestaurante")
+	})
 	@Enumerated(EnumType.STRING)
-	private Sabor sabor;
-	@Column(name = "valoracion")
-	private int valoracion;
-	@Column(name = "alimentos")
-	private List<String> alimentos;
+	@Column(name = "attribute")
+	private List<Sabor> attributes;
+
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "comida_features", joinColumns = {
+			@JoinColumn(name = "nombre", referencedColumnName = "nComida"),
+			@JoinColumn(name = "restaurante", referencedColumnName = "nRestaurante")
+	})
+	@Column(name = "feature")
+	private List<String> features;
+
+	@Column
+	private int preparationTime;
+	
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "fotoId")
 	private Foto foto;
-	
+
 }
+

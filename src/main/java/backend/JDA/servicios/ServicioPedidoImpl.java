@@ -1,5 +1,6 @@
 package backend.JDA.servicios;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,16 +31,13 @@ public class ServicioPedidoImpl implements IServicioPedido {
 	private ComidaRepositorio comidaRepo;
 
 	public Optional<Pedido> crearPedidoSimple(String email, String restaurante) {
-		Optional<Cliente> clienteOpt = clienteRepo.findById(email);
-		List<Comida> comidasRest = comidaRepo.obtenerComidasDeUnRestaurante(restaurante);
+		Optional<Cliente> clienteOpt = clienteRepo.findById(email);List<Comida> comidasRest = comidaRepo.obtenerComidasDeUnRestaurante(restaurante);
 
 		if (clienteOpt.isEmpty() || comidasRest.isEmpty()) return Optional.empty();
 
-		Pedido pedido = new Pedido();
-		pedido.setId(UUID.randomUUID().toString());
-		pedido.setCliente(clienteOpt.get());
-		pedido.setComidas(new ArrayList<>());
-		pedido.setCantidadFinal(0f);
+		Pedido pedido = Pedido.builder().id(UUID.randomUUID().toString()).cliente(clienteOpt.get())
+				.activo(true).comidas(new ArrayList<>()).fechaCreacion(LocalDate.now()).cantidadFinal(0f).build();
+
 		pedidoRepo.save(pedido);
 
 		// Generamos QR hacia un esquema app://pedido/{id}
@@ -63,14 +61,39 @@ public class ServicioPedidoImpl implements IServicioPedido {
 
 		pedido.getComidas().add(comida);
 		float totalActual = pedido.getCantidadFinal();
-		pedido.setCantidadFinal(totalActual + comida.getPrecio());
+		pedido.setCantidadFinal(totalActual + comida.getPrice());
 
 		pedidoRepo.save(pedido);
 		return Optional.of(pedido);
 	}
 
 	public List<Pedido> listarPedidos() {
-		return (List<Pedido>) pedidoRepo.findAll();
+		return pedidoRepo.findByActivoTrue();
 	}
-	
+
+	public Optional<Pedido> cambiarEstadoPedido(String id, boolean nuevoEstado) {
+		Optional<Pedido> pedidoOpt = pedidoRepo.findById(id);
+		if (pedidoOpt.isEmpty()) return Optional.empty();
+
+		Pedido pedido = pedidoOpt.get();
+		pedido.setActivo(nuevoEstado);
+		pedidoRepo.save(pedido);
+		return Optional.of(pedido);
+	}
+
+	public List<Object[]> top5ComidasMasPedidas() {
+		return comidaRepo.top5ComidasMasPedidas();
+	}
+
+	public List<Object[]> top5ComidasPorRestaurante(String restaurante) {
+		return comidaRepo.top5ComidasPorRestaurante(restaurante);
+	}
+
+	public int pedidosUltimos7Dias() {
+		LocalDate hoy = LocalDate.now();
+		LocalDate hace7Dias = hoy.minusDays(7);
+		return pedidoRepo.buscarPedidosEntreFechas(hace7Dias, hoy).size();
+	}
+
+
 }
