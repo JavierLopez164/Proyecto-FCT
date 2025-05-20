@@ -35,13 +35,13 @@ public class ComentarioController {
             @ApiResponse(responseCode = "200", description = "Comentario creado correctamente"),
             @ApiResponse(responseCode = "403", description = "No autorizado o datos inválidos")
     })
-    public ResponseEntity<String> crearComentario(@Valid @RequestBody ComentarioDTO comentario, @RequestParam String idComida,
-                                                  @RequestParam String nombreRestaurante) {
+    public ResponseEntity<String> crearComentario(@Valid @RequestBody ComentarioDTO comentario, @RequestParam String comida,
+                                                  @RequestParam String restaurante) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        ComidaPK comidapk = new ComidaPK(idComida, nombreRestaurante);
+        ComidaPK comidapk = new ComidaPK(comida, restaurante);
         boolean creado = servicioComentario.crearComentario(comentario, email, comidapk);
 
         return creado
@@ -90,8 +90,8 @@ public class ComentarioController {
             @ApiResponse(responseCode = "200", description = "Promedio obtenido correctamente"),
             @ApiResponse(responseCode = "404", description = "Comida no encontrada")
     })
-    public ResponseEntity<Integer> obtenerPromedioValoracion(@RequestParam String comida, @RequestParam String restaurante) {
-        int promedio = servicioComentario.obtenerPromedioValoracion(comida, restaurante);
+    public ResponseEntity<Integer> obtenerPromedioValoracion(@RequestParam String comida) {
+        int promedio = servicioComentario.obtenerPromedioValoracion(comida);
         return ResponseEntity.ok(promedio);
     }
 
