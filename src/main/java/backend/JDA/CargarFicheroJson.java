@@ -17,8 +17,8 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.List;
 
-@Component
-@Order(1)
+//@Component
+//@Order(1)
 public class CargarFicheroJson implements CommandLineRunner {
 
 	@Autowired

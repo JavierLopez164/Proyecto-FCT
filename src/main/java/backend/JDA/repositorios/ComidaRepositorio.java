@@ -2,15 +2,15 @@ package backend.JDA.repositorios;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import backend.JDA.modelo.Comida;
 import backend.JDA.modelo.ComidaPK;
 
 @Repository
-public interface ComidaRepositorio extends CrudRepository<Comida, ComidaPK> {
+public interface ComidaRepositorio extends JpaRepository<Comida, ComidaPK> {
 
 	@Query("UPDATE Comida c SET c.description = ?2 WHERE c.comidaPK = ?1")
 	public int actualizaDescripcion (ComidaPK id, String description);

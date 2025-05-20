@@ -1,15 +1,12 @@
 package backend.JDA.repositorios;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import backend.JDA.modelo.Cliente;
 
-import java.time.LocalDateTime;
-
 @Repository
-public interface ClienteRepositorio extends CrudRepository<Cliente, String> {
+public interface ClienteRepositorio extends JpaRepository<Cliente, String> {
 
 
 }
