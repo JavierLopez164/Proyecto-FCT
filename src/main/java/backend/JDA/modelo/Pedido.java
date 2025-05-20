@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -14,6 +15,7 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 
 @Entity
+//@Document(collection = "pedido")
 public class Pedido {
 	@EqualsAndHashCode.Include
 	@Id
