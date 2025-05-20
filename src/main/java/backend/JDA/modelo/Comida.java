@@ -32,8 +32,8 @@ public class Comida implements Serializable{
 	private int valoracion;
 	@Column(name = "alimentos")
 	private List<String> alimentos;
-	/*@JoinColumn(name = "foto")
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Foto foto;*/
+	@JoinColumn(name = "fotoId")
+	private Foto foto;
 	
 }

@@ -41,14 +41,15 @@ public class Cliente {
 	@Column(name = "contrasenia", nullable = false)
 	private String contrasenia;
 
-	 @Builder.Default
-	 @Enumerated(EnumType.STRING)
-	 private Rol rol=Rol.ROLE_ADMIN;
-	 @Builder.Default
-	 private LocalDate fechaCreacion=LocalDate.now();
-	 @Builder.Default
-	 private String imagenUrl="/img/imagen_usuario_por_defecto.jpg";
-
+	@Builder.Default
+	@Enumerated(EnumType.STRING)
+	private Rol rol=Rol.ROLE_ADMIN;
+	@Builder.Default
+	private LocalDate fechaCreacion=LocalDate.now();
+	@Builder.Default
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "fotoId")
+	private Foto fotoPerfil=Foto.builder().fecha(LocalDate.now()).url("/img/imagen_usuario_por_defecto.jpg").build();
 
 	
 	
