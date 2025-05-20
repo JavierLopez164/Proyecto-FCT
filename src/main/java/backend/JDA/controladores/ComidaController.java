@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 @RestController
 @RequestMapping("api/comida")
-@CrossOrigin(origins = "*") // Ajusta el origen si es necesario
+@CrossOrigin(origins = "http://localhost:4200")
 public class ComidaController {
 
 	@Autowired
