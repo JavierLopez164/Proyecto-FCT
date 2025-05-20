@@ -24,8 +24,5 @@ public class Foto {
 	
 	private LocalDate fecha;
 	
-	@ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
-	@JoinColumn(name = "pk_email")
-	private Cliente cliente;
 	
 }

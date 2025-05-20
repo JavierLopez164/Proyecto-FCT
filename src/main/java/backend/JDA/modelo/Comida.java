@@ -47,7 +47,10 @@ public class Comida implements Serializable {
 
 	@Column
 	private int preparationTime;
+	
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "fotoId")
+	private Foto foto;
 
-	@Column
-	private String imageUrl;
 }
+
