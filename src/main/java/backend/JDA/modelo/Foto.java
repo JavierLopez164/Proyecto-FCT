@@ -13,15 +13,19 @@ import lombok.*;
 
 @Entity
 public class Foto {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
-	@Column(name = "foto_id")
-	private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	
+	private Integer fotoId;
 
 	@Column(name = "url")
 	private String url;
 	
 	private LocalDate fecha;
+	
+	@ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
+	@JoinColumn(name = "pk_email")
+	private Cliente cliente;
+	
 }

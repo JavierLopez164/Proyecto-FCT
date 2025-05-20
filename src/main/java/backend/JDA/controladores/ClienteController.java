@@ -82,7 +82,6 @@ public class ClienteController {
 
 	public ResponseEntity<Cliente> crearClienteRegistrado( @RequestBody Cliente client) {
 		ResponseEntity<Cliente> response;
-		System.out.println(client);
 		if (servicioCliente.registrarCliente(client)) {
 			response = ResponseEntity.ok(client);
 		} else {

@@ -36,42 +36,54 @@ public class ServicioFotoImpl implements IServicioFoto {
 	private String uploadPreset="";
 
 	
+
 	//El MultipartFile es una interfaz que representa el archivo cuando se hace un Request 
-	public boolean subirImagenACloud(MultipartFile imagenFichero,String email) throws IOException {
-		String url = "https://api.cloudinary.com/v1_1/" + cloudName + "/image/upload";
-		Optional<Cliente> client=clienteDao.findById(email);
-		boolean exitoAlSubirFoto=false;
-		
-		if(client.isPresent()) {
-	        // Crear body de la request 
-			// Leer archivo y pasarlo en base 64=[A-Z a-z 0-9]
-	        byte[] bytes = imagenFichero.getBytes();
-	        String base64 = Base64.getEncoder().encodeToString(bytes);
-	        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-	        body.add("file", "data:image/jpeg;base64," + base64); //La imagen en base64 para cloudinary sepa el contenido
-	        body.add("upload_preset",uploadPreset); 
-	        body.add("folder", "usuarios/"+email);
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-		    HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
-		    ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
-		    Foto f=fotoDAO.save(Foto.builder().fecha(LocalDate.now()).url(response.getBody().get("secure_url").toString()).build());
-		    client.get().getFoto().add(f);
-		    clienteDao.save(client.get());
-		    exitoAlSubirFoto=true;
+	public boolean subirImagenACloud(MultipartFile imagenFichero, String email) throws IOException {
+	    String url = "https://api.cloudinary.com/v1_1/" + cloudName + "/image/upload";
+	    Cliente client = clienteDao.findById(email).orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado"));
+	    boolean exitoAlSubirFoto = false;
+	    // Leer el archivo y convertirlo a Base64
+        byte[] bytes = imagenFichero.getBytes();
+        String base64Image = Base64.getEncoder().encodeToString(bytes);
+	    // Crear body de la request
+	    MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+	    body.add("file",  "data:image/jpeg;base64," + base64Image); // Enviar archivo en bytes
+	    body.add("upload_preset", uploadPreset);
+	    body.add("folder", "usuarios/" + email);
+
+	    // Configurar cabeceras
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+	    HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
 	
-		}
-		return exitoAlSubirFoto;
-	  
-	
+	    try {
+	        ResponseEntity<Map> response = restTemplate.postForEntity(url ,request, Map.class);
+	        if (response.getBody() != null && response.getBody().containsKey("secure_url")) {
+	            Foto f = fotoDAO.save(Foto.builder()
+	                .fecha(LocalDate.now())
+	                .url(response.getBody().get("secure_url").toString())
+	                .cliente(client)
+	                .build());
+	            System.out.println("Se hizo la petición Se ha subido a Cloudinary tu foto");
+
+	            exitoAlSubirFoto = true;
+	        } else {
+	            System.out.println("Error: Respuesta inesperada de Cloudinary");
+	        }
+	    } catch (Exception e) {
+	        System.out.println("Error al subir imagen: " + e.getMessage());
+	    }
+	    
+	    return exitoAlSubirFoto;
 	}
+
 	
 	@Override
 	public boolean update(Foto foto) {
 		// TODO Auto-generated method stub
 		boolean exito = false;
 		
-		if(fotoDAO.existsById(foto.getId())) {
+		if(fotoDAO.existsById(foto.getFotoId())) {
 			fotoDAO.save(foto);
 			exito = true;
 		}
@@ -80,7 +92,7 @@ public class ServicioFotoImpl implements IServicioFoto {
 	}
 
 	@Override
-	public boolean delete(Long id) {
+	public boolean delete(int id) {
 		// TODO Auto-generated method stub
 		boolean exito = false;
 		
@@ -99,7 +111,7 @@ public class ServicioFotoImpl implements IServicioFoto {
 	}
 
 	@Override
-	public Optional<Foto> findById(Long id) {
+	public Optional<Foto> findById(int id) {
 		// TODO Auto-generated method stub
 		return fotoDAO.findById(id);
 	}
