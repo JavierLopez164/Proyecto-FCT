@@ -20,7 +20,7 @@ export class HeaderWashabiComponent implements OnInit{
 
   ngOnInit(): void {
      this.perfilService.obtenerPerfil().subscribe(res=>{
-      this.perfil = res.imagenUrl;})
+      this.perfil =  res.fotoPerfil?.url;})
   }
   estaLogeado():Boolean{
     return localStorage.getItem('token')!=null;
