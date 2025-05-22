@@ -18,7 +18,8 @@ public interface IServicioFoto {
 	public boolean update(Foto foto);
 	
 	public boolean delete(int id);
-	
+	public List<Foto> ordenarFechaActual();
+	public List<Foto> ordenarFechaAntiguo();
 	public List<Foto> findAll();
 	
 	public Optional<Foto> findById(int id);

@@ -26,7 +26,6 @@ public class MultiHttpSecurityConfig {
                                 "/api/clientes/login",
                                 "/api/clientes/register",
                                 "/api/comentarios/lista",
-                                "/api/clientes/acceso",
                                 "api/comentarios/promedio"
                         ).permitAll()
 
@@ -50,7 +49,7 @@ public class MultiHttpSecurityConfig {
                         // Consultar clientes
 
                         .requestMatchers("/api/clientes/consultar/**").hasAnyRole("USER", "ADMIN")
-                        
+                        .requestMatchers("/api/clientes/actualizar").hasAnyRole("USER", "ADMIN")                   
                         //fotos
                         .requestMatchers("/api/fotos/**").hasAnyRole("USER", "ADMIN")
 

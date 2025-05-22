@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.JDA.modelo.Comida;
 import backend.JDA.modelo.ComidaPK;
+import backend.JDA.modelo.Foto;
 import backend.JDA.servicios.IServicioComida;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -107,4 +109,28 @@ public class ComidaController {
 		List<Comida> comidas = servicioComida.obtenerComidasDeUnRestaurante(restaurante);
 		return ResponseEntity.ok(comidas);
 	}
+	@GetMapping("/obtenerTodosLosRestaurantes")
+	@Operation(
+			summary = "Obtener las fotos de un restaurante",
+			description = "Permite obtener las fotos de un restaurante.",
+			security = @SecurityRequirement(name = "bearerAuth")
+	)
+	public ResponseEntity<List<Foto>> obtenerFotosRestaurante(@RequestParam String restaurante) {
+		
+		return ResponseEntity.ok(servicioComida.obtenerTodasLasFotosDeUnRestaurantes(restaurante));
+	}
+	
+	@GetMapping("/obtenerNombresRestaurante")
+	@Operation(
+			summary = "Obtener el nombre de todos los restaurantes",
+			description = "Permite obtener todos los nombres de los restaurantes.",
+			security = @SecurityRequirement(name = "bearerAuth")
+	)
+	public ResponseEntity<List<String>> obtenerNombreTodosRestaurante() {
+		
+		return ResponseEntity.ok(servicioComida.obtenerTodosLosRestaurantes());
+	}
+	
+	
+	
 }
