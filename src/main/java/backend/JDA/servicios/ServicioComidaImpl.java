@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import backend.JDA.modelo.Comida;
 import backend.JDA.modelo.ComidaPK;
+import backend.JDA.modelo.Foto;
 import backend.JDA.repositorios.ComidaRepositorio;
 
 @Service
@@ -102,6 +103,18 @@ public class ServicioComidaImpl implements IServicioComida {
 		listaComidas = comidaDAO.obtenerComidasDeUnRestaurante(restaurante);
 
 		return listaComidas;
+	}
+
+	@Override
+	public List<String> obtenerTodosLosRestaurantes() {
+		// TODO Auto-generated method stub
+		return comidaDAO.obtenerTodosLosRestaurantes();
+	}
+
+	@Override
+	public List<Foto> obtenerTodasLasFotosDeUnRestaurantes(String restaurante) {
+		// TODO Auto-generated method stub
+		return comidaDAO.obtenerTodasLasFotosDeUnRestaurantes(restaurante);
 	}
 
 }
