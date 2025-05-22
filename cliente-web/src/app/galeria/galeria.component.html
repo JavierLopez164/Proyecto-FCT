@@ -1,0 +1,48 @@
+<app-header></app-header>
+<div class="container mx-auto px-4 py-8 bg-gray-100 rounded-xl shadow-md my-23">
+  <!-- Barra de Filtros -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+    <div class="flex flex-wrap gap-4">
+      <!-- Ordenar por -->
+      <mat-form-field appearance="fill" class="min-w-[200px]">
+        <mat-label>Ordenar por</mat-label>
+        <mat-select (selectionChange)="onSortChange($event)">
+          <mat-option value="name">Nombre (A-Z)</mat-option>
+          <mat-option value="dateNewest">Fecha más reciente</mat-option>
+          <mat-option value="dateOldest">Fecha más antigua</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Filtrar por Restaurante -->
+      <mat-form-field appearance="fill" class="min-w-[200px]">
+        <mat-label>Filtrar por Restaurante</mat-label>
+        <mat-select (selectionChange)="onRestaurantFilterChange($event)">
+          <mat-option value="all">Todos</mat-option>
+          @for (restaurant of restaurants; track restaurant) {
+            <mat-option [value]="restaurant">{{ restaurant }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Tarjetas de comida -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    @for (food of filteredFoodItems; track food) {
+      <mat-card class="w-full max-w-sm mx-auto shadow-md hover:shadow-lg transition-shadow duration-300">
+        <img
+          mat-card-image
+          [src]="food.imageUrl"
+          alt="{{ food.name }}"
+          class="w-full h-40 object-cover rounded-t"
+        />
+        <mat-card-content class="space-y-2 p-4">
+          <h3 class="text-xl font-semibold text-gray-800">{{ food.name }}</h3>
+          <p class="text-sm text-gray-600">Restaurante: {{ food.restaurant }}</p>
+          <p class="text-xs text-gray-500">Fecha añadida: {{ food.dateAdded | date: 'shortDate' }}</p>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+</div>
+<app-footer></app-footer>

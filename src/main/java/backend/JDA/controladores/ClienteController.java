@@ -68,6 +68,7 @@ public class ClienteController {
 			resJson.put("mensaje", "Login exitoso");
 			resJson.put("nombre", copia.getNombre());
 			resJson.put("rol", copia.getRol().toString());
+			resJson.put("restaurant", copia.getRestaurante());
 			return ResponseEntity.ok(resJson);
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)

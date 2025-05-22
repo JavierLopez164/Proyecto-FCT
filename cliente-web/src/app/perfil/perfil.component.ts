@@ -35,7 +35,7 @@ export class PerfilComponent implements OnInit {
       this.perfil.password = res.contrasenia;
       this.perfil.rol = res.rol;
       this.perfil.fechaCreacion = res.fechaCreacion;
-      this.perfil.imagenUrl=res.imagenUrl;
+      this.perfil.imagenUrl= res.fotoPerfil?.url;
     });
   };
  

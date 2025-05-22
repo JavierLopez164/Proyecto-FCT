@@ -2,47 +2,52 @@ import { Component, OnInit, signal } from '@angular/core';
 import { HeaderWashabiComponent } from "../header-washabi/header-washabi.component";
 import { FooterComponent } from "../footer/footer.component";
 import { ReactiveFormsModule, FormControl, FormGroup, Validators, } from '@angular/forms';
-import { MatIcon } from '@angular/material/icon';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatExpansionPanelTitle } from '@angular/material/expansion';
+
 import { MatToolbar } from '@angular/material/toolbar';
-import { MatExpansionPanel } from '@angular/material/expansion';
-import { MatExpansionPanelHeader } from '@angular/material/expansion';
+
 import { RouterLink } from '@angular/router';
 import { PerfilService } from '../services/perfil.service';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatCardModule } from '@angular/material/card';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Component({
   selector: 'app-ajuste',
-  imports: [HeaderWashabiComponent, FooterComponent, RouterLink, MatIconModule, MatSnackBarModule,MatExpansionModule, MatIcon, MatExpansionPanelTitle, MatToolbar, MatExpansionPanel, MatExpansionPanelHeader, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule,],
+  imports: [HeaderWashabiComponent, FooterComponent, RouterLink, MatCardModule, MatIconModule, MatStepperModule, MatSnackBarModule, MatExpansionModule, MatToolbar, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule,],
   templateUrl: './ajuste.component.html',
   styleUrl: './ajuste.component.css'
 })
 export class AjusteComponent implements OnInit {
+  nombreArchivo: string = '';
+  archivoSeleccionado: File | null = null;
   perfil = {
+    email:"",
     nombre: "",
-    email: "",
     contrasenia: "",
-    sala: "",
-    rol: "",
-    fechaCreacion: "",
-    imagenUrl:""
+    rol:"",
+    fechaCreacion:"",
+    fotoPerfil:null,
+    restaurante:""
+
+
   };
-  readonly panelOpenState = signal(false);
-  constructor(private perfilServicio: PerfilService,private snackBar: MatSnackBar) { }
+  constructor(private perfilServicio: PerfilService, private snackBar: MatSnackBar, private http: HttpClient) { }
   ngOnInit(): void {
     this.perfilServicio.obtenerPerfil().subscribe(
       res => {
-      this.perfil.nombre = res.nombre;
-      this.perfil.email = res.email;
-      this.perfil.rol = res.rol;
-      this.perfil.contrasenia=res.contrasenia
-      this.perfil.fechaCreacion = res.fechaCreacion;
-      this.perfil.imagenUrl=res.imagenUrl;
-        this.panelOpenState.set(res.rol == 'ROLE_USER');
+        this.perfil.email=res.email;
+        this.perfil.nombre = res.nombre;
+        this.perfil.contrasenia = res.contrasenia;
+        this.perfil.rol=res.rol;
+        this.perfil.fechaCreacion=res.fechaCreacion;
+        this.perfil.fotoPerfil=res.fotoPerfil;
+        this.perfil.restaurante=res.restaurante;
       }
     )
   }
@@ -51,34 +56,57 @@ export class AjusteComponent implements OnInit {
     nombre: new FormControl(''),
     email: new FormControl('', Validators.email),
     contrasenia: new FormControl(''),
-    imagenUrl: new FormControl(''),
-    sala: new FormControl("")
   });
 
   guardarCambiosCliente() {
+    if (this.archivoSeleccionado != null) {
+      const formData = new FormData();
+      const headers = new HttpHeaders({
+        'Authorization': localStorage.getItem('token') ?? "",
+      });
+      formData.append('imagenFichero', this.archivoSeleccionado);
+
+      this.http.post('http://localhost:8080/api/fotos/subirfotoperfil', formData,{headers}).subscribe({
+        next: (res) => {
+          this.snackBar.open('Ha sido actualizado tu foto de perfil', 'Cerrar', {
+          duration: 3000
+        });
+        },
+        error: (err) => {
+          console.error('Error al subir la imagen', err);
+          this.snackBar.open('Error al subir la imagen de perfil', 'Cerrar', {
+            duration: 3000,
+          });
+        }
+      });
+    }
+
+
+
     if (this.perfilForm.valid) {
-       const perfilActualizar: any =this.perfil
+      const perfilActualizar: any = this.perfil
 
-    const nombre = this.perfilForm.get('nombre')?.value;
-    if (nombre) perfilActualizar.nombre = nombre;
+      const nombre = this.perfilForm.get('nombre')?.value;
+      if (nombre) perfilActualizar.nombre = nombre;
 
-    const contrasenia = this.perfilForm.get('contrasenia')?.value;
-    if (contrasenia) perfilActualizar.contrasenia =  contrasenia;
-
-    const imagenUrl = this.perfilForm.get('imagenUrl')?.value;
-    if (imagenUrl) perfilActualizar.imagenUrl =  imagenUrl;
+      const contrasenia = this.perfilForm.get('contrasenia')?.value;
+      if (contrasenia) perfilActualizar.contrasenia = contrasenia;
 
       this.perfilServicio.actualizarPerfilCliente(perfilActualizar).subscribe(res => {
-        console.log(res)
         this.snackBar.open('Ha sido actualizado tu perfil', 'Cerrar', {
-        duration: 3000
-      });
+          duration: 3000
+        });
       });
     }
   }
-  //Para mañana hacer el backend ,el admin y subirlo
-  guardarCambiosAdmin() {
 
+
+  enArchivoSeleccionado(event: Event): void {
+    //El tarjet y el as htmlinput es como castear el evento que viene por subir una foto
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.archivoSeleccionado = input.files[0];
+      this.nombreArchivo = this.archivoSeleccionado.name;
+    }
   }
-
 }

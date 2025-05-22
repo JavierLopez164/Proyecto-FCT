@@ -70,8 +70,6 @@ public class ServicioComentarioImpl implements IServicioComentario {
 	}
 
 	@Override
-	public List<Comentario> obtenerComentariosPorComida(String idComida, String restaurante) {
-		return comentarioRepo.findByComidaId(idComida, restaurante);
 	public List<Comentario> obtenerComentariosPorComida(String comida, String restaurante) {
 		return comentarioRepo.findByComidaId(comida, restaurante);
 	}
@@ -82,8 +80,6 @@ public class ServicioComentarioImpl implements IServicioComentario {
 	}
 
 	@Override
-	public int obtenerPromedioValoracion(String comida, String restaurante) {
-		Double promedio = comentarioRepo.obtenerPromedioValoracionPorComida(comida, restaurante);
 	public int obtenerPromedioValoracion(String comida, String restaurante) {
 		Double promedio = comentarioRepo.obtenerPromedioValoracionPorComida(comida, restaurante);
 		return promedio != null ? promedio.intValue() : 0;

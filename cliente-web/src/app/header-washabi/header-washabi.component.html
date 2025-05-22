@@ -25,9 +25,9 @@
         <nav class="flex space-x-4 text-md">
           <a routerLink="/" class="rounded-md hover:bg-orange-500 px-3 py-2 font-medium text-white hover:font-playfair"
             aria-current="page">Inicio</a>
-          <a routerLink="/reserva"
+          <a routerLink="/galeria"
             class="rounded-md hover:bg-orange-500 px-3 py-2 font-medium text-white hover:font-playfair"
-            aria-current="page">Reserva</a>
+            aria-current="page">Galería Común</a>
           <a routerLink="/chat"
             class="rounded-md px-3 py-2  font-medium text-white hover:bg-orange-500 hover:text-white hover:font-playfair">Chat
             en vivo</a>
@@ -61,7 +61,7 @@
         </div>
       </div>
       }@else {
-      @if (rutaActual=="/" ||rutaActual=="/menu" ||rutaActual=="/descargarapp") {
+      @if (rutaActual=="/"  ||rutaActual=="/descargarapp") {
       <div class="flex gap-1.5">
         <div class="bg-orange-700 py-3 px-3 rounded-md animate-fade-up">
           <a routerLink="/registrar" class="text-white text-md">Registrarse</a>
