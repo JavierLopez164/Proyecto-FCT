@@ -22,7 +22,7 @@ public class Comida implements Serializable {
 	private String description;
 
 	@Column
-	private float price;
+	private int price;
 
 	@Column
 	private String category;
