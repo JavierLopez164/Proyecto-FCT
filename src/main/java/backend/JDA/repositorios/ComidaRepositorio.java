@@ -25,7 +25,7 @@ public interface ComidaRepositorio extends JpaRepository<Comida, ComidaPK> {
 	@Query("SELECT c.comidaPK.nComida, COUNT(c) AS veces FROM Pedido p JOIN p.comidas c GROUP BY c.comidaPK.nComida ORDER BY veces DESC")
 	List<Object[]> top5ComidasMasPedidas();
 
-	@Query("SELECT c.comidaPK.nComida, COUNT(c) AS veces FROM Pedido p JOIN p.comidas c WHERE c.comidaPK.nRestaurante = ?1restaurante GROUP BY c.comidaPK.nComida ORDER BY veces DESC")
+	@Query("SELECT c.comidaPK.nComida, COUNT(c) AS veces FROM Pedido p JOIN p.comidas c WHERE c.comidaPK.nRestaurante = ?1 GROUP BY c.comidaPK.nComida ORDER BY veces DESC")
 	List<Object[]> top5ComidasPorRestaurante( String restaurante);
 	
 	@Query("SELECT DISTINCT c.comidaPK.nRestaurante FROM Comida c ")
