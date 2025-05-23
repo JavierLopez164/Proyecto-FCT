@@ -3,6 +3,7 @@ package backend.JDA.servicios;
 import backend.JDA.config.DtoConverter;
 import backend.JDA.modelo.*;
 import backend.JDA.modelo.dto.ComentarioDTO;
+import backend.JDA.modelo.dto.ComentarioResponseDTO;
 import backend.JDA.repositorios.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,10 +27,10 @@ public class ServicioComentarioImpl implements IServicioComentario {
 	private DtoConverter dtoConverter;
 
 	@Override
-	public boolean crearComentario(ComentarioDTO dto, String cliente, ComidaPK comida) {
+	public Optional<ComentarioResponseDTO> crearComentario(ComentarioDTO dto, String cliente, ComidaPK comida) {
 		Optional<Cliente> clienteOpt = clienteRepo.findById(cliente);
 		Optional<Comida> comidaOpt = comidaRepo.findById(comida);
-		Comentario comentario;
+		Comentario comentario = null;
 
 		if (clienteOpt.isPresent() && comidaOpt.isPresent()) {
 			Cliente copia = clienteOpt.get();
@@ -42,7 +43,7 @@ public class ServicioComentarioImpl implements IServicioComentario {
 				comentario.setComida(comidaOpt.get());
 				comentario.setFecha(LocalDateTime.now());
 				comentarioRepo.save(comentario);
-				return true;
+
 			} else {
 				System.out.println("Rol no autorizado: " + copia.getRol());
 			}
@@ -50,7 +51,7 @@ public class ServicioComentarioImpl implements IServicioComentario {
 			System.out.println("Cliente no encontrado con email: " + cliente);
 		}
 
-		return false;
+		return Optional.ofNullable(dtoConverter.map(comentario, ComentarioResponseDTO.class));
 	}
 
 
@@ -70,8 +71,9 @@ public class ServicioComentarioImpl implements IServicioComentario {
 	}
 
 	@Override
-	public List<Comentario> obtenerComentariosPorComida(String comida, String restaurante) {
-		return comentarioRepo.findByComidaId(comida, restaurante);
+	public List<ComentarioResponseDTO> obtenerComentariosPorComida(String comida, String restaurante) {
+		List<Comentario> lista = comentarioRepo.findByComidaId(comida, restaurante);
+		return dtoConverter.mapAll(lista, ComentarioResponseDTO.class);
 	}
 
 	@Override

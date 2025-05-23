@@ -3,6 +3,7 @@ package backend.JDA.controladores;
 import backend.JDA.modelo.Comentario;
 import backend.JDA.modelo.ComidaPK;
 import backend.JDA.modelo.dto.ComentarioDTO;
+import backend.JDA.modelo.dto.ComentarioResponseDTO;
 import backend.JDA.servicios.IServicioComentario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/comentarios")
@@ -35,18 +37,16 @@ public class ComentarioController {
             @ApiResponse(responseCode = "200", description = "Comentario creado correctamente"),
             @ApiResponse(responseCode = "403", description = "No autorizado o datos inválidos")
     })
-    public ResponseEntity<String> crearComentario(@Valid @RequestBody ComentarioDTO comentario, @RequestParam String comida,
-                                                  @RequestParam String restaurante) {
+    public ResponseEntity<ComentarioResponseDTO> crearComentario(@Valid @RequestBody ComentarioDTO comentario, @RequestParam String comida,
+                                                                 @RequestParam String restaurante) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
         ComidaPK comidapk = new ComidaPK(comida, restaurante);
-        boolean creado = servicioComentario.crearComentario(comentario, email, comidapk);
+        Optional<ComentarioResponseDTO> creado = servicioComentario.crearComentario(comentario, email, comidapk);
 
-        return creado
-                ? ResponseEntity.ok("Comentario creado")
-                : ResponseEntity.status(HttpStatus.FORBIDDEN).body("No autorizado o datos inválidos");
+        return creado.map(ResponseEntity::ok).orElseGet(() -> (ResponseEntity<ComentarioResponseDTO>) ResponseEntity.status(HttpStatus.FORBIDDEN));
     }
 
     @DeleteMapping("/eliminar")
@@ -69,18 +69,20 @@ public class ComentarioController {
     }
 
     @GetMapping("/lista")
-    @Operation(
-            summary = "Obtener comentarios por comida",
-            description = "Devuelve todos los comentarios asociados a una comida específica."
-    )
+    @Operation(summary = "Obtener comentarios por comida", description = "Devuelve todos los comentarios asociados a una comida específica.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Comentarios obtenidos correctamente"),
             @ApiResponse(responseCode = "404", description = "Comida no encontrada")
     })
-    public ResponseEntity<List<Comentario>> obtenerComentariosPorComida(@RequestParam String comida,@RequestParam String restaurante) {
-        List<Comentario> comentarios = servicioComentario.obtenerComentariosPorComida(comida, restaurante);
+    public ResponseEntity<List<ComentarioResponseDTO>> obtenerComentariosPorComida(
+            @RequestParam String comida,
+            @RequestParam String restaurante) {
+
+        List<ComentarioResponseDTO> comentarios = servicioComentario.obtenerComentariosPorComida(comida, restaurante);
+
         return ResponseEntity.ok(comentarios);
     }
+
     @GetMapping("/promedio")
     @Operation(
             summary = "Obtener promedio de valoraciones de una comida",
