@@ -51,7 +51,7 @@ public class MultiHttpSecurityConfig {
                         .requestMatchers("/api/clientes/consultar/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/clientes/actualizar").hasAnyRole("USER", "ADMIN")                   
                         //fotos
-                        .requestMatchers("/api/fotos/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/fotos/**").permitAll()
 
 
                         // Cualquier otra petición requiere autenticación

@@ -19,5 +19,5 @@ public class ClienteFotoDto {
 	@EqualsAndHashCode.Include
 	private String email;
 	
-	private Foto foto;
+	private String imagenUrl;
 }

@@ -41,18 +41,18 @@ public class ServicioFotoImpl implements IServicioFoto {
 	private DtoConverter dtoConverter;
 	@Autowired 
 	private ComidaRepositorio comidaDao;
-	private String cloudName="";
-	private String uploadPreset="";
+	private String cloudName="dmljwxole";
+	private String uploadPreset="ml_default";
 	private String url= "https://api.cloudinary.com/v1_1/" + cloudName + "/image/upload";
-	
 
-	//El MultipartFile es una interfaz que representa el archivo cuando se hace un Request 
+
+	//El MultipartFile es una interfaz que representa el archivo cuando se hace un Request
 	public Optional<ClienteFotoDto> subirImagenACloudFotoPerfil(MultipartFile imagenFichero, String email) {
 	    Optional<Cliente> client = clienteDao.findById(email);
 	    // Leer el archivo y convertirlo a Base64
 	    Optional<ClienteFotoDto> cliFoto=Optional.empty();
 	  if(client.isPresent()) {
-		  	
+
 	        byte[] bytes = null;
 			try {
 				bytes = imagenFichero.getBytes();
@@ -66,18 +66,18 @@ public class ServicioFotoImpl implements IServicioFoto {
 		    body.add("file",  "data:image/png;base64," + base64Image); // Enviar archivo en bytes
 		    body.add("upload_preset", uploadPreset);
 		    body.add("folder", "usuarios/fotoperfil/" + email);
-	
+
 		    // Configurar cabeceras
 		    HttpHeaders headers = new HttpHeaders();
 		    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 		    HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
-		
+
 		    try {
 		        ResponseEntity<Map> response = restTemplate.postForEntity(url ,request, Map.class);
 		        if (response.getBody() != null && response.getBody().containsKey("secure_url")) {
 		            Foto f = fotoDAO.save(Foto.builder()
 		                .fecha(LocalDate.now())
-		                .url(response.getBody().get("secure_url").toString())
+		                .imagenUrl(response.getBody().get("secure_url").toString())
 		                .build());
 		            client.get().setFotoPerfil(f);
 		            clienteDao.save(client.get());
@@ -90,7 +90,7 @@ public class ServicioFotoImpl implements IServicioFoto {
 		    } catch (Exception e) {
 		        System.out.println("Error al subir imagen: " + e.getMessage());
 		    }
-		    	
+
 	  }else
 		  System.out.println("Cliente no encontrado");
 	    return cliFoto;
@@ -128,7 +128,7 @@ public class ServicioFotoImpl implements IServicioFoto {
 			        if (response.getBody() != null && response.getBody().containsKey("secure_url")) {
 			            Foto f = fotoDAO.save(Foto.builder()
 			                .fecha(LocalDate.now())
-			                .url(response.getBody().get("secure_url").toString())
+			                .imagenUrl(response.getBody().get("secure_url").toString())
 			                .build());
 			            comida.get().setFoto(f);
 			            comidaDao.save(comida.get());

@@ -1,6 +1,5 @@
 package backend.JDA.controladores;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import backend.JDA.modelo.ComidaPK;
@@ -36,20 +29,20 @@ public class FotoController {
 	  
 	  @Autowired
 	  private IServicioFoto servicioFoto;
-	
-	  @PostMapping(value="/subirfotoperfil",consumes = "multipart/form-data")
-	  @Operation(summary = "Subida al cloud de una imagen de perfil seleccionado de su galeria")
-		@ApiResponse(responseCode = "200", description = "Se ha subido exitosamente a la nube de Cloudinary")
-		@ApiResponse(responseCode = "400", description = "Error no se ha subido la imagen a Cloudinary")
-	    public ResponseEntity<ClienteFotoDto> subirFoto(@RequestPart MultipartFile imagenFichero ) {
 
-	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	        String email = authentication.getName();
-	        return ResponseEntity.of(servicioFoto.subirImagenACloudFotoPerfil(imagenFichero, email));
-	    }
-	  
-	  
-	  @PostMapping(value="/subirfotocomida",consumes = "multipart/form-data")
+	@PostMapping(value = "/actualizarfotoperfil", consumes = "multipart/form-data")
+	@Operation(summary = "Actualiza la foto de perfil del cliente autenticado")
+	@ApiResponse(responseCode = "200", description = "Foto de perfil actualizada correctamente")
+	@ApiResponse(responseCode = "404", description = "Cliente no encontrado")
+	public ResponseEntity<ClienteFotoDto> actualizarFotoPerfil(@RequestPart MultipartFile imagenFichero, @RequestParam String email) {
+
+		// Este método ya debe existir, lo reutilizas para actualizar la imagen
+		return ResponseEntity.of(servicioFoto.subirImagenACloudFotoPerfil(imagenFichero, email));
+	}
+
+
+
+	@PostMapping(value="/subirfotocomida",consumes = "multipart/form-data")
 	  @Operation(summary = "Subida al cloud de una imagen de comida tomado desde la cámara")
 		@ApiResponse(responseCode = "200", description = "Se ha subido exitosamente a la nube de Cloudinary")
 		@ApiResponse(responseCode = "400", description = "Error no se ha subido la imagen a Cloudinary")
