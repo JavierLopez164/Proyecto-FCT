@@ -69,6 +69,7 @@ public class ClienteController {
 			resJson.put("nombre", copia.getNombre());
 			resJson.put("rol", copia.getRol().toString());
 			resJson.put("restaurant", copia.getRestaurante());
+			resJson.put("imageUrl", copia.getFotoPerfil().getImagenUrl());
 			return ResponseEntity.ok(resJson);
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)

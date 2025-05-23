@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("api/comida")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -69,7 +70,14 @@ public class ComidaController {
 			description = "Permite a un admin eliminar una comida.",
 			security = @SecurityRequirement(name = "bearerAuth")
 	)
-	public ResponseEntity<?> eliminarComida(@Valid @RequestBody ComidaPK comidaPK) {
+	public ResponseEntity<?> eliminarComida(@RequestParam String comida,
+											@RequestParam String restaurante) {
+
+		ComidaPK comidaPK = ComidaPK.builder()
+				.nComida(comida)
+				.nRestaurante(restaurante)
+				.build();
+
 		boolean eliminada = servicioComida.delete(comidaPK);
 		return eliminada
 				? ResponseEntity.ok("Comida eliminada")
@@ -93,10 +101,19 @@ public class ComidaController {
 			description = "Permite obtener una comida específica usando su ID.",
 			security = @SecurityRequirement(name = "bearerAuth")
 	)
-	public ResponseEntity<?> obtenerUnaComidaPorId(@Valid @RequestBody ComidaPK comidaPK) {
-		Optional<Comida> comida = servicioComida.findById(comidaPK);
-		return comida.isPresent() ? ResponseEntity.ok(comida.get()) :
-				ResponseEntity.status(HttpStatus.NOT_FOUND).body("Comida no encontrada");
+	public ResponseEntity<?> obtenerUnaComidaPorId(
+			@RequestParam String comida,
+			@RequestParam String restaurante) {
+
+		ComidaPK comidaPK = ComidaPK.builder()
+				.nComida(comida)
+				.nRestaurante(restaurante)
+				.build();
+
+		Optional<Comida> comidaOpt = servicioComida.findById(comidaPK);
+		return comidaOpt.isPresent()
+				? ResponseEntity.ok(comidaOpt.get())
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("Comida no encontrada");
 	}
 
 	@PostMapping("/obtenerPorRestaurante")

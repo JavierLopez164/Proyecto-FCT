@@ -52,6 +52,7 @@ public class FotoController {
 	        String email = authentication.getName();
 		  return ResponseEntity.of(servicioFoto.subirImagenACloudComida(imagenFichero, new ComidaPK(comida,restaurante),email));
 	    }
+
 		@GetMapping("/obtenerfotomasreciente")
 		@Operation(
 				summary = "Obtener las fotos mas recientes",
@@ -62,6 +63,7 @@ public class FotoController {
 			
 			return ResponseEntity.ok(servicioFoto.ordenarFechaActual());
 		}
+
 		@GetMapping("/obtenerfotosmenosrecientes")
 		@Operation(
 				summary = "Obtener las fotos menos recientes",
