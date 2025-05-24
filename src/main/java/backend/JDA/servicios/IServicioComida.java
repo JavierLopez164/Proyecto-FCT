@@ -6,6 +6,7 @@ import java.util.Optional;
 import backend.JDA.modelo.Comida;
 import backend.JDA.modelo.ComidaPK;
 import backend.JDA.modelo.Foto;
+import backend.JDA.modelo.dto.ComidaGaleriaDto;
 
 public interface IServicioComida {
 
@@ -24,7 +25,7 @@ public interface IServicioComida {
 	public boolean cambiarPrecio(ComidaPK comidaPK, float precio);
 
 	public List<String>obtenerTodosLosRestaurantes();
-	public List<Foto>obtenerTodasLasFotosDeUnRestaurantes(String restaurante);
+	public List<ComidaGaleriaDto>obtenerTodasLasComidasDeUnRestaurantes(String restaurante);
 	public List<Comida> obtenerComidasDeUnRestaurante(String restaurante);
 
 }

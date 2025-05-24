@@ -30,6 +30,6 @@ public interface ComidaRepositorio extends JpaRepository<Comida, ComidaPK> {
 	
 	@Query("SELECT DISTINCT c.comidaPK.nRestaurante FROM Comida c ")
 	List<String>obtenerTodosLosRestaurantes();
-	@Query("SELECT c.foto FROM Comida c WHERE c.comidaPK.nRestaurante = ?1 ")
-	List<Foto>obtenerTodasLasFotosDeUnRestaurantes(String restaurante);
+	@Query("SELECT c FROM Comida c WHERE c.comidaPK.nRestaurante = ?1 ")
+	List<Comida>obtenerTodasLasComidasDeUnRestaurantes(String restaurante);
 }
