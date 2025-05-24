@@ -7,9 +7,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import backend.JDA.config.DtoConverter;
 import backend.JDA.modelo.Comida;
 import backend.JDA.modelo.ComidaPK;
 import backend.JDA.modelo.Foto;
+import backend.JDA.modelo.dto.ComidaGaleriaDto;
 import backend.JDA.repositorios.ComidaRepositorio;
 
 @Service
@@ -17,7 +19,8 @@ public class ServicioComidaImpl implements IServicioComida {
 
 	@Autowired
 	private ComidaRepositorio comidaDAO;
-
+	@Autowired 
+	private DtoConverter dtoConverter;
 	@Override
 	public boolean insert(Comida comida) {
 		// TODO Auto-generated method stub
@@ -60,7 +63,7 @@ public class ServicioComidaImpl implements IServicioComida {
 	@Override
 	public List<Comida> findAll() {
 		// TODO Auto-generated method stub
-		return (List<Comida>) comidaDAO.findAll();
+		return  comidaDAO.findAll();
 	}
 
 	@Override
@@ -112,9 +115,9 @@ public class ServicioComidaImpl implements IServicioComida {
 	}
 
 	@Override
-	public List<Foto> obtenerTodasLasFotosDeUnRestaurantes(String restaurante) {
+	public List<ComidaGaleriaDto> obtenerTodasLasComidasDeUnRestaurantes(String restaurante) {
 		// TODO Auto-generated method stub
-		return comidaDAO.obtenerTodasLasFotosDeUnRestaurantes(restaurante);
+		return dtoConverter.mapAll(comidaDAO.obtenerTodasLasComidasDeUnRestaurantes(restaurante), ComidaGaleriaDto.class)  ;
 	}
 
 }

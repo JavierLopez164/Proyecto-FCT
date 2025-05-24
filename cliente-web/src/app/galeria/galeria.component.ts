@@ -1,4 +1,4 @@
-import { Component,OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderWashabiComponent } from '../header-washabi/header-washabi.component';
 import { FooterComponent } from '../footer/footer.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,68 +6,103 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-galeria',
-  imports: [CommonModule ,HeaderWashabiComponent,FooterComponent,  MatFormFieldModule,MatSelectModule,MatOptionModule, MatCardModule],
+  imports: [CommonModule, HeaderWashabiComponent, FooterComponent, MatFormFieldModule, MatSelectModule, MatOptionModule, MatCardModule],
   templateUrl: './galeria.component.html',
   styleUrl: './galeria.component.css'
 })
-export class GaleriaComponent implements OnInit {
- foodItems = [
-    { id: 1, name: 'Pizza Margherita', imageUrl: 'img/anime.jpeg', restaurant: 'Pizzeria Roma', dateAdded: new Date('2023-01-15') },
-    { id: 2, name: 'Sushi', imageUrl: 'img/anime.jpeg', restaurant: 'Sushi Bar', dateAdded: new Date('2023-05-05') },
-    { id: 3, name: 'Tacos', imageUrl: 'img/anime.jpeg', restaurant: 'Taquería El Camino', dateAdded: new Date('2023-04-01') },
-    { id: 4, name: 'Burger', imageUrl: 'img/anime.jpeg', restaurant: 'Burger King', dateAdded: new Date('2023-03-25') }
-  ];
 
-  filteredFoodItems: any[] = [];
-  restaurants: string[] = [];
-  selectedRestaurant: string = 'all';
-  sortBy: string = 'name';
+
+export class GaleriaComponent implements OnInit {
+
+  comidas: any[] = [];
+  comidasFiltradas: any[] = [];
+  nombresRestaurantes: string[] = [];
+  restauranteSeleccionado: string = 'todos';
+  ordenarPor: string = '';
+  private urlComida = 'http://localhost:8080/api/comida';
+  private headers = new HttpHeaders({
+    Authorization: localStorage.getItem('token') ?? ''
+  });
+
+  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    // Extrae restaurantes únicos
-    this.restaurants = Array.from(new Set(this.foodItems.map(item => item.restaurant)));
-
-    // Inicializa el listado con los filtros por defecto
-    this.applyFilters();
+    this.cargarComidas();
+    this.cargarNombresDeRestaurantes();
   }
 
-  // Aplica los filtros combinados
-  applyFilters(): void {
-    let result = [...this.foodItems];
+  // Carga las comidas desde el backend
+  cargarComidas(): void {
+    this.http.get<any[]>(`${this.urlComida}/listarComidas`, { headers: this.headers })
+      .subscribe({
+        next: (comidas) => {
+          this.comidas = comidas.map(c => ({
+            restaurante: c.comidaPK?.nrestaurante,
+            nombre: c.comidaPK?.ncomida,
+            descripcion: c.description,
+            precio: c.price,
+            categoria: c.category,
+            tiempoPreparacion: c.preparationTime,
+            imagen: c.foto?.imagenUrl,
+            fechaSubida:new Date(c.foto?.fecha)
+          }));
+          this.aplicarFiltros();
+        },
+        error: err => console.error('Error al listar comidas', err)
+      });
+  }
 
-    // Filtro por restaurante
-    if (this.selectedRestaurant !== 'all') {
-      result = result.filter(item => item.restaurant === this.selectedRestaurant);
+  // Carga la lista de nombres de restaurantes
+  cargarNombresDeRestaurantes(): void {
+    this.http.get<string[]>(`${this.urlComida}/obtenerNombresRestaurante`, { headers: this.headers })
+      .subscribe({
+        next: (nombres) => {
+          this.nombresRestaurantes = ['todos', ...nombres];
+        },
+        error: err => console.error('Error al cargar nombres de restaurantes', err)
+      });
+  }
+
+  // Aplica filtros de restaurante y orden
+  aplicarFiltros(): void {
+    let resultado = [...this.comidas];
+
+    // Filtrar por restaurante
+    if (this.restauranteSeleccionado !== 'todos') {
+      resultado = resultado.filter(c => c.restaurante == this.restauranteSeleccionado);
     }
 
-    // Ordenamiento
-    switch (this.sortBy) {
-      case 'dateNewest':
-        result.sort((a, b) => b.dateAdded.getTime() - a.dateAdded.getTime());
+    // Ordenar según selección
+    switch (this.ordenarPor) {
+      case 'fechaReciente':
+        resultado.sort((a, b) => b.fechaSubida.getTime() - a.fechaSubida.getTime());
         break;
-      case 'dateOldest':
-        result.sort((a, b) => a.dateAdded.getTime() - b.dateAdded.getTime());
+      case 'fechaAntigua':
+        resultado.sort((a, b) => a.fechaSubida.getTime() - b.fechaSubida.getTime());
         break;
       default:
-        result.sort((a, b) => a.name.localeCompare(b.name));
+        resultado.sort((a, b) => a.nombre.localeCompare(b.nombre));
         break;
     }
 
-    this.filteredFoodItems = result;
+    this.comidasFiltradas = resultado;
   }
 
-  // Cambia ordenamiento
-  onSortChange(event: any): void {
-    this.sortBy = event.value;
-    this.applyFilters();
+  // Cambia el criterio de ordenamiento
+  alCambiarOrden(evento: any): void {
+    this.ordenarPor = evento.value;
+    this.aplicarFiltros();
   }
 
-  // Cambia restaurante
-  onRestaurantFilterChange(event: any): void {
-    this.selectedRestaurant = event.value;
-    this.applyFilters();
+  // Cambia el filtro de restaurante
+  alCambiarRestaurante(evento: any): void {
+    this.restauranteSeleccionado = evento.value;
+    this.aplicarFiltros();
   }
+
 }

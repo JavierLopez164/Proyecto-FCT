@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import backend.JDA.modelo.Comida;
 import backend.JDA.modelo.ComidaPK;
 import backend.JDA.modelo.Foto;
+import backend.JDA.modelo.dto.ComidaGaleriaDto;
 import backend.JDA.servicios.IServicioComida;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -126,15 +127,19 @@ public class ComidaController {
 		List<Comida> comidas = servicioComida.obtenerComidasDeUnRestaurante(restaurante);
 		return ResponseEntity.ok(comidas);
 	}
-	@GetMapping("/obtenerTodosLosRestaurantes")
+	
+	
+	
+	
+	@GetMapping("/obtenerComidasDeUnRestaurantes")
 	@Operation(
-			summary = "Obtener las fotos de un restaurante",
-			description = "Permite obtener las fotos de un restaurante.",
+			summary = "Obtener las comidas de un restaurante pero con dto especifico para galeria",
+			description = "Permite obtener las comidas de un restaurante.",
 			security = @SecurityRequirement(name = "bearerAuth")
 	)
-	public ResponseEntity<List<Foto>> obtenerFotosRestaurante(@RequestParam String restaurante) {
+	public ResponseEntity<List<ComidaGaleriaDto>> obtenerComidasRestaurante(@RequestParam String restaurante) {
 		
-		return ResponseEntity.ok(servicioComida.obtenerTodasLasFotosDeUnRestaurantes(restaurante));
+		return ResponseEntity.ok(servicioComida.obtenerTodasLasComidasDeUnRestaurantes(restaurante));
 	}
 	
 	@GetMapping("/obtenerNombresRestaurante")
@@ -147,7 +152,6 @@ public class ComidaController {
 		
 		return ResponseEntity.ok(servicioComida.obtenerTodosLosRestaurantes());
 	}
-	
 	
 	
 }

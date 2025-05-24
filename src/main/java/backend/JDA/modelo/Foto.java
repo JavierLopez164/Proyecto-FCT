@@ -17,7 +17,6 @@ public class Foto {
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 	private Integer fotoId;
 
 	@Column(name = "url")

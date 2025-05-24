@@ -184,17 +184,4 @@ public class ServicioFotoImpl implements IServicioFoto {
 		return fotoDAO.findById(id);
 	}
 
-	@Override
-	public List<Foto> ordenarFechaActual() {
-		// TODO Auto-generated method stub
-		return fotoDAO.ordenarFechaActual();
-	}
-
-	@Override
-	public List<Foto> ordenarFechaAntiguo() {
-		// TODO Auto-generated method stub
-		return fotoDAO.ordenarFechaAntiguo();
-	}
-
-
 }

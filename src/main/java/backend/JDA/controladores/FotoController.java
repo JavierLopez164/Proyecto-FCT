@@ -51,28 +51,5 @@ public class FotoController {
 
 		  return ResponseEntity.of(servicioFoto.subirImagenACloudComida(imagenFichero, new ComidaPK(comida,restaurante)));
 	    }
-
-		@GetMapping("/obtenerfotomasreciente")
-		@Operation(
-				summary = "Obtener las fotos mas recientes",
-				description = "Permite obtener fotos recientes.",
-				security = @SecurityRequirement(name = "bearerAuth")
-		)
-		public ResponseEntity<List<Foto>> obtenerFotosRecientes() {
-			
-			return ResponseEntity.ok(servicioFoto.ordenarFechaActual());
-		}
-
-		@GetMapping("/obtenerfotosmenosrecientes")
-		@Operation(
-				summary = "Obtener las fotos menos recientes",
-				description = "Permite obtener fotos menos recientes.",
-				security = @SecurityRequirement(name = "bearerAuth")
-		)
-		public ResponseEntity<List<Foto>> obtenerFotosAntiguo() {
-			
-			return ResponseEntity.ok(servicioFoto.ordenarFechaAntiguo());
-		}
-		
 		
 }
