@@ -97,12 +97,10 @@ public class ServicioFotoImpl implements IServicioFoto {
 	}
 
 	@Override
-	public Optional<ComidaFotoDto> subirImagenACloudComida(MultipartFile imagenFichero,ComidaPK comidaPK,String email)  {
+	public Optional<ComidaFotoDto> subirImagenACloudComida(MultipartFile imagenFichero,ComidaPK comidaPK)  {
 		// TODO Auto-generated method stub
-		 Optional<Cliente> client = clienteDao.findById(email);
 		 Optional<ComidaFotoDto>comidaFoto=Optional.empty();
 		 Optional<Comida>comida=comidaDao.findById(comidaPK);
-		  if(client.isPresent()) {
 			  if(comida.isPresent()) {
 		        byte[] bytes = null;
 				try {
@@ -116,7 +114,7 @@ public class ServicioFotoImpl implements IServicioFoto {
 			    MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
 			    body.add("file",  "data:image/jpeg;base64," + base64Image); // Enviar archivo en bytes
 			    body.add("upload_preset", uploadPreset);
-			    body.add("folder", "usuarios/comida/" + email);
+			    body.add("folder", "usuarios/comida/" + comidaPK.getNComida()+"+"+comidaPK.getNRestaurante());
 		
 			   
 			    HttpHeaders headers = new HttpHeaders();
@@ -142,8 +140,7 @@ public class ServicioFotoImpl implements IServicioFoto {
 			    }
 			    System.out.println("Comida no encontrada");
 			  }
-			  System.out.println("Cliente no encontrado");
-		  }
+
 		
 		return comidaFoto;
 	}

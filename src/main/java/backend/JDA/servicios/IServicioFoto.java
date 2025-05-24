@@ -13,7 +13,7 @@ import backend.JDA.modelo.dto.ComidaFotoDto;
 
 public interface IServicioFoto {
 	public Optional<ClienteFotoDto> subirImagenACloudFotoPerfil(MultipartFile imagenFichero,String email) ;
-	public Optional<ComidaFotoDto> subirImagenACloudComida(MultipartFile imagenFichero,ComidaPK comidaPK,String email);
+	public Optional<ComidaFotoDto> subirImagenACloudComida(MultipartFile imagenFichero,ComidaPK comidaPK);
 	
 	public boolean update(Foto foto);
 	

@@ -48,9 +48,8 @@ public class FotoController {
 		@ApiResponse(responseCode = "400", description = "Error no se ha subido la imagen a Cloudinary")
 	    public ResponseEntity<ComidaFotoDto> subirFotoComida(@RequestPart MultipartFile imagenFichero , @RequestParam String comida,@RequestParam String restaurante) {
 
-	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	        String email = authentication.getName();
-		  return ResponseEntity.of(servicioFoto.subirImagenACloudComida(imagenFichero, new ComidaPK(comida,restaurante),email));
+
+		  return ResponseEntity.of(servicioFoto.subirImagenACloudComida(imagenFichero, new ComidaPK(comida,restaurante)));
 	    }
 
 		@GetMapping("/obtenerfotomasreciente")

@@ -17,5 +17,5 @@ public class ComidaFotoDto {
 	@EqualsAndHashCode.Include
 	private ComidaPK comidaPK;
 	
-	private Foto fotoPerfil;
+	private String imagenUrl;
 }
