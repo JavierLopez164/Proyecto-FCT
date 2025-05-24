@@ -34,8 +34,6 @@ export class AjusteComponent implements OnInit {
     fechaCreacion:"",
     fotoPerfil:null,
     restaurante:""
-
-
   };
   constructor(private perfilServicio: PerfilService, private snackBar: MatSnackBar, private http: HttpClient) { }
   ngOnInit(): void {
@@ -65,8 +63,8 @@ export class AjusteComponent implements OnInit {
         'Authorization': localStorage.getItem('token') ?? "",
       });
       formData.append('imagenFichero', this.archivoSeleccionado);
-
-      this.http.post('http://localhost:8080/api/fotos/subirfotoperfil', formData,{headers}).subscribe({
+      formData.append("email",this.perfil.email)
+      this.http.post('http://localhost:8080/api/fotos/actualizarfotoperfil',formData,{headers}).subscribe({
         next: (res) => {
           this.snackBar.open('Ha sido actualizado tu foto de perfil', 'Cerrar', {
           duration: 3000
