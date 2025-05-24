@@ -26,7 +26,6 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @EntityListeners(PasswordListener.class)
 public class Cliente {
-	//@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 	@EqualsAndHashCode.Include
 	@Id
 	@Email(message = "El correo debe ser válido")
@@ -37,13 +36,17 @@ public class Cliente {
 	private String nombre;
 	@Column(name = "contrasenia", nullable = false)
 	private String contrasenia;
+	
 	@Enumerated(EnumType.STRING)
-	private Rol rol;
+	@Builder.Default
+	private Rol rol=Rol.ROLE_USER;
 	@Builder.Default
 	private LocalDate fechaCreacion=LocalDate.now();
+
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "fotoId")
-	private Foto fotoPerfil;
+	@Builder.Default
+	private Foto fotoPerfil=Foto.builder().fecha(LocalDate.now()).imagenUrl("/img/imagen_usuario_por_defecto.jpg").build();
 	 @Column(name = "restaurante", length = 50, nullable = true)
 	 private String restaurante;
 

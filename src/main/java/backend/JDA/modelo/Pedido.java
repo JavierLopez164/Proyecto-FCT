@@ -15,7 +15,7 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 
 @Entity
-//@Document(collection = "pedido")
+
 public class Pedido {
 	@EqualsAndHashCode.Include
 	@Id

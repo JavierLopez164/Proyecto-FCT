@@ -53,7 +53,9 @@ public class MultiHttpSecurityConfig {
                         //fotos
                         .requestMatchers("/api/fotos/**").permitAll()
 
-
+                        //comidas
+                        .requestMatchers("/api/comida/obtenerNombresRestaurante").hasRole("USER")
+                        .requestMatchers("/api/comida/obtenerComidasDeUnRestaurantes").hasRole("USER")
                         // Cualquier otra petición requiere autenticación
                         .anyRequest().authenticated()
                 )

@@ -10,9 +10,5 @@ import backend.JDA.modelo.Foto;
 
 @Repository
 public interface FotoRepositorio extends JpaRepository<Foto, Integer> {
-	@Query("SELECT f FROM Foto f ORDER BY f.fecha DESC")
-	List<Foto> ordenarFechaAntiguo();
-	@Query("SELECT f FROM Foto f ORDER BY f.fecha ASC")
-	List<Foto> ordenarFechaActual();
-	
+
 }
