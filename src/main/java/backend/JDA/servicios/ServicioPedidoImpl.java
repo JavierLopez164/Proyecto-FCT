@@ -36,7 +36,7 @@ public class ServicioPedidoImpl implements IServicioPedido {
 		if (clienteOpt.isEmpty() || comidasRest.isEmpty()) return Optional.empty();
 
 		Pedido pedido = Pedido.builder().id(UUID.randomUUID().toString()).cliente(clienteOpt.get())
-				.activo(true).comidas(new ArrayList<>()).fechaCreacion(LocalDate.now()).cantidadFinal(0f).build();
+				.activo(true).comidas(new ArrayList<>()).fechaCreacion(LocalDate.now()).cantidadFinal(0).restaurante(restaurante).build();
 
 		pedidoRepo.save(pedido);
 
@@ -60,7 +60,7 @@ public class ServicioPedidoImpl implements IServicioPedido {
 		Comida comida = comidaOpt.get();
 
 		pedido.getComidas().add(comida);
-		float totalActual = pedido.getCantidadFinal();
+		int totalActual = pedido.getCantidadFinal();
 		pedido.setCantidadFinal(totalActual + comida.getPrice());
 
 		pedidoRepo.save(pedido);

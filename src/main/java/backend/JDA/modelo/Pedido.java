@@ -31,10 +31,12 @@ public class Pedido {
 	private List<Comida> comidas;
 
 	@Column(nullable = false)
-	private float cantidadFinal;
+	private int cantidadFinal;
 
 	private boolean activo;
 	private LocalDate fechaCreacion;
+
+	private String restaurante;
 
 	
 }
