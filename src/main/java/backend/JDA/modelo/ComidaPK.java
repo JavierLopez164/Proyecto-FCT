@@ -3,6 +3,7 @@ package backend.JDA.modelo;
 import java.io.Serializable;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import lombok.AllArgsConstructor;
@@ -16,9 +17,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
-public class ComidaPK implements Serializable{
-
+public class ComidaPK implements Serializable {
+    @Column(name = "nComida")
     private String nComida;
-    private String nRestaurante;
 
+    @Column(name = "nRestaurante")
+    private String nRestaurante;
 }

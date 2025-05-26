@@ -2,6 +2,7 @@ package backend.JDA.controladores;
 
 import backend.JDA.modelo.ComidaPK;
 import backend.JDA.modelo.Pedido;
+import backend.JDA.modelo.dto.PedidoListadoDTO;
 import backend.JDA.servicios.ServicioPedidoImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,10 @@ public class PedidoController {
     public ResponseEntity<?> crearSimple(@RequestParam String email, @RequestParam String restaurante) {
         Optional<Pedido> pedidoOpt = pedidoService.crearPedidoSimple(email, restaurante);
         return pedidoOpt.isPresent()
-                ? ResponseEntity.ok(pedidoOpt.get())
+                ? ResponseEntity.ok(pedidoService.mapToPedidoCreadoDTO(pedidoOpt.get()))
                 : ResponseEntity.badRequest().body("Cliente o restaurante inválido");
     }
+
 
     @Operation(summary = "Añadir comida a pedido", description = "Añade una comida existente a un pedido.")
     @ApiResponses(value = {
@@ -95,8 +97,9 @@ public class PedidoController {
             @ApiResponse(responseCode = "200", description = "Pedidos listados correctamente")
     })
     @GetMapping("/listar")
-    public ResponseEntity<Iterable<Pedido>> listar() {
-        return ResponseEntity.ok(pedidoService.listarPedidos());
+    public ResponseEntity<?> listar() {
+        List<PedidoListadoDTO> dtos = pedidoService.listarPedidosDTO(); // nuevo método
+        return ResponseEntity.ok(dtos);
     }
 }
 

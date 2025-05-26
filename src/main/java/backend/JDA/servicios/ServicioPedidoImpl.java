@@ -5,17 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import backend.JDA.config.DtoConverter;
 import backend.JDA.config.QRUtils;
-import backend.JDA.modelo.Cliente;
-import backend.JDA.modelo.Comida;
-import backend.JDA.modelo.ComidaPK;
+import backend.JDA.modelo.*;
+import backend.JDA.modelo.dto.ItemDTO;
+import backend.JDA.modelo.dto.PedidoCreadoDTO;
+import backend.JDA.modelo.dto.PedidoListadoDTO;
 import backend.JDA.repositorios.ClienteRepositorio;
 import backend.JDA.repositorios.ComidaRepositorio;
+import backend.JDA.repositorios.ItemPedidoRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import backend.JDA.modelo.Pedido;
 import backend.JDA.repositorios.PedidoRepositorio;
 
 @Service
@@ -30,17 +33,34 @@ public class ServicioPedidoImpl implements IServicioPedido {
 	@Autowired
 	private ComidaRepositorio comidaRepo;
 
+	@Autowired
+	private ItemPedidoRepositorio itemPedidoRepo;
+
+	@Autowired
+	private DtoConverter dtoConverter;
+
 	public Optional<Pedido> crearPedidoSimple(String email, String restaurante) {
-		Optional<Cliente> clienteOpt = clienteRepo.findById(email);List<Comida> comidasRest = comidaRepo.obtenerComidasDeUnRestaurante(restaurante);
+		Optional<Cliente> clienteOpt = clienteRepo.findById(email);
+		List<Comida> comidasRest = comidaRepo.obtenerComidasDeUnRestaurante(restaurante);
 
 		if (clienteOpt.isEmpty() || comidasRest.isEmpty()) return Optional.empty();
 
-		Pedido pedido = Pedido.builder().id(UUID.randomUUID().toString()).cliente(clienteOpt.get())
-				.activo(true).comidas(new ArrayList<>()).fechaCreacion(LocalDate.now()).cantidadFinal(0).restaurante(restaurante).build();
+		LocalDate hoy = LocalDate.now();
+		LocalDate expiracion = hoy.plusDays(1); // fecha de expiración = mañana
+
+		Pedido pedido = Pedido.builder()
+				.id(UUID.randomUUID().toString())
+				.cliente(clienteOpt.get())
+				.activo(true)
+				.items(new ArrayList<>())
+				.fechaCreacion(hoy)
+				.fechaExpiracion(expiracion)
+				.cantidadFinal(0)
+				.restaurante(restaurante)
+				.build();
 
 		pedidoRepo.save(pedido);
 
-		// Generamos QR hacia un esquema app://pedido/{id}
 		try {
 			QRUtils.generarQR("app://pedido/" + pedido.getId(), pedido.getId() + ".png");
 		} catch (Exception e) {
@@ -59,13 +79,35 @@ public class ServicioPedidoImpl implements IServicioPedido {
 		Pedido pedido = pedidoOpt.get();
 		Comida comida = comidaOpt.get();
 
-		pedido.getComidas().add(comida);
-		int totalActual = pedido.getCantidadFinal();
-		pedido.setCantidadFinal(totalActual + comida.getPrice());
+		List<ItemPedido> items = pedido.getItems();
+
+		// Buscar si ya hay un item con esa comida
+		Optional<ItemPedido> existenteOpt = items.stream()
+				.filter(i -> i.getComida().equals(comida))
+				.findFirst();
+
+		if (existenteOpt.isPresent()) {
+			ItemPedido existente = existenteOpt.get();
+			existente.setCantidad(existente.getCantidad() + 1);
+			itemPedidoRepo.save(existente);
+		} else {
+			ItemPedido nuevoItem = ItemPedido.builder()
+					.pedido(pedido)
+					.comida(comida)
+					.cantidad(1)
+					.build();
+			items.add(nuevoItem);
+			itemPedidoRepo.save(nuevoItem);
+		}
+
+		// Recalcular total
+		int total = items.stream().mapToInt(i -> i.getCantidad() * i.getComida().getPrice()).sum();
+		pedido.setCantidadFinal(total);
 
 		pedidoRepo.save(pedido);
 		return Optional.of(pedido);
 	}
+
 
 	public List<Pedido> listarPedidos() {
 		return pedidoRepo.findByActivoTrue();
@@ -95,5 +137,31 @@ public class ServicioPedidoImpl implements IServicioPedido {
 		return pedidoRepo.buscarPedidosEntreFechas(hace7Dias, hoy).size();
 	}
 
+	public PedidoListadoDTO mapToPedidoListadoDTO(Pedido pedido) {
+		PedidoListadoDTO dto = dtoConverter.map(pedido, PedidoListadoDTO.class);
+
+		// Mapear los items manualmente si no se hace automáticamente
+		List<ItemDTO> itemsDTO = pedido.getItems().stream().map(item -> {
+			ItemDTO itemDTO = new ItemDTO();
+			itemDTO.setNombreComida(item.getComida().getComidaPK().getNComida());
+			itemDTO.setCantidad(item.getCantidad());
+			itemDTO.setPrecioUnitario(item.getComida().getPrice());
+			return itemDTO;
+		}).collect(Collectors.toList());
+
+		dto.setItems(itemsDTO);
+		return dto;
+	}
+
+	public PedidoCreadoDTO mapToPedidoCreadoDTO(Pedido pedido) {
+		return dtoConverter.map(pedido, PedidoCreadoDTO.class);
+	}
+
+
+	public List<PedidoListadoDTO> listarPedidosDTO() {
+		return pedidoRepo.findByActivoTrue().stream()
+				.map(this::mapToPedidoListadoDTO) // este ya usa dtoConverter si lo cambiaste
+				.collect(Collectors.toList());
+	}
 
 }
