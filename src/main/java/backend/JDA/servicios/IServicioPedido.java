@@ -12,6 +12,10 @@ public interface IServicioPedido {
 
 	 Optional<Pedido> añadirComida(String pedidoId, ComidaPK comidaPK);
 
+	 Optional<Pedido> restarComida(String pedidoId, ComidaPK comidaPK);
+
+	Optional<Pedido> eliminarComida(String pedidoId, ComidaPK comidaPK);
+
 	List<Pedido> listarPedidos();
 	
 }

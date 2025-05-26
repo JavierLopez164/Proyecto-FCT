@@ -108,6 +108,75 @@ public class ServicioPedidoImpl implements IServicioPedido {
 		return Optional.of(pedido);
 	}
 
+	public Optional<Pedido> restarComida(String pedidoId, ComidaPK comidaPK) {
+		Optional<Pedido> pedidoOpt = pedidoRepo.findById(pedidoId);
+		Optional<Comida> comidaOpt = comidaRepo.findById(comidaPK);
+
+		if (pedidoOpt.isEmpty() || comidaOpt.isEmpty()) return Optional.empty();
+
+		Pedido pedido = pedidoOpt.get();
+		Comida comida = comidaOpt.get();
+
+		List<ItemPedido> items = pedido.getItems();
+
+		Optional<ItemPedido> itemOpt = items.stream()
+				.filter(i -> i.getComida().equals(comida))
+				.findFirst();
+
+		if (itemOpt.isPresent()) {
+			ItemPedido item = itemOpt.get();
+			if (item.getCantidad() > 1) {
+				item.setCantidad(item.getCantidad() - 1);
+				itemPedidoRepo.save(item);
+			} else {
+				// Si es 1, se elimina directamente
+				items.remove(item);
+				itemPedidoRepo.delete(item);
+			}
+
+			// Recalcular total
+			int total = items.stream().mapToInt(i -> i.getCantidad() * i.getComida().getPrice()).sum();
+			pedido.setCantidadFinal(total);
+			pedidoRepo.save(pedido);
+
+			return Optional.of(pedido);
+		}
+
+		return Optional.empty(); // No estaba ese item
+	}
+
+	public Optional<Pedido> eliminarComida(String pedidoId, ComidaPK comidaPK) {
+		Optional<Pedido> pedidoOpt = pedidoRepo.findById(pedidoId);
+		Optional<Comida> comidaOpt = comidaRepo.findById(comidaPK);
+
+		if (pedidoOpt.isEmpty() || comidaOpt.isEmpty()) return Optional.empty();
+
+		Pedido pedido = pedidoOpt.get();
+		Comida comida = comidaOpt.get();
+
+		List<ItemPedido> items = pedido.getItems();
+
+		Optional<ItemPedido> itemOpt = items.stream()
+				.filter(i -> i.getComida().equals(comida))
+				.findFirst();
+
+		if (itemOpt.isPresent()) {
+			ItemPedido item = itemOpt.get();
+			items.remove(item);
+			itemPedidoRepo.delete(item);
+
+			// Recalcular total
+			int total = items.stream().mapToInt(i -> i.getCantidad() * i.getComida().getPrice()).sum();
+			pedido.setCantidadFinal(total);
+			pedidoRepo.save(pedido);
+
+			return Optional.of(pedido);
+		}
+
+		return Optional.empty(); // No había nada que eliminar
+	}
+
+
 
 	public List<Pedido> listarPedidos() {
 		return pedidoRepo.findByActivoTrue();

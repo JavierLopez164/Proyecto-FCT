@@ -56,6 +56,43 @@ public class PedidoController {
                 : ResponseEntity.badRequest().body("Pedido o comida no válida");
     }
 
+    @Operation(summary = "Restar una unidad de comida en un pedido", description = "Disminuye en 1 la cantidad de una comida en el pedido. Si queda en 0, se elimina.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Comida actualizada correctamente"),
+            @ApiResponse(responseCode = "400", description = "Pedido o comida no válida")
+    })
+    @PostMapping("/restar-comida")
+    public ResponseEntity<?> restarComida(
+            @RequestParam String pedidoId,
+            @RequestParam String nComida,
+            @RequestParam String nRestaurante
+    ) {
+        ComidaPK comidaPK = new ComidaPK(nComida, nRestaurante);
+        Optional<Pedido> pedidoOpt = pedidoService.restarComida(pedidoId, comidaPK);
+        return pedidoOpt.isPresent()
+                ? ResponseEntity.ok(pedidoOpt.get())
+                : ResponseEntity.badRequest().body("Pedido o comida no válida");
+    }
+
+    @Operation(summary = "Eliminar completamente una comida del pedido", description = "Quita completamente un ítem del pedido.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Item eliminado correctamente"),
+            @ApiResponse(responseCode = "400", description = "Pedido o comida no válida")
+    })
+    @DeleteMapping("/eliminar-comida")
+    public ResponseEntity<?> eliminarComida(
+            @RequestParam String pedidoId,
+            @RequestParam String nComida,
+            @RequestParam String nRestaurante
+    ) {
+        ComidaPK comidaPK = new ComidaPK(nComida, nRestaurante);
+        Optional<Pedido> pedidoOpt = pedidoService.eliminarComida(pedidoId, comidaPK);
+        return pedidoOpt.isPresent()
+                ? ResponseEntity.ok(pedidoOpt.get())
+                : ResponseEntity.badRequest().body("Pedido o comida no válida");
+    }
+
+
     @Operation(summary = "Cambiar estado de un pedido", description = "Activa o desactiva un pedido por ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Estado actualizado exitosamente"),
