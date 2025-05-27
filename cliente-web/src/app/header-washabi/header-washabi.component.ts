@@ -1,10 +1,10 @@
 import { Component,OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { PerfilService } from '../services/perfil.service';
-
+import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-header',
-  imports: [RouterLink],
+  imports: [RouterLink,MatIconModule],
   templateUrl: './header-washabi.component.html',
   styleUrl: './header-washabi.component.css'
 })

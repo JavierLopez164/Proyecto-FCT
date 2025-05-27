@@ -1,0 +1,129 @@
+<app-header></app-header>
+<div class="max-w-3xl mx-auto p-4 bg-purple-700 my-41 rounded-3xl text-white ">
+  <h1 class="text-3xl font-bold mb-6 text-center">Menú</h1>
+
+  <!-- Filtro de restaurante -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-center gap-4 mb-8">
+    <mat-form-field appearance="fill" class="min-w-[200px]">
+      <mat-label>Seleccione por Restaurante</mat-label>
+      <mat-select (selectionChange)="alCambiarRestaurante($event)">
+        @for (restauranteN of nombresRestaurantes; track restauranteN) {
+        <mat-option [value]="restauranteN">{{ restauranteN }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- Mensaje cuando no hay restaurante seleccionado -->
+  @if (!restauranteSeleccionado) {
+  <div class="text-center text-gray-200 mt-10">
+    <span class="material-icons text-6xl text-gray-300">restaurant</span>
+    <p class="mt-4 text-lg">Selecciona un restaurante para ver su menú y hacer un pedido</p>
+  </div>
+  }
+
+  <!-- Lista de comidas -->
+  @if (restauranteSeleccionado) {
+  @for (comida of comidas; track comida) {
+  <mat-card class="mb-6 p-4 bg-white text-black rounded-xl shadow" >
+    <div class="flex gap-4 items-center" >
+      <img [src]="comida.imagen" [alt]="comida.nombre" class="w-24 h-24 object-cover rounded-md" />
+
+      <div class="flex-1" (mouseover)="cargarMediaValoracion(comida.nombre)">
+        <h2 class="text-xl font-bold text-purple-800">{{ comida.nombre }}</h2>
+        <p class="text-sm text-gray-600">
+          Restaurante: <strong>{{ comida.restaurante }}</strong>
+        </p>
+        <p class="text-lg font-bold text-green-600">Precio: {{ comida.precio }}€</p>
+        <div class="flex items-center gap-1 mb-1" >
+          @for (star of [1, 2, 3, 4, 5]; track star) {
+          <mat-icon [ngClass]="{
+          'text-yellow-400': star <= (mediaPuntuacion[comida.nombre] || 0),
+          'text-gray-400': star > (mediaPuntuacion[comida.nombre] || 0)
+        }">
+            {{ star <= (mediaPuntuacion[comida.nombre] || 0) ? 'star' : 'star_border' }} </mat-icon>
+              }
+        </div>
+        <div class="mt-2 flex justify-end mb-6">
+          <button mat-raised-button color="accent">
+            <mat-icon>add_shopping_cart</mat-icon> Añadir al carrito
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detalles y comentarios -->
+    <mat-expansion-panel class="mt-6" [expanded]="panelAbierto == comida.nombre" (opened)="alAbrirPanel(comida.nombre)"  (closed)="alCerrarPanel(comida.nombre)">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Detalles de la Comida y Comentarios
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="space-y-2 text-sm text-gray-700">
+        <p><span class="font-semibold text-gray-800">Descripción:</span> {{ comida.descripcion }}</p>
+        <p><span class="font-semibold text-gray-800">Categoría:</span> {{ comida.category }}</p>
+        <p><span class="font-semibold text-gray-800">Tiempo de preparación:</span> {{ comida.preparationTime }} min</p>
+        <p><span class="font-semibold text-gray-800">Atributos:</span> {{ comida.attributes }}</p>
+        <p><span class="font-semibold text-gray-800">Características:</span> {{ comida.features }}</p>
+      </div>
+
+      <!-- Comentarios -->
+      <div class="mt-4">
+        <h4 class="text-md font-semibold mb-2">Crear un Comentario:</h4>
+        <!-- Formulario de nuevo comentario -->
+        <form [formGroup]="comentarioForm" (ngSubmit)="insertarComentario()" class="mt-4">
+          <!-- Campo de comentario -->
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Escribe un comentario</mat-label>
+            <input matInput formControlName="contenido" />
+          </mat-form-field>
+
+          <div class="flex items-center gap-1 mt-2  mb-2">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+            <mat-icon class="cursor-pointer" [ngClass]="{
+              'text-yellow-400': star <= puntuacion,
+              'text-gray-400': star > puntuacion
+            }" (click)="setPuntuacion(star)">
+              {{ star <= puntuacion ? 'star' : 'star_border' }} </mat-icon>
+                }
+          </div>
+
+          <!-- Botón de envío -->
+          <button mat-flat-button color="primary" type="submit" class="mt-4"
+            [disabled]="!comentarioForm.valid || puntuacion<=0 ">
+            Añadir Comentario
+          </button>
+        </form>
+  <h4 class="text-md font-semibold mb-2 mt-4">Comentarios:</h4>
+      @if (comentarios.length > 0) {
+        @for (comentario of comentarios; track comentario.emailCli) {
+        <mat-card class="mb-2 p-4 bg-gray-100 rounded shadow  mt-2">
+           <p class="text-lg text-gray-800">{{ comentario.emailCli }}</p>
+          <!-- Estrellas -->
+          <div class="flex items-center gap-1 mb-1">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+            <mat-icon [ngClass]="{
+          'text-yellow-400': star <= comentario.valoracion,
+          'text-gray-400': star > comentario.valoracion
+        }">
+              {{ star <= comentario.valoracion ? 'star' : 'star_border' }} </mat-icon>
+                }
+          </div>
+
+          <!-- Texto del comentario -->
+          <p class="text-lg text-gray-800">{{ comentario.contenido }}</p>
+        </mat-card>
+        }
+        } @else {
+        <p class="text-sm text-gray-500">No hay comentarios aún.</p>
+        }
+
+      </div>
+    </mat-expansion-panel>
+  </mat-card>
+  }
+  }
+</div>
+
+<app-footer></app-footer>
