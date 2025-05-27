@@ -3,6 +3,7 @@ package backend.JDA.controladores;
 import backend.JDA.modelo.ComidaPK;
 import backend.JDA.modelo.Pedido;
 import backend.JDA.modelo.dto.PedidoListadoDTO;
+import backend.JDA.modelo.dto.TopComidaDTO;
 import backend.JDA.servicios.ServicioPedidoImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,10 +113,18 @@ public class PedidoController {
     })
     @GetMapping("/top5-comidas")
     public ResponseEntity<?> top5Comidas(@RequestParam(required = false) String restaurante) {
-        List<Object[]> resultado = restaurante != null
-                ? pedidoService.top5ComidasPorRestaurante(restaurante)
-                : pedidoService.top5ComidasMasPedidas();
+        List<TopComidaDTO> resultado = pedidoService.top5ComidasPorRestaurante(restaurante);
 
+        return ResponseEntity.ok(resultado);
+    }
+
+    @Operation(summary = "Top 5 comidas más pedidas por restaurante", description = "Devuelve el Top 5 de comidas para cada restaurante.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Mapa de restaurantes con sus Top 5 comidas")
+    })
+    @GetMapping("/top5-comidas/todos")
+    public ResponseEntity<?> top5ComidasTodosRestaurantes() {
+        List<TopComidaDTO> resultado = pedidoService.top5ComidasMasPedidas();
         return ResponseEntity.ok(resultado);
     }
 

@@ -13,6 +13,7 @@ import backend.JDA.modelo.*;
 import backend.JDA.modelo.dto.ItemDTO;
 import backend.JDA.modelo.dto.PedidoCreadoDTO;
 import backend.JDA.modelo.dto.PedidoListadoDTO;
+import backend.JDA.modelo.dto.TopComidaDTO;
 import backend.JDA.repositorios.ClienteRepositorio;
 import backend.JDA.repositorios.ComidaRepositorio;
 import backend.JDA.repositorios.ItemPedidoRepositorio;
@@ -192,13 +193,15 @@ public class ServicioPedidoImpl implements IServicioPedido {
 		return Optional.of(pedido);
 	}
 
-	public List<Object[]> top5ComidasMasPedidas() {
-		return comidaRepo.top5ComidasMasPedidas();
+	public List<TopComidaDTO> top5ComidasMasPedidas() {
+		return comidaRepo.top5ComidasMasPedidas().stream().limit(5).toList();
 	}
 
-	public List<Object[]> top5ComidasPorRestaurante(String restaurante) {
-		return comidaRepo.top5ComidasPorRestaurante(restaurante);
+
+	public List<TopComidaDTO> top5ComidasPorRestaurante(String restaurante) {
+		return comidaRepo.top5ComidasPorRestaurante(restaurante).stream().limit(5).toList();
 	}
+
 
 	public int pedidosUltimos7Dias() {
 		LocalDate hoy = LocalDate.now();
