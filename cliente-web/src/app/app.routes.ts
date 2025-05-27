@@ -9,6 +9,8 @@ import { LoginComponent } from './login/login.component';
 import { authGuard } from './auth.guard';
 import { noAuthGuard } from './guards/no-auth.guard';
 import { GaleriaComponent } from './galeria/galeria.component';
+import { MenuComponent } from './menu/menu.component';
+import { CestaComponent } from './cesta/cesta.component';
 export const routes: Routes = [
     {path:"",title:"Inicio",component:InicioComponent,},   
     {path:"galeria",title:"Galeria",component:GaleriaComponent,
@@ -22,4 +24,8 @@ export const routes: Routes = [
         canActivate: [authGuard]},
     {path:"registrar",title:"Registrar",component:RegistrarComponent,canActivate:[noAuthGuard]},
     {path:"login",title:"Login",component:LoginComponent,canActivate:[noAuthGuard]},
-];
+      {path:"menu",title:"Menu",component:MenuComponent,
+        canActivate: [authGuard]},
+          {path:"cesta",title:"Cesta",component:CestaComponent,
+        canActivate: [authGuard]},
+    ];
