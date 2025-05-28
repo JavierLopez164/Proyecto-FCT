@@ -1,0 +1,53 @@
+<app-header></app-header>
+<div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg my-33">
+
+  <h2 class="text-2xl font-bold mb-4 text-gray-800">Tu pedido Nombre</h2>
+
+  @if (carrito.length === 0) {
+    <div class="text-center text-gray-500 py-20">
+      <mat-icon class="text-6xl mb-4">shopping_cart</mat-icon>
+      <p class="text-lg">Tu cesta está vacía</p>
+      <p class="text-sm text-gray-400">Añade alguna comida para ver tu pedido aquí.</p>
+    </div>
+  }@else {
+    <div class=" divide-gray-200">
+      @for (item of carrito; track item.id) {
+        <div class="flex justify-between items-center py-4 rounded-lg relative bg-cover bg-center my-5 "
+          [style.background-image]="'url(' + item.imagen + ')'">
+          
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent rounded-lg"></div>
+
+          <div class="relative z-10 flex flex-col gap-2 p-4 text-white flex-grow">
+            <h3 class="text-lg font-semibold drop-shadow-md">{{ item.nombre }}</h3>
+            <p class="text-sm drop-shadow-md text-amber-400 font-semibold">
+              Precio: ${{ item.precio }}
+            </p>
+
+            <mat-form-field appearance="fill" class="w-24">
+              <mat-label>Cantidad</mat-label>
+              <input matInput type="number" min="1" [(ngModel)]="item.cantidad" id="cantidad-{{item.id}}" />
+            </mat-form-field>
+          </div>
+
+          <button (click)="eliminarItem(item.id)"
+            class="relative z-10 text-red-400 hover:text-red-600 transition ml-4">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      }
+
+      <div class="mt-6 flex justify-between items-center border-t pt-4">
+        <span class="text-xl font-bold text-gray-700">Total:</span>
+        <span class="text-xl font-bold text-green-600">{{ calcularTotal().toFixed(2) }} €</span>
+      </div>
+
+      <div class="mt-6">
+        <button (click)="finalizarPedido()"
+          class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 px-4 rounded-lg shadow transition">
+          Finalizar pedido 
+        </button>
+      </div>
+    </div>
+  }
+</div>
+<app-footer></app-footer>

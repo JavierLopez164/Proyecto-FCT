@@ -27,7 +27,12 @@
             aria-current="page">Inicio</a>
           <a routerLink="/galeria"
             class="rounded-md hover:bg-orange-500 px-3 py-2 font-medium text-white hover:font-playfair"
-            aria-current="page">Galería Comidas</a>
+            aria-current="page">Galeria Comidas Restaurantes</a>
+             @if(estaLogeado()){ 
+            <a routerLink="/menu"
+            class="rounded-md hover:bg-orange-500 px-3 py-2 font-medium text-white hover:font-playfair"
+            aria-current="page">Menú</a>
+             }
           <a routerLink="/chat"
             class="rounded-md px-3 py-2  font-medium text-white hover:bg-orange-500 hover:text-white hover:font-playfair">Chat
             en vivo</a>
@@ -37,7 +42,14 @@
       </div>
       <!-- Imagen de usuario -->
       @if(estaLogeado()){
+         <!-- Ícono del carrito -->
+    <button mat-icon-button routerLink="/cesta" class="text-white hover:text-cyan-400 relative md:right-1 right-12  top-0.5">
+      <mat-icon>shopping_cart</mat-icon>
+    </button>
+
       <div class="flex sm:ml-6 sm:static absolute right-0 top-6 ">
+        
+   
         <div class="relative ">
           <button (click)="estaPulsado=!estaPulsado" type="button"
             class="relative flex  rounded-full " id="user-menu-button">
@@ -81,8 +93,13 @@
     <div class="space-y-1 px-2 pt-2 pb-3 text-white">
       <a routerLink="/" class="block rounded-md hover:bg-orange-500 px-3 py-2 text-base font-medium "
         aria-current="page">Inicio</a>
-      <a routerLink="/reserva" class="block rounded-md hover:bg-orange-500 px-3 py-2 text-base font-medium "
-        aria-current="page">Reserva</a>
+      <a routerLink="/galeria" class="block rounded-md hover:bg-orange-500 px-3 py-2 text-base font-medium "
+        aria-current="page">Galeria Comidas Restaurantes</a>
+            @if(estaLogeado()){ 
+            <a routerLink="/menu"
+            class="block rounded-md px-3 py-2 text-base font-medium  hover:bg-orange-500 hover:text-white"
+            aria-current="page">Menú</a>
+             }
       <a routerLink="/chat"
         class="block rounded-md px-3 py-2 text-base font-medium  hover:bg-orange-500 hover:text-white">Chat</a>
       <a routerLink="/descargarapp"
