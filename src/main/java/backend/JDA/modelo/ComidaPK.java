@@ -18,9 +18,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Embeddable
 public class ComidaPK implements Serializable {
-    @Column(name = "nComida")
+    @Column(name = "nComida", nullable = false)
     private String nComida;
 
-    @Column(name = "nRestaurante")
+    @Column(name = "nRestaurante", nullable = false)
     private String nRestaurante;
 }

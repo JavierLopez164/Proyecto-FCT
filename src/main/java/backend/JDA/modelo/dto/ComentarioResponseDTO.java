@@ -23,4 +23,5 @@ public class ComentarioResponseDTO {
     @Min(value = 1, message = "La valoración mínima es 1")
     @Max(value = 5, message = "La valoración máxima es 5")
     private int valoracion;
+    private Boolean destacado;
 }

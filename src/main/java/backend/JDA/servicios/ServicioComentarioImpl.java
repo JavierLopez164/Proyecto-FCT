@@ -5,7 +5,9 @@ import backend.JDA.modelo.*;
 import backend.JDA.modelo.dto.ComentarioDTO;
 import backend.JDA.modelo.dto.ComentarioResponseDTO;
 import backend.JDA.repositorios.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -85,6 +87,15 @@ public class ServicioComentarioImpl implements IServicioComentario {
 	public int obtenerPromedioValoracion(String comida, String restaurante) {
 		Double promedio = comentarioRepo.obtenerPromedioValoracionPorComida(comida, restaurante);
 		return promedio != null ? promedio.intValue() : 0;
+	}
+
+	// Ejecutar cada 12 horas
+	@Scheduled(fixedRate = 1000 * 60 * 60 * 12) // cada 10 segundos para pruebas
+	@Transactional
+	public void eliminarComentariosAntiguos() {
+		LocalDateTime fechaLimite = LocalDateTime.now().minusHours(12); // o .minusSeconds(10) para pruebas
+		int eliminados = comentarioRepo.deleteByDestacadoIsTrueAndFechaBefore(fechaLimite);
+		System.out.println("Comentarios destacados eliminados automáticamente: " + eliminados);
 	}
 
 }

@@ -37,4 +37,6 @@ public class Comentario {
 	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 	@ManyToOne(optional = false)
 	private Comida comida;
+
+	private boolean destacado;
 }
