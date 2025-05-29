@@ -32,6 +32,7 @@ public class MultiHttpSecurityConfig {
                         // Rutas públicas
                         .requestMatchers("/api/comida/**").permitAll()
                         .requestMatchers("/api/pedidos/**").permitAll()
+                        .requestMatchers("api/stripe/**").permitAll()
                         
                         // Swagger
                         .requestMatchers(

@@ -1,5 +1,6 @@
 package backend.JDA.controladores;
 
+import backend.JDA.modelo.dto.PaymentIntentResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -15,7 +16,8 @@ import com.stripe.model.PaymentIntent;
 
 import backend.JDA.modelo.dto.PaymentIntentDTO;
 import backend.JDA.servicios.IPaymentService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("api/stripe")
@@ -24,15 +26,19 @@ public class PaymentController {
 	
 	@Autowired
 	private IPaymentService paymentService;
-	
+
 	@PostMapping("/paymentintent")
-	public ResponseEntity<String> payment(@RequestBody PaymentIntentDTO paymentIntentDTO) throws StripeException{
+	public ResponseEntity<PaymentIntentResponseDTO> payment(@RequestBody PaymentIntentDTO paymentIntentDTO) throws StripeException {
 		PaymentIntent paymentIntent = paymentService.paymentIntent(paymentIntentDTO);
-		String paymentStr = paymentIntent.toJson();
-		return new ResponseEntity<String>(paymentStr, HttpStatus.OK);
-		
+		PaymentIntentResponseDTO response = new PaymentIntentResponseDTO(
+				paymentIntent.getId(),
+				paymentIntent.getStatus(),
+				paymentIntent.getClientSecret()
+		);
+		return ResponseEntity.ok(response);
 	}
-	
+
+
 	@PostMapping("/confirm/{id}")
 	public ResponseEntity<String> confirm(@PathVariable("id") String id) throws StripeException{
 		PaymentIntent paymentIntent = paymentService.confirm(id);

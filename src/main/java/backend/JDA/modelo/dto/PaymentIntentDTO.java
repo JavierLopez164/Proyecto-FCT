@@ -1,8 +1,13 @@
 package backend.JDA.modelo.dto;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+
 public class PaymentIntentDTO {
 	public enum Currency{
 		USD, EUR;
@@ -11,6 +16,6 @@ public class PaymentIntentDTO {
 	private String description;
 	private int amount;
 	private Currency currency;
-	
+	private String paymentMethodId;
 	
 }
