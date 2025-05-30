@@ -1,10 +1,10 @@
 <app-header></app-header>
-<div class="max-w-3xl mx-auto p-4 bg-purple-700 my-41 rounded-3xl text-white ">
+<div class="max-w-3xl mx-auto p-4 bg-purple-700 my-45 rounded-3xl text-white ">
   <h1 class="text-3xl font-bold mb-6 text-center">Menú</h1>
 
   <!-- Filtro de restaurante -->
   <div class="flex flex-col md:flex-row md:items-center md:justify-center gap-4 mb-8">
-    <mat-form-field appearance="fill" class="min-w-[200px]">
+    <mat-form-field appearance="fill">
       <mat-label>Seleccione por Restaurante</mat-label>
       <mat-select (selectionChange)="alCambiarRestaurante($event)">
         @for (restauranteN of nombresRestaurantes; track restauranteN) {
@@ -18,7 +18,7 @@
   @if (!restauranteSeleccionado) {
   <div class="text-center text-gray-200 mt-10">
     <span class="material-icons text-6xl text-gray-300">restaurant</span>
-    <p class="mt-4 text-lg">Selecciona un restaurante para ver su menú y hacer un pedido</p>
+    <p class="mt-4 text-lg">Selecciona un restaurante para ver su menú y añadirlo a la cesta de pedidos</p>
   </div>
   }
 
@@ -35,6 +35,7 @@
           Restaurante: <strong>{{ comida.restaurante }}</strong>
         </p>
         <p class="text-lg font-bold text-green-600">Precio: {{ comida.precio }}€</p>
+        <p class="text-md font-bold text-cyan-500">Valoración media:</p>
         <div class="flex items-center gap-1 mb-1" >
           @for (star of [1, 2, 3, 4, 5]; track star) {
           <mat-icon [ngClass]="{
@@ -45,7 +46,7 @@
               }
         </div>
         <div class="mt-2 flex justify-end mb-6">
-          <button mat-raised-button color="accent">
+          <button mat-raised-button color="accent" (click)="insertarAlCarrito()">
             <mat-icon>add_shopping_cart</mat-icon> Añadir al carrito
           </button>
         </div>
@@ -53,7 +54,7 @@
     </div>
 
     <!-- Detalles y comentarios -->
-    <mat-expansion-panel class="mt-6" [expanded]="panelAbierto == comida.nombre" (opened)="alAbrirPanel(comida.nombre)"  (closed)="alCerrarPanel(comida.nombre)">
+    <mat-expansion-panel class="mt-6"  [expanded]="panelAbierto == comida.nombre "  (opened)="alAbrirPanel(comida.nombre)"  (closed)="alCerrarPanel(comida.nombre)">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Detalles de la Comida y Comentarios
@@ -91,13 +92,13 @@
 
           <!-- Botón de envío -->
           <button mat-flat-button color="primary" type="submit" class="mt-4"
-            [disabled]="!comentarioForm.valid || puntuacion<=0 ">
+            [disabled]="!comentarioForm.valid || puntuacion<=0  || comentarioHecho">
             Añadir Comentario
           </button>
         </form>
   <h4 class="text-md font-semibold mb-2 mt-4">Comentarios:</h4>
-      @if (comentarios.length > 0) {
-        @for (comentario of comentarios; track comentario.emailCli) {
+      @if (comentariosPorComida[comida.nombre] && comentariosPorComida[comida.nombre].length > 0) {
+        @for (comentario of comentariosPorComida[comida.nombre] ; track comentario.emailCli) {
         <mat-card class="mb-2 p-4 bg-gray-100 rounded shadow  mt-2">
            <p class="text-lg text-gray-800">{{ comentario.emailCli }}</p>
           <!-- Estrellas -->

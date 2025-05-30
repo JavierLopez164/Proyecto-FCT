@@ -13,11 +13,12 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-menu',
-  imports: [HeaderWashabiComponent, FooterComponent,MatSelectModule, CommonModule, ReactiveFormsModule, MatOptionModule, MatInputModule, MatButtonModule, MatIconModule, MatCardModule, MatExpansionModule],
+  imports: [HeaderWashabiComponent, FooterComponent, MatSelectModule, CommonModule, ReactiveFormsModule, MatOptionModule, MatInputModule, MatButtonModule, MatIconModule, MatCardModule, MatExpansionModule],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css'
 })
 export class MenuComponent implements OnInit {
+
 
   constructor(private http: HttpClient) { }
   ngOnInit(): void {
@@ -27,13 +28,13 @@ export class MenuComponent implements OnInit {
   restauranteSeleccionado: string = '';
   nombresRestaurantes: string[] = [];
   comidas: any[] = [];
-  comentarios: any[] = [];
-  nombreComida:string=""
-  mediaPuntuacion :Record<string, number>= {};
+  nombreComida: string = ""
+  mediaPuntuacion: Record<string, number> = {};
+  comentariosPorComida: Record<string, any[]> = {}
   private urlComida = 'http://localhost:8080/api/comida';
   private urlComentario = 'http://localhost:8080/api/comentarios';
   private headers = new HttpHeaders({
-    Authorization: localStorage.getItem('token') ?? '','Content-Type': 'application/json',
+    Authorization: localStorage.getItem('token') ?? '', 'Content-Type': 'application/json',
   });
 
 
@@ -69,77 +70,87 @@ export class MenuComponent implements OnInit {
         error: err => console.error('Error al cargar nombres de restaurantes', err)
       });
   }
-  cargarMediaValoracion(comida:string){
-   
-        this.http.get<number>(this.urlComentario + "/promedio", {
-          params:{comida:comida,restaurante:this.restauranteSeleccionado},  
-          
-        }).subscribe({
-       next: (media) => { 
-           this.mediaPuntuacion[comida]=media
-       },
-      error: (err) => {
-        console.error('Error al mostrar promedio comentarios', err);
-      }
-       })
-      
+  cargarMediaValoracion(comida: string) {
+
+    const estaCargada = this.mediaPuntuacion[comida] !== undefined;
+
+    if (!estaCargada) {
+      this.http.get<number>(this.urlComentario + "/promedio", {
+        params: {
+          comida: comida,
+          restaurante: this.restauranteSeleccionado
+        }
+      }).subscribe({
+        next: (media) => {
+          this.mediaPuntuacion[comida] = media;
+        },
+        error: (err) => {
+          console.error('Error al mostrar promedio comentarios', err);
+        }
+      });
+    }
   }
   alCambiarRestaurante(evento: any): void {
     this.restauranteSeleccionado = evento.value;
+    this.comentariosPorComida = {}
+    this.mediaPuntuacion = {}
     this.cargarComidaPorRestaurante();
   }
 
   alAbrirPanel(evento: any) {
-    this.nombreComida=evento
-   
-    this.http.get<any[]>(this.urlComentario + "/lista", {
-      params: {
-        comida: this.nombreComida,
-        restaurante: this.restauranteSeleccionado
-      }
-    }).subscribe({
-      next: (comentarios) => {
-     
-        this.comentarios = comentarios.map(co => ({
-          contenido: co.contenido,
-          valoracion: co.valoracion,
-          emailCli:co.clienteEmail
-        })
-        )
-        
-      }
-      ,
-      error: (err) => {
-        console.error('Error al listar comentarios', err);
-      }
-    })
-  this.panelAbierto = evento;
+    this.nombreComida = evento
+    this.panelAbierto = evento;
+    if (!this.comentariosPorComida[evento]) {
+      this.http.get<any[]>(this.urlComentario + "/lista", {
+        params: {
+          comida: this.nombreComida,
+          restaurante: this.restauranteSeleccionado
+        }
+      }).subscribe({
+        next: (comentarios) => {
+
+          this.comentariosPorComida[this.nombreComida] = comentarios.map(co => ({
+            contenido: co.contenido,
+            valoracion: co.valoracion,
+            emailCli: co.clienteEmail
+          })
+          )
+
+        }
+        ,
+        error: (err) => {
+          console.error('Error al listar comentarios', err);
+        }
+      })
+
+    }
+
   }
-  puntuacion:number=-1; 
+  puntuacion: number = -1;
   comentarioForm = new FormGroup({
-    contenido: new FormControl('',Validators.required),
+    contenido: new FormControl('', Validators.required),
 
   });
 
-alCerrarPanel(nombreComida: string) {
-  // Solo cerrar si el panel cerrado es el abierto actualmente
-  if (this.panelAbierto == nombreComida) {
-    this.panelAbierto = null;
+  alCerrarPanel(nombreComida: string) {
+    // Solo cerrar si el panel cerrado es el abierto actualmente
+    if (this.panelAbierto == nombreComida) {
+      this.panelAbierto = null;
+    }
   }
-}
   setPuntuacion(valor: number) {
     console.log(valor)
     this.puntuacion = valor;
   }
-
+  comentarioHecho = false;
   insertarComentario() {
-    
-  const comentario = {
-    contenido: this.comentarioForm.get("contenido")?.value,
-    valoracion:this.puntuacion,
-  };
-    
-    this.http.post<any>(this.urlComentario + "/crear",comentario, {
+
+    const comentario = {
+      contenido: this.comentarioForm.get("contenido")?.value,
+      valoracion: this.puntuacion,
+    };
+
+    this.http.post<any>(this.urlComentario + "/crear", comentario, {
       headers: this.headers,
       params: {
         comida: this.nombreComida,
@@ -147,15 +158,19 @@ alCerrarPanel(nombreComida: string) {
       }
     },).subscribe({
       next: (nuevoComentario) => {
-        this.comentarios.push(nuevoComentario);
+
+        this.comentariosPorComida[this.nombreComida].push(nuevoComentario);
+        this.comentarioForm.disable();
+        this.comentarioHecho = true
         console.log("comentario insertado");
       },
       error: (err) => {
         console.error('Error al guardar comentario', err);
       }
     });
-
   }
+  insertarAlCarrito() {
     
+  }
 }
 
