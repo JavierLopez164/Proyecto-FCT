@@ -89,6 +89,11 @@ public class ServicioComentarioImpl implements IServicioComentario {
 		return promedio != null ? promedio.intValue() : 0;
 	}
 
+	@Override
+	public boolean puedeComentar(String email, String nombreComida, String restaurante) {
+		return comentarioRepo.clientePidioComida(email, nombreComida, restaurante);
+	}
+
 	// Ejecutar cada 12 horas
 	@Scheduled(fixedRate = 1000 * 60 * 60 * 12) // cada 10 segundos para pruebas
 	@Transactional

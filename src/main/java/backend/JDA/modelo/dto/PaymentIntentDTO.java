@@ -17,5 +17,6 @@ public class PaymentIntentDTO {
 	private int amount;
 	private Currency currency;
 	private String paymentMethodId;
+	private String correo;
 	
 }
