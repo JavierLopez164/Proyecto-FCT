@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HeaderWashabiComponent } from '../header-washabi/header-washabi.component';
 import { FooterComponent } from '../footer/footer.component';
 import { MatSelectModule } from '@angular/material/select';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { MatOptionModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,6 +11,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { CarritoService } from '../services/carrito.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-menu',
   imports: [HeaderWashabiComponent, FooterComponent, MatSelectModule, CommonModule, ReactiveFormsModule, MatOptionModule, MatInputModule, MatButtonModule, MatIconModule, MatCardModule, MatExpansionModule],
@@ -20,12 +22,12 @@ import { CommonModule } from '@angular/common';
 export class MenuComponent implements OnInit {
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private carrito: CarritoService, private snackBar: MatSnackBar) { }
   ngOnInit(): void {
     this.cargarNombresDeRestaurantes();
   }
   panelAbierto: string | null = null;
-  restauranteSeleccionado: string = '';
+  restauranteSeleccionado: string = ''
   nombresRestaurantes: string[] = [];
   comidas: any[] = [];
   nombreComida: string = ""
@@ -53,6 +55,7 @@ export class MenuComponent implements OnInit {
               preparationTime: c.preparationTime,
               attributes: c.attributes,
               features: c.features,
+              cantidad: 1,
             }));
           },
           error: err => console.error('Error al cargar comidas', err)
@@ -95,6 +98,7 @@ export class MenuComponent implements OnInit {
     this.comentariosPorComida = {}
     this.mediaPuntuacion = {}
     this.cargarComidaPorRestaurante();
+
   }
 
   alAbrirPanel(evento: any) {
@@ -169,8 +173,17 @@ export class MenuComponent implements OnInit {
       }
     });
   }
-  insertarAlCarrito() {
-    
+  insertarAlCarrito(comida: any) {
+    const restauranteEnCarrito = this.carrito.obtenerNombreRestaurante() || this.restauranteSeleccionado;
+    const mismoRestaurante = restauranteEnCarrito == this.restauranteSeleccionado;
+    const mensaje = mismoRestaurante
+      ? `Añadido al carrito la comida: ${comida.nombre}`
+      : 'Se ha quitado el pedido anterior del restaurante anterior';
+
+    this.snackBar.open(mensaje, 'Cerrar', {
+      duration: 3000,
+    });
+    this.carrito.insertarCesta(comida);
   }
 }
 

@@ -43,7 +43,7 @@
       <!-- Imagen de usuario -->
       @if(estaLogeado()){
          <!-- Ícono del carrito -->
-    <button mat-icon-button routerLink="/cesta" class="text-white hover:text-cyan-400 relative md:right-1 right-12  top-0.5">
+    <button mat-icon-button routerLink="/cesta" class="text-white hover:text-cyan-400 relative md:right-1 right-12  top-0.5"  [matBadge]="obtenerLogintudComida()"  matBadgeColor="warn" [matBadgeHidden]="obtenerLogintudComida()==0" >
       <mat-icon>shopping_cart</mat-icon>
     </button>
 
