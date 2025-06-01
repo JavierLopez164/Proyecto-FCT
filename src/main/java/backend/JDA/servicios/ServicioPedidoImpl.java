@@ -40,35 +40,36 @@ public class ServicioPedidoImpl implements IServicioPedido {
 	@Autowired
 	private DtoConverter dtoConverter;
 
-	public Optional<Pedido> crearPedidoSimple(String email, String restaurante) {
+	public PedidoCreadoDTO crearPedidoSimple(String email, String restaurante) {
 		Optional<Cliente> clienteOpt = clienteRepo.findById(email);
 		List<Comida> comidasRest = comidaRepo.obtenerComidasDeUnRestaurante(restaurante);
-
-		if (clienteOpt.isEmpty() || comidasRest.isEmpty()) return Optional.empty();
-
-		LocalDate hoy = LocalDate.now();
-		LocalDate expiracion = hoy.plusDays(1); // fecha de expiración = mañana
-
-		Pedido pedido = Pedido.builder()
-				.id(UUID.randomUUID().toString())
-				.cliente(clienteOpt.get())
-				.activo(true)
-				.items(new ArrayList<>())
-				.fechaCreacion(hoy)
-				.fechaExpiracion(expiracion)
-				.cantidadFinal(0)
-				.restaurante(restaurante)
-				.build();
-
-		pedidoRepo.save(pedido);
-
+		Optional<Pedido>pedido=Optional.empty();
+		if (!clienteOpt.isEmpty() && !comidasRest.isEmpty()) {
+					LocalDate hoy = LocalDate.now();
+					LocalDate expiracion = hoy.plusDays(1); // fecha de expiración = mañana
+		
+				 	pedido = Optional.of(Pedido.builder()
+						.id(UUID.randomUUID().toString())
+						.cliente(clienteOpt.get())
+						.activo(true)
+						.items(new ArrayList<>())
+						.fechaCreacion(hoy)
+						.fechaExpiracion(expiracion)
+						.cantidadFinal(0)
+						.restaurante(restaurante)
+						.build());
+				
+				pedidoRepo.save(pedido.get());
+		    
+		}
+		
 		try {
-			QRUtils.generarQR("app://pedido/" + pedido.getId(), pedido.getId() + ".png");
+			QRUtils.generarQR("app://pedido/" + pedido.get().getId(), pedido.get().getId() + ".png");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return Optional.of(pedido);
+		return dtoConverter.map(pedido,PedidoCreadoDTO.class );
 	}
 
 	public Optional<Pedido> añadirComida(String pedidoId, ComidaPK comidaPK) {
@@ -194,12 +195,12 @@ public class ServicioPedidoImpl implements IServicioPedido {
 	}
 
 	public List<TopComidaDTO> top5ComidasMasPedidas() {
-		return comidaRepo.top5ComidasMasPedidas().stream().limit(5).toList();
+		return pedidoRepo.top5ComidasMasPedidas().stream().limit(5).toList();
 	}
 
 
 	public List<TopComidaDTO> top5ComidasPorRestaurante(String restaurante) {
-		return comidaRepo.top5ComidasPorRestaurante(restaurante).stream().limit(5).toList();
+		return pedidoRepo.top5ComidasPorRestaurante(restaurante).stream().limit(5).toList();
 	}
 
 
@@ -225,14 +226,10 @@ public class ServicioPedidoImpl implements IServicioPedido {
 		return dto;
 	}
 
-	public PedidoCreadoDTO mapToPedidoCreadoDTO(Pedido pedido) {
-		return dtoConverter.map(pedido, PedidoCreadoDTO.class);
-	}
-
 
 	public List<PedidoListadoDTO> listarPedidosDTO() {
 		return pedidoRepo.findByActivoTrue().stream()
-				.map(this::mapToPedidoListadoDTO) // este ya usa dtoConverter si lo cambiaste
+				.map(this::mapToPedidoListadoDTO) 
 				.collect(Collectors.toList());
 	}
 
