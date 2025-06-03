@@ -1,32 +1,63 @@
-<app-header/>
+<app-header />
 
-<section class="bg-gradient-to-br from-gray-900 via-gray-700 to-gray-500 text-white py-24 text-center px-6">
+<section class=" bg-cyan-900   text-white py-42 text-center px-6">
   <h1 class="text-5xl font-bold mb-4">🍣 Bienvenido a Washabi</h1>
-  <p class="text-xl mb-8">Gestión de reservas y pedidos con tecnología QR</p>
+  <p class="text-xl mb-8">Gestión de pedidos y con tecnología QR</p>
 </section>
 
-<section class="py-20 bg-gray-400 text-center">
-  <h2 class="text-3xl font-bold mb-10">¿Por qué usar Washabi?</h2>
-  <div class="grid md:grid-cols-3 gap-8 px-4 max-w-6xl mx-auto">
+<section class="py-20 from-cyan-900 via-cyan-700 text-center">
+  <div class="grid md:grid-cols-2 gap-20 px-4 max-w-6xl mx-auto py-8">
 
-    <div class="bg-white p-6 rounded-2xl shadow-md  hover:shadow-blue-500 transition">
-      <h3 class="text-blue-500 text-xl font-bold mb-2">Clientes con reserva</h3>
-      <p class="text-gray-600">Se registran, obtienen un QR y al llegar lo escanean. Se notifica su reserva automáticamente.</p>
-    </div>
+  <!-- Sección: Top 5 Global -->
+  <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 hover:shadow-blue-500 transition">
+    <h3 class="text-blue-600 text-2xl font-bold mb-4"> Top-5 Comidas Más Pedidas</h3>
 
-    <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-blue-500 transition">
-      <h3 class="text-blue-500 text-xl font-bold mb-2">Clientes sin reserva</h3>
-      <p class="text-gray-600">Pueden escanear un QR en la mesa para acceder a un menú limitado y hacer pedidos al instante.</p>
-    </div>
-
-    <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-blue-500 transition">
-      <h3 class="text-blue-500 text-xl font-bold mb-2">Priorización inteligente</h3>
-      <p class="text-gray-600">El sistema adapta la cola según la reserva y tipo de comida para optimizar tiempos.</p>
-    </div>
-
+    @for (comida of comidas; track comida.nombreComida) {
+      <div class="mb-4 p-4 bg-gray-100 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
+        <h5 class="text-lg font-semibold text-gray-500 mb-1">
+           {{ comida.nombreComida }}
+        </h5>
+        <p class="text-gray-700">
+           <strong>Restaurante:</strong> {{ comida.restaurante }}<br />
+           <strong>Pedidos:</strong> {{ comida.cantidad }}
+        </p>
+      </div>
+    }
   </div>
+
+  <!-- Sección: Por Restaurante -->
+  <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 hover:shadow-blue-500 transition">
+    <mat-form-field appearance="fill" class="w-full mb-4">
+      <mat-label> Selecciona Restaurante</mat-label>
+      <mat-select (selectionChange)="alCambiarRestaurante($event)">
+        @for (restaurante of nombresRestaurantes; track restaurante) {
+          <mat-option [value]="restaurante">{{ restaurante }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (comidasRestaurante.length > 0) {
+      <div>
+        <h3 class="text-blue-600 text-2xl font-bold mb-4"> Top-5 del Restaurante</h3>
+        @for (comida of comidasRestaurante; track comida.nombreComida) {
+          <div class="mb-4 p-4 bg-gray-100 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
+            <h5 class="text-lg font-semibold text-gray-500 mb-1">
+               {{ comida.nombreComida }}
+            </h5>
+            <p class="text-gray-700">
+               <strong>Pedidos:</strong> {{ comida.cantidad }}
+            </p>
+          </div>
+        }
+      </div>
+    } @else {
+      <p class="text-gray-400 italic">No hay comidas para mostrar.</p>
+    }
+  </div>
+
+</div>
+
 </section>
 
 
-<app-footer/>
-  
+<app-footer />

@@ -21,16 +21,17 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class MenuComponent implements OnInit {
 
-
   constructor(private http: HttpClient, private carrito: CarritoService, private snackBar: MatSnackBar) { }
   ngOnInit(): void {
     this.cargarNombresDeRestaurantes();
   }
+
   panelAbierto: string | null = null;
   restauranteSeleccionado: string = ''
   nombresRestaurantes: string[] = [];
   comidas: any[] = [];
   nombreComida: string = ""
+  puedeComentarPorComida: Record<string, boolean> = {};
   mediaPuntuacion: Record<string, number> = {};
   comentariosPorComida: Record<string, any[]> = {}
   private urlComida = 'http://localhost:8080/api/comida';
@@ -97,13 +98,36 @@ export class MenuComponent implements OnInit {
     this.restauranteSeleccionado = evento.value;
     this.comentariosPorComida = {}
     this.mediaPuntuacion = {}
+    this.puedeComentarPorComida={}
     this.cargarComidaPorRestaurante();
 
+  }
+
+
+    puedeInsertarComentario(comida: string) {
+    if(this.puedeComentarPorComida[comida] == undefined){
+    this.http.get<boolean>(this.urlComentario + "/puede-comentar", {
+      headers: this.headers,
+      params: {
+        comida: comida,
+        restaurante: this.restauranteSeleccionado
+      }
+    }).subscribe({
+      next: (response) => {
+        this.puedeComentarPorComida[comida] = response;
+        console.log(this.puedeComentarPorComida)
+      },
+      error: () => {
+        this.puedeComentarPorComida[comida] = false; 
+      }
+    });
+    }
   }
 
   alAbrirPanel(evento: any) {
     this.nombreComida = evento
     this.panelAbierto = evento;
+      this.puedeInsertarComentario(evento);
     if (!this.comentariosPorComida[evento]) {
       this.http.get<any[]>(this.urlComentario + "/lista", {
         params: {

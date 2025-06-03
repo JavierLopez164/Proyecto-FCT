@@ -3,23 +3,27 @@
 
 <mat-toolbar color="primary" class="!bg-cyan-500 !text-white shadow-md justify-center px-4">
   <a routerLink="/perfil"
-     class="text-white font-medium hover:text-amber-600 hover:underline transition duration-200 flex items-center space-x-2">
+    class="text-white font-medium hover:text-amber-600 hover:underline transition duration-200 flex items-center space-x-2">
     <mat-icon>account_circle</mat-icon>
     <span>Perfil</span>
   </a>
 
 
 </mat-toolbar>
+
 <div class="max-w-6xl mx-auto mt-12 p-10 bg-white shadow-xl rounded-2xl space-y-10 my-35">
 
   <h2 class="text-4xl font-bold text-center text-gray-800">Editar</h2>
 
   <form [formGroup]="perfilForm" (ngSubmit)="guardarCambiosCliente()" class="my-16">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 ">
-
+     
       <mat-form-field appearance="fill" class="w-full">
+       
         <mat-label>Nuevo Nombre</mat-label>
+        
         <input matInput formControlName="nombre" placeholder="Ingresa tu nuevo nombre">
+         
       </mat-form-field>
 
       <mat-form-field appearance="fill" class="w-full">
@@ -42,6 +46,9 @@
 
 
     </div>
+    <span class="inline-block px-3 py-1 text-sm font-semibold text-white  bg-cyan-500  rounded">
+        Nombre Actual: {{ perfil.nombre }}
+      </span>
     <div class="flex justify-center mt-8">
       <button mat-raised-button color="primary" type="submit" class="px-6 py-2 text-white font-semibold">
         Guardar Cambios Cliente

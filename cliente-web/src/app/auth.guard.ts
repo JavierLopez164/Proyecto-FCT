@@ -15,7 +15,7 @@ export const authGuard: CanActivateFn = (route, state) => {
    snackBar.open(
       `Bloqueado el acceso a ${state.url}, inicia sesión para acceder.`,
       'Cerrar',
-      { duration: 4000}
+      { duration: 3000}
     );
     router.navigate(['/login']);
     return false// acceso denegado

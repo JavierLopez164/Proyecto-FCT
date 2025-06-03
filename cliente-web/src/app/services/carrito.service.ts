@@ -17,7 +17,7 @@ export class CarritoService {
   }
 
   // Método para obtener el valor actual
-  obtenerPedidoActual(): any | null {
+  obtenerPedidoActual(): any {
     return this.pedidoCreadoSubject.getValue();
   }
 
