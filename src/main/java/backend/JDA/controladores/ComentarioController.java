@@ -97,6 +97,22 @@ public class ComentarioController {
         return ResponseEntity.ok(promedio);
     }
 
+    @GetMapping("/puede-comentar")
+    @Operation(
+            summary = "Verificar si el cliente puede comentar una comida",
+            description = "Devuelve true si el usuario ha pedido esta comida previamente"
+    )
+    public ResponseEntity<Boolean> puedeComentar(
+            @RequestParam String comida,
+            @RequestParam String restaurante) {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean permitido = servicioComentario.puedeComentar(email, comida, restaurante);
+
+        return ResponseEntity.ok(permitido);
+    }
+
+
 
 
 }
