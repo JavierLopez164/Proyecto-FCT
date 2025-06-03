@@ -7,11 +7,11 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-galeria',
-  imports: [CommonModule, HeaderWashabiComponent, FooterComponent, MatFormFieldModule, MatSelectModule, MatOptionModule, MatCardModule],
+  imports: [CommonModule, HeaderWashabiComponent, MatIconModule,FooterComponent, MatFormFieldModule, MatSelectModule, MatOptionModule, MatCardModule],
   templateUrl: './galeria.component.html',
   styleUrl: './galeria.component.css'
 })

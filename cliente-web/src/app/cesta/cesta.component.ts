@@ -92,6 +92,24 @@ export class CestaComponent implements OnInit, AfterViewInit {
     this.mostrarStepper = false;
     this.carrito.limpiarCesta();
   }
+
+  crearPedido() {
+    const params = new HttpParams()
+      .set('email', localStorage.getItem('email') ?? "")
+      .set('restaurante', this.carrito.obtenerNombreRestaurante());
+
+    this.http.post<any>('http://localhost:8080/api/pedidos/crear-simple', {}, { params })
+      .subscribe({
+        next: (respuesta) => {
+          this.carrito.establecerPedidoCreado(respuesta);
+
+        },
+        error: (error) => {
+          console.error('Error al crear pedido:', error);
+        }
+      });
+  }
+
   form = {
     description: '',
     amount: 0,
@@ -99,14 +117,14 @@ export class CestaComponent implements OnInit, AfterViewInit {
     address: '',
     email: ""
   };
-  pagoExitoso: boolean = false;
+
   mensajeErrorPago: string = '';
   paymentResponse: {
     id: string;
     status: string;
     clientSecret: string;
   } | null = null;
-
+  pagoExitoso: boolean | null = null;
   pagarConStripe(): void {
 
     this.stripe.createPaymentMethod({
@@ -131,7 +149,8 @@ export class CestaComponent implements OnInit, AfterViewInit {
           description: this.form.description,
           amount: this.form.amount * 100,
           currency: this.form.currency,
-          paymentMethodId: resultado.paymentMethod.id
+          paymentMethodId: resultado.paymentMethod.id,
+          correo:this.form.email
         };
 
         this.http.post<any>('http://localhost:8080/api/stripe/paymentintent', dto)
@@ -143,7 +162,28 @@ export class CestaComponent implements OnInit, AfterViewInit {
                 status: data.status,
                 clientSecret: data.clientSecret
               };
-              this.pagoExitoso=true;
+              this.pagoExitoso = true;
+               this.carrito.obtenerCesta().forEach(c => {
+
+          this.http.post<any>('http://localhost:8080/api/pedidos/aniadircomidas', {}, {
+            params: {
+              'pedidoId': this.carrito.obtenerPedidoActual().id,
+              "nComida": c.nombre,
+              "nRestaurante": c.restaurante,
+              "cantidad": c.cantidad,
+              "total": this.carrito.calcularTotal()
+            }
+          })
+            .subscribe({
+              next: (respuesta) => {
+
+              },
+              error: (error) => {
+                console.error('Error al añadir las comidas al pedido:', error);
+              }
+            });
+
+        });
             },
             error: (err) => {
               this.pagoExitoso = false;
@@ -154,55 +194,21 @@ export class CestaComponent implements OnInit, AfterViewInit {
 
 
 
-        const params = new HttpParams()
-          .set('email', localStorage.getItem('email') ?? "")
-          .set('restaurante', this.carrito.obtenerNombreRestaurante());
+        this.http.put<any>('http://localhost:8080/api/pedidos/cambiar-estado', {}, {
+          params: {
+            'id': this.carrito.obtenerPedidoActual().id,
+            'activo': false
+          }
+        }).subscribe({
+          next: (respuesta) => {
+          
+          },
+          error: (error) => {
+            console.error('Error al cambiar estado del pedido:', error);
+          }
+        });
 
-        this.http.post<any>('http://localhost:8080/api/pedidos/crear-simple', {}, { params })
-          .subscribe({
-            next: (respuesta) => {
-              this.carrito.establecerPedidoCreado(respuesta);
-
-              this.carrito.obtenerCesta().forEach(c => {
-                for (let i = 0; i < c.cantidad; i++) {
-                  this.http.post<any>('http://localhost:8080/api/pedidos/añadir-comida', {}, {
-                    params: {
-                      'pedidoId': this.carrito.obtenerPedidoActual().id,
-                      "nComida": c.nombre,
-                      "nRestaurante": c.restaurante
-                    }
-                  })
-                    .subscribe({
-                      next: (respuesta) => {
-
-                      },
-                      error: (error) => {
-                        console.error('Error al añadir las comidas al pedido:', error);
-                      }
-                    });
-                }
-              });
-
-              this.http.put<any>('http://localhost:8080/api/pedidos/cambiar-estado', {}, {
-                params: {
-                  'id': this.carrito.obtenerPedidoActual().id,
-                  'activo': false
-                }
-              }).subscribe({
-                next: (respuesta) => {
-                  console.log(respuesta)
-                },
-                error: (error) => {
-                  console.error('Error al cambiar estado del pedido:', error);
-                }
-              });
-
-            },
-            error: (error) => {
-              console.error('Error al crear pedido:', error);
-            }
-          });
-
+      
       }
     });
 

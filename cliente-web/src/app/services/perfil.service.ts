@@ -25,7 +25,6 @@ export class PerfilService {
     });
     return this.http.get(this.apiUrl+"consultar/"+encodeURIComponent(localStorage.getItem('email')??""),{headers});
   }
-
   
  
 }
