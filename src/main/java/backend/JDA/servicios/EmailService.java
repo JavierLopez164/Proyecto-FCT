@@ -16,12 +16,12 @@ public class EmailService {
     public void enviarFactura(String destinatario, String descripcion, long cantidad, String moneda) {
         SimpleMailMessage mensaje = new SimpleMailMessage();
         mensaje.setTo(destinatario);
-        mensaje.setSubject("Factura - App Guasavi " + LocalDate.now());
+        mensaje.setSubject("Factura - App Washabi " + LocalDate.now());
         mensaje.setText("Gracias por tu compra.\n\n"
                 + "Descripción: " + descripcion + "\n"
                 + "Cantidad: " + (cantidad / 100.0) + " " + moneda.toUpperCase() + "\n\n"
                 + "Fecha: " + LocalDate.now() + "\n"
-                + "App Guasavi");
+                + "App Washabi");
 
         mailSender.send(mensaje);
     }

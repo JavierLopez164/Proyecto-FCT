@@ -20,6 +20,6 @@ public interface IServicioPedido {
 	Optional<Pedido> cambiarEstadoPedido(String id, boolean nuevoEstado);
 	int pedidosUltimos7Dias();
 	List<PedidoListadoDTO> listarPedidosDTO();
-	List<Pedido> listarPedidos();
+	Optional<Pedido> aniadirComidas(String pedidoId, ComidaPK comidaPK, int cantidad,int total);
 	
 }

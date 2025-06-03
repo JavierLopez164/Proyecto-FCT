@@ -22,14 +22,7 @@ public interface ComentarioRepositorio extends JpaRepository<Comentario, Long> {
     @Transactional
     int deleteByDestacadoIsTrueAndFechaBefore(LocalDateTime fechaLimite);
 
-    @Query("""
-        SELECT COUNT(ip) > 0
-        FROM Pedido p
-        JOIN p.items ip
-        WHERE p.cliente.email = :email
-        AND ip.comida.comidaPK.nComida = :nombreComida
-        AND ip.comida.comidaPK.nRestaurante = :restaurante
-    """)
+    @Query("SELECT COUNT(ip) > 0 FROM Pedido p JOIN p.items ip WHERE p.cliente.email = :email AND ip.comida.comidaPK.nComida = :nombreComida AND ip.comida.comidaPK.nRestaurante = :restaurante")
     boolean clientePidioComida(String email, String nombreComida, String restaurante);
 
 
