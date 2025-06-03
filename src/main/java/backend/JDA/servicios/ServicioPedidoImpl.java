@@ -43,40 +43,33 @@ public class ServicioPedidoImpl implements IServicioPedido {
 	public PedidoCreadoDTO crearPedidoSimple(String email, String restaurante) {
 		Optional<Cliente> clienteOpt = clienteRepo.findById(email);
 		List<Comida> comidasRest = comidaRepo.obtenerComidasDeUnRestaurante(restaurante);
-		Optional<Pedido>pedido=Optional.empty();
+		Optional<Pedido> pedido = Optional.empty();
 		if (!clienteOpt.isEmpty() && !comidasRest.isEmpty()) {
-					LocalDate hoy = LocalDate.now();
-					LocalDate expiracion = hoy.plusDays(1); // fecha de expiración = mañana
-		
-				 	pedido = Optional.of(Pedido.builder()
-						.id(UUID.randomUUID().toString())
-						.cliente(clienteOpt.get())
-						.activo(true)
-						.items(new ArrayList<>())
-						.fechaCreacion(hoy)
-						.fechaExpiracion(expiracion)
-						.cantidadFinal(0)
-						.restaurante(restaurante)
-						.build());
-				
-				pedidoRepo.save(pedido.get());
-		    
-		}
-		
-		try {
-			QRUtils.generarQR("app://pedido/" + pedido.get().getId(), pedido.get().getId() + ".png");
-		} catch (Exception e) {
-			e.printStackTrace();
+			LocalDate hoy = LocalDate.now();
+			LocalDate expiracion = hoy.plusDays(1); // fecha de expiración = mañana
+
+			pedido = Optional.of(Pedido.builder().id(UUID.randomUUID().toString()).cliente(clienteOpt.get())
+					.activo(true).items(new ArrayList<>()).fechaCreacion(hoy).fechaExpiracion(expiracion)
+					.cantidadFinal(0).restaurante(restaurante).build());
+
+			pedidoRepo.save(pedido.get());
+
+			try {
+				QRUtils.generarQR("app://pedido/" + pedido.get().getId(), pedido.get().getId() + ".png");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
-		return dtoConverter.map(pedido,PedidoCreadoDTO.class );
+		return dtoConverter.map(pedido, PedidoCreadoDTO.class);
 	}
 
 	public Optional<Pedido> añadirComida(String pedidoId, ComidaPK comidaPK) {
 		Optional<Pedido> pedidoOpt = pedidoRepo.findById(pedidoId);
 		Optional<Comida> comidaOpt = comidaRepo.findById(comidaPK);
 
-		if (pedidoOpt.isEmpty() || comidaOpt.isEmpty()) return Optional.empty();
+		if (pedidoOpt.isEmpty() || comidaOpt.isEmpty())
+			return Optional.empty();
 
 		Pedido pedido = pedidoOpt.get();
 		Comida comida = comidaOpt.get();
@@ -84,20 +77,13 @@ public class ServicioPedidoImpl implements IServicioPedido {
 		List<ItemPedido> items = pedido.getItems();
 
 		// Buscar si ya hay un item con esa comida
-		Optional<ItemPedido> existenteOpt = items.stream()
-				.filter(i -> i.getComida().equals(comida))
-				.findFirst();
-
+		Optional<ItemPedido> existenteOpt = items.stream().filter(i -> i.getComida().equals(comida)).findFirst();
 		if (existenteOpt.isPresent()) {
 			ItemPedido existente = existenteOpt.get();
 			existente.setCantidad(existente.getCantidad() + 1);
 			itemPedidoRepo.save(existente);
 		} else {
-			ItemPedido nuevoItem = ItemPedido.builder()
-					.pedido(pedido)
-					.comida(comida)
-					.cantidad(1)
-					.build();
+			ItemPedido nuevoItem = ItemPedido.builder().pedido(pedido).comida(comida).cantidad(1).build();
 			items.add(nuevoItem);
 			itemPedidoRepo.save(nuevoItem);
 		}
@@ -114,16 +100,15 @@ public class ServicioPedidoImpl implements IServicioPedido {
 		Optional<Pedido> pedidoOpt = pedidoRepo.findById(pedidoId);
 		Optional<Comida> comidaOpt = comidaRepo.findById(comidaPK);
 
-		if (pedidoOpt.isEmpty() || comidaOpt.isEmpty()) return Optional.empty();
+		if (pedidoOpt.isEmpty() || comidaOpt.isEmpty())
+			return Optional.empty();
 
 		Pedido pedido = pedidoOpt.get();
 		Comida comida = comidaOpt.get();
 
 		List<ItemPedido> items = pedido.getItems();
 
-		Optional<ItemPedido> itemOpt = items.stream()
-				.filter(i -> i.getComida().equals(comida))
-				.findFirst();
+		Optional<ItemPedido> itemOpt = items.stream().filter(i -> i.getComida().equals(comida)).findFirst();
 
 		if (itemOpt.isPresent()) {
 			ItemPedido item = itemOpt.get();
@@ -151,16 +136,15 @@ public class ServicioPedidoImpl implements IServicioPedido {
 		Optional<Pedido> pedidoOpt = pedidoRepo.findById(pedidoId);
 		Optional<Comida> comidaOpt = comidaRepo.findById(comidaPK);
 
-		if (pedidoOpt.isEmpty() || comidaOpt.isEmpty()) return Optional.empty();
+		if (pedidoOpt.isEmpty() || comidaOpt.isEmpty())
+			return Optional.empty();
 
 		Pedido pedido = pedidoOpt.get();
 		Comida comida = comidaOpt.get();
 
 		List<ItemPedido> items = pedido.getItems();
 
-		Optional<ItemPedido> itemOpt = items.stream()
-				.filter(i -> i.getComida().equals(comida))
-				.findFirst();
+		Optional<ItemPedido> itemOpt = items.stream().filter(i -> i.getComida().equals(comida)).findFirst();
 
 		if (itemOpt.isPresent()) {
 			ItemPedido item = itemOpt.get();
@@ -178,18 +162,14 @@ public class ServicioPedidoImpl implements IServicioPedido {
 		return Optional.empty(); // No había nada que eliminar
 	}
 
-
-
-	public List<Pedido> listarPedidos() {
-		return pedidoRepo.findByActivoTrue();
-	}
-
 	public Optional<Pedido> cambiarEstadoPedido(String id, boolean nuevoEstado) {
 		Optional<Pedido> pedidoOpt = pedidoRepo.findById(id);
-		if (pedidoOpt.isEmpty()) return Optional.empty();
+		if (pedidoOpt.isEmpty())
+			return Optional.empty();
 
 		Pedido pedido = pedidoOpt.get();
 		pedido.setActivo(nuevoEstado);
+	
 		pedidoRepo.save(pedido);
 		return Optional.of(pedido);
 	}
@@ -198,11 +178,9 @@ public class ServicioPedidoImpl implements IServicioPedido {
 		return pedidoRepo.top5ComidasMasPedidas().stream().limit(5).toList();
 	}
 
-
 	public List<TopComidaDTO> top5ComidasPorRestaurante(String restaurante) {
 		return pedidoRepo.top5ComidasPorRestaurante(restaurante).stream().limit(5).toList();
 	}
-
 
 	public int pedidosUltimos7Dias() {
 		LocalDate hoy = LocalDate.now();
@@ -226,11 +204,25 @@ public class ServicioPedidoImpl implements IServicioPedido {
 		return dto;
 	}
 
-
 	public List<PedidoListadoDTO> listarPedidosDTO() {
-		return pedidoRepo.findByActivoTrue().stream()
-				.map(this::mapToPedidoListadoDTO) 
-				.collect(Collectors.toList());
+		return pedidoRepo.findByActivoTrue().stream().map(this::mapToPedidoListadoDTO).collect(Collectors.toList());
 	}
 
+	
+	public Optional<Pedido> aniadirComidas(String pedidoId, ComidaPK comidaPK, int cantidad,int total) {
+		Optional<Pedido> pedidoOpt = pedidoRepo.findById(pedidoId);
+		Optional<Comida> comidaOpt = comidaRepo.findById(comidaPK);
+		
+		if (pedidoOpt.isPresent() && comidaOpt.isPresent()) {
+			
+			pedidoOpt.get().setCantidadFinal(total);
+			pedidoRepo.save(pedidoOpt.get());
+			itemPedidoRepo.save(ItemPedido.builder().pedido(pedidoOpt.get()).comida(comidaOpt.get()).cantidad(cantidad).build());
+
+		}
+		return pedidoOpt;
+	}
+	
+	
+	
 }

@@ -146,5 +146,27 @@ public class PedidoController {
         List<PedidoListadoDTO> dtos = pedidoService.listarPedidosDTO(); // nuevo método
         return ResponseEntity.ok(dtos);
     }
+    
+    
+
+    @Operation(summary = "Añadir comida a pedido", description = "Añade todas las comidas existente a un pedido.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Comidas añadida al pedido"),
+            @ApiResponse(responseCode = "400", description = "Pedido o comidas no válida")
+    })
+    @PostMapping("/aniadircomidas")
+    public ResponseEntity<?> aniadirComida(
+            @RequestParam String pedidoId,
+            @RequestParam String nComida,
+            @RequestParam String nRestaurante,
+            @RequestParam  int cantidad,
+            @RequestParam  int total
+    ) {
+        ComidaPK comidaPK = new ComidaPK(nComida, nRestaurante);
+        Optional<Pedido> pedidoOpt = pedidoService.aniadirComidas(pedidoId, comidaPK,cantidad,total);
+        return pedidoOpt.isPresent()
+                ? ResponseEntity.ok(pedidoOpt.get())
+                : ResponseEntity.badRequest().body("Pedido o comida no válida");
+    }
 }
 

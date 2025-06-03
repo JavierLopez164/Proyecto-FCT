@@ -32,6 +32,7 @@ public interface PedidoRepositorio extends JpaRepository<Pedido, String> {
 			"GROUP BY c.comida.comidaPK.nComida, c.comida.comidaPK.nRestaurante " +
 			"ORDER BY SUM(c.cantidad) DESC")
 	List<TopComidaDTO> top5ComidasPorRestaurante(String restaurante);
+		
     
 }
 
