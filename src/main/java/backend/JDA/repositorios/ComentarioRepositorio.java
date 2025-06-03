@@ -21,6 +21,6 @@ public interface ComentarioRepositorio extends JpaRepository<Comentario, Long> {
 
     @Transactional
     int deleteByDestacadoIsTrueAndFechaBefore(LocalDateTime fechaLimite);
-
+    
 
 }
