@@ -15,5 +15,7 @@ public interface IServicioComentario {
 	List<ComentarioResponseDTO> obtenerComentariosPorComida(String idComida, String restaurante);
 	Optional<Comentario> findById(Long id);
 	int obtenerPromedioValoracion(String comida, String restaurante);
+	boolean puedeComentar(String email, String nombreComida, String restaurante);
+
 
 }

@@ -1,22 +1,18 @@
 package backend.JDA.controladores;
 
 import backend.JDA.modelo.dto.PaymentIntentResponseDTO;
+import backend.JDA.servicios.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 
 import backend.JDA.modelo.dto.PaymentIntentDTO;
 import backend.JDA.servicios.IPaymentService;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController

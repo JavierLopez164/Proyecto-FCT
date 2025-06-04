@@ -4,6 +4,7 @@ import backend.JDA.modelo.ComidaPK;
 import backend.JDA.modelo.Pedido;
 import backend.JDA.modelo.dto.PedidoListadoDTO;
 import backend.JDA.modelo.dto.TopComidaDTO;
+import backend.JDA.servicios.IServicioPedido;
 import backend.JDA.servicios.ServicioPedidoImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 
 @RestController
-@RequestMapping("/api/pedidos")
+@RequestMapping("api/pedidos")
 @CrossOrigin(origins = "http://localhost:4200")
 public class PedidoController {
 
     @Autowired
-    private ServicioPedidoImpl pedidoService;
+    private IServicioPedido pedidoService;
 
     @Operation(summary = "Crear pedido inicial", description = "Crea un pedido si el cliente y restaurante existen.")
     @ApiResponses(value = {
@@ -32,10 +33,8 @@ public class PedidoController {
     })
     @PostMapping("/crear-simple")
     public ResponseEntity<?> crearSimple(@RequestParam String email, @RequestParam String restaurante) {
-        Optional<Pedido> pedidoOpt = pedidoService.crearPedidoSimple(email, restaurante);
-        return pedidoOpt.isPresent()
-                ? ResponseEntity.ok(pedidoService.mapToPedidoCreadoDTO(pedidoOpt.get()))
-                : ResponseEntity.badRequest().body("Cliente o restaurante inválido");
+        return ResponseEntity.ok(pedidoService.crearPedidoSimple(email, restaurante));
+               
     }
 
 
@@ -146,6 +145,28 @@ public class PedidoController {
     public ResponseEntity<?> listar() {
         List<PedidoListadoDTO> dtos = pedidoService.listarPedidosDTO(); // nuevo método
         return ResponseEntity.ok(dtos);
+    }
+    
+    
+
+    @Operation(summary = "Añadir comida a pedido", description = "Añade todas las comidas existente a un pedido.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Comidas añadida al pedido"),
+            @ApiResponse(responseCode = "400", description = "Pedido o comidas no válida")
+    })
+    @PostMapping("/aniadircomidas")
+    public ResponseEntity<?> aniadirComida(
+            @RequestParam String pedidoId,
+            @RequestParam String nComida,
+            @RequestParam String nRestaurante,
+            @RequestParam  int cantidad,
+            @RequestParam  int total
+    ) {
+        ComidaPK comidaPK = new ComidaPK(nComida, nRestaurante);
+        Optional<Pedido> pedidoOpt = pedidoService.aniadirComidas(pedidoId, comidaPK,cantidad,total);
+        return pedidoOpt.isPresent()
+                ? ResponseEntity.ok(pedidoOpt.get())
+                : ResponseEntity.badRequest().body("Pedido o comida no válida");
     }
 }
 

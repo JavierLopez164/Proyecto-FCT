@@ -25,8 +25,8 @@
   <!-- Lista de comidas -->
   @if (restauranteSeleccionado) {
   @for (comida of comidas; track comida) {
-  <mat-card class="mb-6 p-4 bg-white text-black rounded-xl shadow" >
-    <div class="flex gap-4 items-center" >
+  <mat-card class="mb-6 p-4 bg-white text-black rounded-xl shadow">
+    <div class="flex gap-4 items-center">
       <img [src]="comida.imagen" [alt]="comida.nombre" class="w-24 h-24 object-cover rounded-md" />
 
       <div class="flex-1" (mouseover)="cargarMediaValoracion(comida.nombre)">
@@ -36,7 +36,7 @@
         </p>
         <p class="text-lg font-bold text-green-600">Precio: {{ comida.precio }}€</p>
         <p class="text-md font-bold text-cyan-500">Valoración media:</p>
-        <div class="flex items-center gap-1 mb-1" >
+        <div class="flex items-center gap-1 mb-1">
           @for (star of [1, 2, 3, 4, 5]; track star) {
           <mat-icon [ngClass]="{
           'text-yellow-400': star <= (mediaPuntuacion[comida.nombre] || 0),
@@ -46,7 +46,7 @@
               }
         </div>
         <div class="mt-2 flex justify-end mb-6">
-          <button mat-raised-button color="accent" (click)="insertarAlCarrito()">
+          <button mat-raised-button color="accent" (click)="insertarAlCarrito(comida)">
             <mat-icon>add_shopping_cart</mat-icon> Añadir al carrito
           </button>
         </div>
@@ -54,7 +54,8 @@
     </div>
 
     <!-- Detalles y comentarios -->
-    <mat-expansion-panel class="mt-6"  [expanded]="panelAbierto == comida.nombre "  (opened)="alAbrirPanel(comida.nombre)"  (closed)="alCerrarPanel(comida.nombre)">
+    <mat-expansion-panel class="mt-6" [expanded]="panelAbierto == comida.nombre " (opened)="alAbrirPanel(comida.nombre)"
+      (closed)="alCerrarPanel(comida.nombre)">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Detalles de la Comida y Comentarios
@@ -71,6 +72,7 @@
 
       <!-- Comentarios -->
       <div class="mt-4">
+      @if (panelAbierto == comida.nombre && puedeComentarPorComida[comida.nombre]) {
         <h4 class="text-md font-semibold mb-2">Crear un Comentario:</h4>
         <!-- Formulario de nuevo comentario -->
         <form [formGroup]="comentarioForm" (ngSubmit)="insertarComentario()" class="mt-4">
@@ -96,11 +98,14 @@
             Añadir Comentario
           </button>
         </form>
-  <h4 class="text-md font-semibold mb-2 mt-4">Comentarios:</h4>
-      @if (comentariosPorComida[comida.nombre] && comentariosPorComida[comida.nombre].length > 0) {
-        @for (comentario of comentariosPorComida[comida.nombre] ; track comentario.emailCli) {
+      }
+
+
+        <h4 class="text-md font-semibold mb-2 mt-4">Comentarios:</h4>
+        @if (comentariosPorComida[comida.nombre] && comentariosPorComida[comida.nombre].length > 0) {
+        @for (comentario of comentariosPorComida[comida.nombre] ; track comentario) {
         <mat-card class="mb-2 p-4 bg-gray-100 rounded shadow  mt-2">
-           <p class="text-lg text-gray-800">{{ comentario.emailCli }}</p>
+          <p class="text-lg text-gray-800">{{ comentario.emailCli }}</p>
           <!-- Estrellas -->
           <div class="flex items-center gap-1 mb-1">
             @for (star of [1, 2, 3, 4, 5]; track star) {

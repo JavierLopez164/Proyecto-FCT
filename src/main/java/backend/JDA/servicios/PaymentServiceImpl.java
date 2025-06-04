@@ -3,6 +3,7 @@ package backend.JDA.servicios;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ public class PaymentServiceImpl implements IPaymentService {
 
 	@Value("${stripe.key.secret}")
 	String secretKey;
+
+	@Autowired
+	private EmailService emailService;
 
 	@Override
 	public PaymentIntent paymentIntent(PaymentIntentDTO dto) throws StripeException {
@@ -43,6 +47,11 @@ public class PaymentServiceImpl implements IPaymentService {
 		params.put("customer", customer.getId());
 		params.put("confirm", true);
 		params.put("return_url", "http://localhost:4200/success");
+
+		// Enviar correo (aquí tú deberías pasar el email del usuario real si lo tienes en dto)
+		String correoCliente = dto.getCorreo(); // Asegúrate de que venga desde el frontend
+		emailService.enviarFactura(correoCliente, dto.getDescription(), dto.getAmount(), dto.getCurrency().name());
+
 		return PaymentIntent.create(params);
 	}
 

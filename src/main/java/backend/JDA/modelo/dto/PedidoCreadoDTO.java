@@ -13,5 +13,6 @@ public class PedidoCreadoDTO {
     private String id;
     private String emailCliente;
     private String restaurante;
+	private boolean activo;
 }
 
