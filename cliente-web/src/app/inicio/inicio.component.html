@@ -5,57 +5,113 @@
   <p class="text-xl mb-8">Gestión de pedidos y con tecnología QR</p>
 </section>
 
+<section class="bg-gradient-to-b from-cyan-900 via-cyan-700 to-cyan-600 py-20 text-white text-center px-6">
+  <h2 class="text-4xl font-semibold mb-4">Información</h2>
+  <p class="text-lg max-w-3xl mx-auto">
+    En Washabi, utilizamos tecnología QR para facilitar la experiencia de pedidos de nuestros clientes.
+    Escanea el código en tu mesa, accede al menú digital y realiza tu pedido sin necesidad de esperar.
+    Rápido, moderno y sin complicaciones.
+  </p>
+</section>
+<section class="bg-cyan-600 py-16 text-white px-6">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-10 items-center justify-center text-center md:text-left">
+    
+    <!-- Columna 1 -->
+    <div class="md:w-1/2">
+      <h4 class="text-2xl font-bold mb-4"> Gestión Eficiente de Pedidos</h4>
+      <p class="text-lg">
+        Nuestro sistema permite un flujo de trabajo más ordenado, enviando los pedidos directamente a cocina
+        y reduciendo los errores humanos. Ideal para mantener alta la productividad sin perder calidad.
+      </p>
+    </div>
+    
+    <!-- Columna 2 -->
+    <div class="md:w-1/2">
+      <h4 class="text-2xl font-bold mb-4"> Datos en Tiempo Real</h4>
+      <p class="text-lg">
+        Accede a estadísticas de consumo, tiempos de preparación y pedidos más populares. 
+        Toda la información que necesitas para tomar mejores decisiones, siempre actualizada.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Detalles de la tecnología QR -->
+<section class="bg-cyan-800 py-16 text-white text-center px-6">
+  <h3 class="text-3xl font-semibold mb-4"> ¿Cómo funciona el sistema QR?</h3>
+  <p class="text-lg max-w-2xl mx-auto">
+    Cada mesa tiene un código QR único. Al escanearlo con tu teléfono, accederás al menú interactivo del restaurante.
+    Podrás explorar los platos, personalizar tu pedido y enviarlo directamente a la cocina sin necesidad de un mesero.
+  </p>
+</section>
+
+<!-- Beneficios para los clientes -->
+<section class="bg-cyan-700 py-16 text-white text-center px-6">
+  <h3 class="text-3xl font-semibold mb-4"> Beneficios para ti</h3>
+  <p class="text-lg max-w-2xl mx-auto">
+    Olvídate de las esperas innecesarias. Con nuestro sistema:
+    <br> Haces pedidos más rápido
+    <br> Tienes mayor control sobre lo que consumes
+    <br> Vives una experiencia moderna y eficiente
+  </p>
+</section>
+
+
+
 <section class="py-20 from-cyan-900 via-cyan-700 text-center">
+   <h3 class="text-3xl font-semibold mb-4">Mejores Pedidos</h3>
+  <p class="text-lg max-w-2xl mx-auto">
   <div class="grid md:grid-cols-2 gap-20 px-4 max-w-6xl mx-auto py-8">
 
-  <!-- Sección: Top 5 Global -->
-  <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 hover:shadow-blue-500 transition">
-    <h3 class="text-blue-600 text-2xl font-bold mb-4"> Top-5 Comidas Más Pedidas</h3>
+    <!-- Sección: Top 5 Global -->
+    <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 hover:shadow-blue-500 transition">
+      <h3 class="text-blue-600 text-2xl font-bold mb-4"> Top-5 Comidas Más Pedidas</h3>
 
-    @for (comida of comidas; track comida.nombreComida) {
+      @for (comida of comidas; track comida.nombreComida) {
       <div class="mb-4 p-4 bg-gray-100 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
         <h5 class="text-lg font-semibold text-gray-500 mb-1">
-           {{ comida.nombreComida }}
+          {{ comida.nombreComida }}
         </h5>
         <p class="text-gray-700">
-           <strong>Restaurante:</strong> {{ comida.restaurante }}<br />
-           <strong>Pedidos:</strong> {{ comida.cantidad }}
+          <strong>Restaurante:</strong> {{ comida.restaurante }}<br />
+          <strong>Pedidos:</strong> {{ comida.cantidad }}
         </p>
       </div>
-    }
-  </div>
+      }
+    </div>
 
-  <!-- Sección: Por Restaurante -->
-  <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 hover:shadow-blue-500 transition">
-    <mat-form-field appearance="fill" class="w-full mb-4">
-      <mat-label> Selecciona Restaurante</mat-label>
-      <mat-select (selectionChange)="alCambiarRestaurante($event)">
-        @for (restaurante of nombresRestaurantes; track restaurante) {
+    <!-- Sección: Por Restaurante -->
+    <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 hover:shadow-blue-500 transition">
+      <mat-form-field appearance="fill" class="w-full mb-4">
+        <mat-label> Selecciona Restaurante</mat-label>
+        <mat-select (selectionChange)="alCambiarRestaurante($event)">
+          @for (restaurante of nombresRestaurantes; track restaurante) {
           <mat-option [value]="restaurante">{{ restaurante }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+          }
+        </mat-select>
+      </mat-form-field>
 
-    @if (comidasRestaurante.length > 0) {
+      @if (comidasRestaurante.length > 0) {
       <div>
         <h3 class="text-blue-600 text-2xl font-bold mb-4"> Top-5 del Restaurante</h3>
         @for (comida of comidasRestaurante; track comida.nombreComida) {
-          <div class="mb-4 p-4 bg-gray-100 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
-            <h5 class="text-lg font-semibold text-gray-500 mb-1">
-               {{ comida.nombreComida }}
-            </h5>
-            <p class="text-gray-700">
-               <strong>Pedidos:</strong> {{ comida.cantidad }}
-            </p>
-          </div>
+        <div class="mb-4 p-4 bg-gray-100 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
+          <h5 class="text-lg font-semibold text-gray-500 mb-1">
+            {{ comida.nombreComida }}
+          </h5>
+          <p class="text-gray-700">
+            <strong>Pedidos:</strong> {{ comida.cantidad }}
+          </p>
+        </div>
         }
       </div>
-    } @else {
+      } @else {
       <p class="text-gray-400 italic">No hay comidas para mostrar.</p>
-    }
-  </div>
+      }
+    </div>
 
-</div>
+  </div>
 
 </section>
 

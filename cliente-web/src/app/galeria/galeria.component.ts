@@ -25,6 +25,8 @@ export class GaleriaComponent implements OnInit {
   restauranteSeleccionado: string = 'todos';
   ordenarPor: string = '';
   private urlComida = 'http://localhost:8080/api/comida';
+
+
   private headers = new HttpHeaders({
     Authorization: localStorage.getItem('token') ?? ''
   });
@@ -56,8 +58,7 @@ export class GaleriaComponent implements OnInit {
         error: err => console.error('Error al listar comidas', err)
       });
   }
-
-  // Carga la lista de nombres de restaurantes
+    // Carga la lista de nombres de restaurantes
   cargarNombresDeRestaurantes(): void {
     this.http.get<string[]>(`${this.urlComida}/obtenerNombresRestaurante`, { headers: this.headers })
       .subscribe({

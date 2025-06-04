@@ -21,11 +21,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class MenuComponent implements OnInit {
 
-  constructor(private http: HttpClient, private carrito: CarritoService, private snackBar: MatSnackBar) { }
   ngOnInit(): void {
     this.cargarNombresDeRestaurantes();
   }
 
+  constructor(private http: HttpClient, private carrito: CarritoService, private snackBar: MatSnackBar) { }
   panelAbierto: string | null = null;
   restauranteSeleccionado: string = ''
   nombresRestaurantes: string[] = [];
@@ -74,6 +74,9 @@ export class MenuComponent implements OnInit {
         error: err => console.error('Error al cargar nombres de restaurantes', err)
       });
   }
+
+
+
   cargarMediaValoracion(comida: string) {
 
     const estaCargada = this.mediaPuntuacion[comida] !== undefined;
