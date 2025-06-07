@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { PerfilService } from '../services/perfil.service';
+import { PerfilService } from '../../core/services/perfil.service';
 import { MatIconModule } from '@angular/material/icon';
-import { CarritoService } from '../services/carrito.service';
+import { CarritoService } from '../../core/services/carrito.service';
 import { MatBadgeModule } from '@angular/material/badge';
 @Component({
   selector: 'app-header',
@@ -22,7 +22,7 @@ export class HeaderWashabiComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    if(localStorage.getItem("token"))
     this.perfilService.obtenerPerfil().subscribe(res => {
       this.perfil = res.fotoPerfil?.imagenUrl;
     })

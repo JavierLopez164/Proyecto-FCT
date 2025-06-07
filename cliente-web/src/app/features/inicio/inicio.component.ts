@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FooterComponent } from "../footer/footer.component";
-import { HeaderWashabiComponent } from "../header-washabi/header-washabi.component";
+import { FooterComponent } from "../../shared/footer/footer.component";
+import { HeaderWashabiComponent } from "../../shared/header-washabi/header-washabi.component";
 import { HttpClient } from '@angular/common/http';
-import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import {  MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatCardModule } from '@angular/material/card';
 

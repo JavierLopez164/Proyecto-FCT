@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HeaderWashabiComponent } from '../header-washabi/header-washabi.component';
-import { FooterComponent } from '../footer/footer.component';
+import { HeaderWashabiComponent } from '../../shared/header-washabi/header-washabi.component';
+import { FooterComponent } from '../../shared/footer/footer.component';
 import { MatSelectModule } from '@angular/material/select';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { MatOptionModule } from '@angular/material/core';
@@ -11,7 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { CarritoService } from '../services/carrito.service';
+import { CarritoService } from '../../core/services/carrito.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-menu',
