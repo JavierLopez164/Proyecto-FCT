@@ -1,16 +1,16 @@
 import { Routes } from '@angular/router';
 import { InicioComponent } from './features/inicio/inicio.component';
 import { ChatComponent } from './features/chat/chat.component';
-import { PerfilComponent } from './features/perfil/perfil.component';
 import { DescargarappComponent } from './features/descargarapp/descargarapp.component';
-import { RegistrarComponent } from './features/registrar/registrar.component';
-import { LoginComponent } from './features/login/login.component';
 import { authGuard } from './core/guards/auth.guard';
 import { noAuthGuard } from './core/guards/no-auth.guard';
 import { GaleriaComponent } from './features/galeria/galeria.component';
 import { MenuComponent } from './features/menu/menu.component';
 import { CestaComponent } from './features/cesta/cesta.component';
-import { AjusteComponent } from './features/ajuste/ajuste.component';
+import { AjusteComponent } from './core/auth/ajuste/ajuste.component';
+import { LoginComponent } from './core/auth/login/login.component';
+import { PerfilComponent } from './core/auth/perfil/perfil.component';
+import { RegistrarComponent } from './core/auth/registrar/registrar.component';
 export const routes: Routes = [
     {path:"",title:"Inicio",component:InicioComponent,},   
     {path:"galeria",title:"Galeria",component:GaleriaComponent,
