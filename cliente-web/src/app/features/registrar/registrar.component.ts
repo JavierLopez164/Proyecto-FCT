@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { HeaderWashabiComponent } from "../header-washabi/header-washabi.component";
-import { FooterComponent } from "../footer/footer.component";
+import { HeaderWashabiComponent } from "../../shared/header-washabi/header-washabi.component";
+import { FooterComponent } from "../../shared/footer/footer.component";
 import { FormControl, FormGroup,Validators,ReactiveFormsModule  } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';

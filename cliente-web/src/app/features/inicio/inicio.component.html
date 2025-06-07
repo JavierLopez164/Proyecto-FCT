@@ -2,15 +2,14 @@
 
 <section class=" bg-cyan-900   text-white py-42 text-center px-6">
   <h1 class="text-5xl font-bold mb-4">🍣 Bienvenido a Washabi</h1>
-  <p class="text-xl mb-8">Gestión de pedidos y con tecnología QR</p>
+  <p class="text-xl mb-8">Pide la comida de diferentes Restaurantes</p>
 </section>
 
 <section class="bg-gradient-to-b from-cyan-900 via-cyan-700 to-cyan-600 py-20 text-white text-center px-6">
   <h2 class="text-4xl font-semibold mb-4">Información</h2>
   <p class="text-lg max-w-3xl mx-auto">
-    En Washabi, utilizamos tecnología QR para facilitar la experiencia de pedidos de nuestros clientes.
-    Escanea el código en tu mesa, accede al menú digital y realiza tu pedido sin necesidad de esperar.
-    Rápido, moderno y sin complicaciones.
+    En Washabi, puedes pedir los menus de restaurantes locales ver su precio ,su descripción y ver la galeria para 
+    clientes registrados ,además de poder comentar los platos de los restaurantes locales dándoles una valoración con estrellas
   </p>
 </section>
 <section class="bg-cyan-600 py-16 text-white px-6">
@@ -18,39 +17,28 @@
     
     <!-- Columna 1 -->
     <div class="md:w-1/2">
-      <h4 class="text-2xl font-bold mb-4"> Gestión Eficiente de Pedidos</h4>
+      <h4 class="text-2xl font-bold mb-4"> Pagos con Stripe</h4>
       <p class="text-lg">
-        Nuestro sistema permite un flujo de trabajo más ordenado, enviando los pedidos directamente a cocina
-        y reduciendo los errores humanos. Ideal para mantener alta la productividad sin perder calidad.
+        Cuando encuentres ese plato que se te antoja, puedes pagar de forma segura y rápida con Stripe, directamente desde la app.
       </p>
     </div>
     
     <!-- Columna 2 -->
     <div class="md:w-1/2">
-      <h4 class="text-2xl font-bold mb-4"> Datos en Tiempo Real</h4>
+      <h4 class="text-2xl font-bold mb-4">Utiliza nuestro ChatBot</h4>
       <p class="text-lg">
-        Accede a estadísticas de consumo, tiempos de preparación y pedidos más populares. 
-        Toda la información que necesitas para tomar mejores decisiones, siempre actualizada.
+        Puedes hacer cualquier tipo de consulta ya que hemos implementado un chatbot que puede resolverte las dudas que quieras.
       </p>
     </div>
 
   </div>
 </section>
 
-<!-- Detalles de la tecnología QR -->
-<section class="bg-cyan-800 py-16 text-white text-center px-6">
-  <h3 class="text-3xl font-semibold mb-4"> ¿Cómo funciona el sistema QR?</h3>
-  <p class="text-lg max-w-2xl mx-auto">
-    Cada mesa tiene un código QR único. Al escanearlo con tu teléfono, accederás al menú interactivo del restaurante.
-    Podrás explorar los platos, personalizar tu pedido y enviarlo directamente a la cocina sin necesidad de un mesero.
-  </p>
-</section>
-
 <!-- Beneficios para los clientes -->
 <section class="bg-cyan-700 py-16 text-white text-center px-6">
   <h3 class="text-3xl font-semibold mb-4"> Beneficios para ti</h3>
   <p class="text-lg max-w-2xl mx-auto">
-    Olvídate de las esperas innecesarias. Con nuestro sistema:
+    Olvídate de las esperas de tener un restaurante propietario en una sola app. Con nuestro sistema:
     <br> Haces pedidos más rápido
     <br> Tienes mayor control sobre lo que consumes
     <br> Vives una experiencia moderna y eficiente
@@ -66,7 +54,7 @@
 
     <!-- Sección: Top 5 Global -->
     <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 hover:shadow-blue-500 transition">
-      <h3 class="text-blue-600 text-2xl font-bold mb-4"> Top-5 Comidas Más Pedidas</h3>
+      <h3 class="text-blue-600 text-2xl font-bold mb-4"> Top-5 Comidas Más Pedidas De Cualquier Restaurante</h3>
 
       @for (comida of comidas; track comida.nombreComida) {
       <div class="mb-4 p-4 bg-gray-100 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
@@ -94,7 +82,7 @@
 
       @if (comidasRestaurante.length > 0) {
       <div>
-        <h3 class="text-blue-600 text-2xl font-bold mb-4"> Top-5 del Restaurante</h3>
+        <h3 class="text-blue-600 text-2xl font-bold mb-4"> Top-5 Comidas Más Pedidas de Ese Restaurante</h3>
         @for (comida of comidasRestaurante; track comida.nombreComida) {
         <div class="mb-4 p-4 bg-gray-100 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
           <h5 class="text-lg font-semibold text-gray-500 mb-1">

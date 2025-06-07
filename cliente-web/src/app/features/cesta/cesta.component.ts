@@ -1,12 +1,12 @@
 import { AfterViewInit, Component, OnInit, inject, ViewChild, ElementRef } from '@angular/core';
-import { HeaderWashabiComponent } from "../header-washabi/header-washabi.component";
-import { FooterComponent } from "../footer/footer.component";
+import { HeaderWashabiComponent } from "../../shared/header-washabi/header-washabi.component";
+import { FooterComponent } from "../../shared/footer/footer.component";
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule, FormsModule, } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatBadgeModule } from '@angular/material/badge';
-import { CarritoService } from '../services/carrito.service';
+import { CarritoService } from '../../core/services/carrito.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { loadStripe, Stripe, StripeElements, StripeCardElement } from '@stripe/stripe-js';
 import { MatStepperModule } from '@angular/material/stepper';
