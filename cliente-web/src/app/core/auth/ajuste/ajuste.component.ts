@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { HeaderWashabiComponent } from "../../shared/header-washabi/header-washabi.component";
-import { FooterComponent } from "../../shared/footer/footer.component";
+import { HeaderWashabiComponent } from "../../../shared/header-washabi/header-washabi.component";
+import { FooterComponent } from "../../../shared/footer/footer.component";
 import { ReactiveFormsModule, FormControl, FormGroup, Validators, } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -16,7 +16,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatCardModule } from '@angular/material/card';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { PerfilService } from '../../core/services/perfil.service';
+import { PerfilService } from '../../services/perfil.service';
 @Component({
   selector: 'app-ajuste',
   imports: [HeaderWashabiComponent, FooterComponent, RouterLink, MatCardModule, MatIconModule, MatStepperModule, MatSnackBarModule, MatToolbar, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule,],
