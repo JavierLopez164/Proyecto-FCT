@@ -4,10 +4,10 @@ export default{
       "./src/**/*.{html,ts}",
     ],
     theme: {
-     
-      extend: { 
-      },
+    extend: {
+      
     },
+  },
     plugins: [
       require("tailwindcss-animated") 
     ],
