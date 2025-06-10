@@ -1,45 +1,46 @@
-<app-header/>
-<div class="flex flex-col h-screen md:w-2xl mx-auto border shadow-lg rounded-2xl bg-white my-5">
- 
-    <div class="bg-blue-600 text-white p-4 font-semibold rounded-2xl text-center mb-4 animate-pulse animate-thrice animate-ease-out animate-alternate-reverse">
-        🔴 Chat En Directo
+<app-header />
+<div class="flex flex-col h-200 md:w-2xl mx-auto border shadow-lg rounded-2xl bg-white my-5">
+
+    <div
+        class="bg-blue-600 text-white p-4 font-semibold rounded-2xl text-center mb-4 animate-pulse animate-thrice animate-ease-out animate-alternate-reverse">
+        Chat de Ayuda
     </div>
-  
+
     <!-- Mensajes -->
-    <div class="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-300">
-        @for (mensaje of messages; track mensaje.id) {
-            <div [ngClass]="mensaje.enviado == 'user' ? 'text-right' : 'text-left'">
-                <div
-                    class="inline-block px-4 py-2 rounded-lg shadow-md max-w-full break-words overflow-hidden"
-                    [ngClass]="
+    <div class="flex-1 overflow-y-auto p-4 space-y-8 bg-gray-300">
+        @for (mensaje of mensajes; track mensaje) {
+        <div [ngClass]="mensaje.enviado == 'user' ? 'text-right' : 'text-left'">
+            <div class="inline-block px-4 py-2 rounded-lg shadow-md max-w-full break-words overflow-hidden" [ngClass]="
                         mensaje.enviado == 'user'
                         ? 'bg-blue-500 text-white'
                         : 'bg-gray-200 text-gray-800'
-                    "
-                >
+                    ">
+
+                <!-- Nombre del emisor -->
+                <div class="text-xs font-semibold mb-1"
+                    [ngClass]="mensaje.enviado === 'user' ? 'text-blue-100' : 'text-gray-600'">
+                    {{ mensaje.enviado === 'user' ? nombre : 'WashabiBot' }}
+                </div>
+
+                <!-- Contenido del mensaje -->
+                <div>
                     {{ mensaje.texto }}
                 </div>
             </div>
+        </div>
         }
     </div>
 
     <!-- Enviar mensaje -->
-    <form (ngSubmit)="sendMessage()" class="flex items-center p-2 border-t bg-gray-50 rounded-2xl">
-        <input
-            [(ngModel)]="newMessage"
-            name="message"
-            type="text"
-            placeholder="Escribe un mensaje..."
-            class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black bg-white"
-        />
-    
-        <button
-            type="submit"
-            class="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-        >
+    <form (ngSubmit)="enviarMensaje()" class="flex items-center p-2 border-t bg-gray-50 rounded-2xl">
+        <input [(ngModel)]="nuevoMensaje" name="message" type="text" placeholder="Escribe un mensaje..."
+            class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black bg-white" />
+
+        <button type="submit"
+            class="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
             Enviar
         </button>
     </form>
 </div>
 
-<app-footer/>
+<app-footer />
