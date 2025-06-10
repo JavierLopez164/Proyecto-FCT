@@ -117,7 +117,7 @@ public class ServicioComidaImpl implements IServicioComida {
 	@Override
 	public List<ComidaGaleriaDto> obtenerTodasLasComidasDeUnRestaurantes(String restaurante) {
 		// TODO Auto-generated method stub
-		return dtoConverter.mapAll(comidaDAO.obtenerTodasLasComidasDeUnRestaurantes(restaurante), ComidaGaleriaDto.class)  ;
+		return dtoConverter.mapAll(comidaDAO.obtenerComidasDeUnRestaurante(restaurante), ComidaGaleriaDto.class)  ;
 	}
 
 }
