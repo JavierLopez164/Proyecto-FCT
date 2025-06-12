@@ -6,6 +6,16 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class CarritoService {
 
+  private puedePagar = new BehaviorSubject<boolean>(false);
+  puedePagar$ = this.puedePagar.asObservable();
+
+  podriaPagado(pagado: boolean) {
+    this.puedePagar.next(pagado);
+  }
+  obtenerPagado():any{
+    return this.puedePagar.getValue()
+  }
+
   private pedidoCreadoSubject = new BehaviorSubject<any | null>(null);
 
   // Observable expuesto para que otros componentes escuchen cambios

@@ -59,7 +59,10 @@
   <div class="bg-white rounded-lg p-6 shadow-xl w-full max-w-2xl z-50">
     <mat-stepper linear #stepper (selectionChange)="onStepChange($event)">
       <!-- Paso 1 -->
+
+    
       <mat-step [editable]="false">
+          @if(puedePagar){
         <ng-template matStepLabel>Creación del pedido</ng-template>
         <h3 class="text-lg font-semibold mb-2 text-blue-800">Resumen del pedido</h3>
 
@@ -74,20 +77,23 @@
           <span>{{ calcularTotal().toFixed(2) }} €</span>
         </div>
 
-
+   }@else {
+        <ng-template matStepLabel>Error al hacer pedido:</ng-template>
+        <h3 class="text-lg font-semibold mb-2 text-red-800">El nombre del restaurante no coincide con el pedido creado o no tienes un pedido creado</h3>
+      }
         <div class="flex justify-between mt-6">
           <button mat-button (click)="mostrarStepper = false"
             class="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded">
             Cancelar pedido
           </button>
-          <button mat-button (click)="crearPedido()" matStepperNext
-            class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded">
+          <button mat-button matStepperNext 
+            class=" bg-cyan-600 text-white px-4 py-2 rounded">
             Confirmar pedido
           </button>
         </div>
-
+   
       </mat-step>
-
+      <!--Paso 2-->
       <mat-step [editable]="false">
         <ng-template matStepLabel>Pagar Pedido</ng-template>
         <div class="mb-4">
@@ -146,7 +152,7 @@
         <!-- Botón -->
         <div class="flex justify-end mt-6">
           <button mat-button matStepperNext (click)="pagarConStripe()"
-            class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded shadow">
+            class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded shadow" [disabled]="!puedePagar" >
             Pagar
           </button>
         </div>

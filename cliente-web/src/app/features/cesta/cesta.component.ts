@@ -22,7 +22,7 @@ export class CestaComponent implements OnInit, AfterViewInit {
 
 
 
-
+  puedePagar=false
   comidas: any[] = [];
   constructor(private http: HttpClient, private carrito: CarritoService) { }
 
@@ -86,28 +86,44 @@ export class CestaComponent implements OnInit, AfterViewInit {
 
   // Finalizar pedido
   finalizarPedido(): void {
+
+ this.http.get<any>('http://localhost:8080/api/pedidos/listar', {}).subscribe({
+      next: (respuesta) => {
+        if (respuesta.emailCliente == localStorage.getItem('email') && respuesta.restaurante == this.carrito.obtenerNombreRestaurante()){
+
+          this.carrito.establecerPedidoCreado(respuesta);
+          this.carrito.obtenerCesta().forEach(c => {
+            this.http.post<any>('http://localhost:8080/api/pedidos/aniadircomidas', {}, {
+              params: {
+                'pedidoId': this.carrito.obtenerPedidoActual().id,
+                "nComida": c.nombre,
+                "nRestaurante": c.restaurante,
+                "cantidad": c.cantidad,
+                "total": this.carrito.calcularTotal()
+              }
+            })
+              .subscribe({
+                next: (respuesta) => {
+                  this.carrito.podriaPagado(true)
+                  this.puedePagar=this.carrito.obtenerPagado()
+                },
+                error: (error) => {
+                  console.error('Error al añadir las comidas al pedido:', error);
+                }
+              });
+
+          });
+        }
+      }
+    })
+
+
+
     this.mostrarStepper = true;
   }
   limpiarCesta(): void {
     this.mostrarStepper = false;
     this.carrito.limpiarCesta();
-  }
-
-  crearPedido() {
-    const params = new HttpParams()
-      .set('email', localStorage.getItem('email') ?? "")
-      .set('restaurante', this.carrito.obtenerNombreRestaurante());
-
-    this.http.post<any>('http://localhost:8080/api/pedidos/crear-simple', {}, { params })
-      .subscribe({
-        next: (respuesta) => {
-          this.carrito.establecerPedidoCreado(respuesta);
-
-        },
-        error: (error) => {
-          console.error('Error al crear pedido:', error);
-        }
-      });
   }
 
   form = {
@@ -150,7 +166,7 @@ export class CestaComponent implements OnInit, AfterViewInit {
           amount: this.form.amount * 100,
           currency: this.form.currency,
           paymentMethodId: resultado.paymentMethod.id,
-          correo:this.form.email
+          correo: this.form.email
         };
 
         this.http.post<any>('http://localhost:8080/api/stripe/paymentintent', dto)
@@ -163,27 +179,6 @@ export class CestaComponent implements OnInit, AfterViewInit {
                 clientSecret: data.clientSecret
               };
               this.pagoExitoso = true;
-               this.carrito.obtenerCesta().forEach(c => {
-
-          this.http.post<any>('http://localhost:8080/api/pedidos/aniadircomidas', {}, {
-            params: {
-              'pedidoId': this.carrito.obtenerPedidoActual().id,
-              "nComida": c.nombre,
-              "nRestaurante": c.restaurante,
-              "cantidad": c.cantidad,
-              "total": this.carrito.calcularTotal()
-            }
-          })
-            .subscribe({
-              next: (respuesta) => {
-
-              },
-              error: (error) => {
-                console.error('Error al añadir las comidas al pedido:', error);
-              }
-            });
-
-        });
             },
             error: (err) => {
               this.pagoExitoso = false;
@@ -201,14 +196,14 @@ export class CestaComponent implements OnInit, AfterViewInit {
           }
         }).subscribe({
           next: (respuesta) => {
-          
+
           },
           error: (error) => {
             console.error('Error al cambiar estado del pedido:', error);
           }
         });
 
-      
+
       }
     });
 
