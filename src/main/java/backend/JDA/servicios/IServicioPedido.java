@@ -21,5 +21,6 @@ public interface IServicioPedido {
 	int pedidosUltimos7Dias();
 	List<PedidoListadoDTO> listarPedidosDTO();
 	Optional<Pedido> aniadirComidas(String pedidoId, ComidaPK comidaPK, int cantidad,int total);
-	
+	boolean eliminarPedido(String id);
+	List<PedidoListadoDTO> ultimos5PedidosDeUsuario(String email);
 }

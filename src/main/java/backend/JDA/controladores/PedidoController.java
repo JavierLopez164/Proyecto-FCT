@@ -146,8 +146,19 @@ public class PedidoController {
         List<PedidoListadoDTO> dtos = pedidoService.listarPedidosDTO(); // nuevo método
         return ResponseEntity.ok(dtos);
     }
-    
-    
+
+    @Operation(summary = "Últimos 5 pedidos de un usuario", description = "Devuelve los últimos 5 pedidos realizados por el usuario indicado.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pedidos obtenidos correctamente"),
+            @ApiResponse(responseCode = "404", description = "Usuario no tiene pedidos")
+    })
+    @GetMapping("/ultimos5")
+    public ResponseEntity<?> ultimos5Pedidos(@RequestParam String email) {
+        List<PedidoListadoDTO> pedidos = pedidoService.ultimos5PedidosDeUsuario(email);
+        return pedidos.isEmpty()
+                ? ResponseEntity.status(404).body("No hay pedidos para este usuario")
+                : ResponseEntity.ok(pedidos);
+    }
 
     @Operation(summary = "Añadir comida a pedido", description = "Añade todas las comidas existente a un pedido.")
     @ApiResponses(value = {
@@ -168,5 +179,21 @@ public class PedidoController {
                 ? ResponseEntity.ok(pedidoOpt.get())
                 : ResponseEntity.badRequest().body("Pedido o comida no válida");
     }
+
+    @Operation(summary = "Eliminar un pedido", description = "Elimina un pedido completamente de la base de datos.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pedido eliminado exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Pedido no encontrado")
+    })
+    @DeleteMapping("/eliminar")
+    public ResponseEntity<?> eliminarPedido(@RequestParam String id) {
+        boolean eliminado = pedidoService.eliminarPedido(id);
+        if (eliminado) {
+            return ResponseEntity.ok("Pedido eliminado correctamente");
+        } else {
+            return ResponseEntity.status(404).body("Pedido no encontrado");
+        }
+    }
+
 }
 

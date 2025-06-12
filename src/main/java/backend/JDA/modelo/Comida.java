@@ -21,7 +21,6 @@ public class Comida implements Serializable {
 	@Column(length = 200)
 	private String description;
 
-	@Column
 	private int price;
 
 	@Column

@@ -7,12 +7,13 @@ import backend.JDA.modelo.Comida;
 import backend.JDA.modelo.ComidaPK;
 import backend.JDA.modelo.Foto;
 import backend.JDA.modelo.dto.ComidaGaleriaDto;
+import backend.JDA.modelo.dto.ComidaUpdateDto;
 
 public interface IServicioComida {
 
 	public boolean insert(Comida comida);
 
-	public boolean update(Comida comida);
+	Optional<Comida> update(ComidaUpdateDto comida);
 
 	public boolean delete(ComidaPK comidaPK);
 

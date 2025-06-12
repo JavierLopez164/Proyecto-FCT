@@ -3,10 +3,14 @@ package backend.JDA.controladores;
 import java.util.List;
 import java.util.Optional;
 
+import backend.JDA.modelo.*;
+import backend.JDA.modelo.dto.ComidaUpdateDto;
+import backend.JDA.servicios.IServicioCliente;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import backend.JDA.modelo.Comida;
-import backend.JDA.modelo.ComidaPK;
-import backend.JDA.modelo.Foto;
 import backend.JDA.modelo.dto.ComidaGaleriaDto;
 import backend.JDA.servicios.IServicioComida;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,6 +35,9 @@ public class ComidaController {
 
 	@Autowired
 	private IServicioComida servicioComida;
+
+	@Autowired
+	private IServicioCliente servicioCliente;
 
 	@PostMapping("/crear")
 	@Operation(
@@ -58,12 +62,26 @@ public class ComidaController {
 			description = "Permite a un admin actualizar una comida.",
 			security = @SecurityRequirement(name = "bearerAuth")
 	)
-	public ResponseEntity<?> actualizarComida(@Valid @RequestBody Comida comida) {
-		boolean actualizada = servicioComida.update(comida);
-		return actualizada
-				? ResponseEntity.ok(comida)
-				: ResponseEntity.status(HttpStatus.FORBIDDEN).body("No autorizado o datos inválidos");
+	public ResponseEntity<?> actualizarComida(@Valid @RequestBody ComidaUpdateDto comida) {
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+		Optional<Cliente> clienteOpt = servicioCliente.findById(email);
+		ResponseEntity<?> response;
+
+		if (clienteOpt.isEmpty() || !clienteOpt.get().getRol().equals(Rol.ROLE_ADMIN)) {
+			 response = ResponseEntity.status(HttpStatus.FORBIDDEN)
+					.body("No tienes permisos para realizar esta acción");
+		}else{
+			Optional<Comida> actualizada = servicioComida.update(comida);
+			if(actualizada.isPresent()){
+				response = ResponseEntity.ok(comida);
+			}else{
+				response = ResponseEntity.status(HttpStatus.NOT_FOUND).body("La comida no existe");
+			}
+
+		}
+		return response;
 	}
+
 
 	@DeleteMapping("/eliminar")
 	@Operation(
@@ -152,6 +170,5 @@ public class ComidaController {
 		
 		return ResponseEntity.ok(servicioComida.obtenerTodosLosRestaurantes());
 	}
-	
 	
 }

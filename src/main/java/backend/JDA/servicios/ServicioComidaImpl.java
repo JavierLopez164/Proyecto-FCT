@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import backend.JDA.modelo.dto.ComidaUpdateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,16 +36,21 @@ public class ServicioComidaImpl implements IServicioComida {
 	}
 
 	@Override
-	public boolean update(Comida comida) {
-		// TODO Auto-generated method stub
-		boolean exito = false;
+	public Optional<Comida> update(ComidaUpdateDto comidaDto) {
+		ComidaPK pk = new ComidaPK(comidaDto.getNcomida(), comidaDto.getRestaurante());
+		Foto fotoExistente;
 
-		if(comidaDAO.existsById(comida.getComidaPK())) {
-			comidaDAO.save(comida);
-			exito = true;
-		}
+		Optional<Comida> comidaOpt = comidaDAO.findById(pk);
+		if (comidaOpt.isEmpty()) return Optional.empty();
 
-		return exito;
+		Comida comidaExistente = comidaOpt.get();
+		fotoExistente = comidaExistente.getFoto();
+
+		 dtoConverter.mapObjetc(comidaDto, comidaExistente);
+		comidaExistente.setFoto(fotoExistente);
+
+		comidaDAO.save(comidaExistente);
+		return Optional.of(comidaExistente);
 	}
 
 	@Override
