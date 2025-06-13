@@ -20,8 +20,6 @@ import { MatStepperModule } from '@angular/material/stepper';
 
 export class CestaComponent implements OnInit, AfterViewInit {
 
-
-
   puedePagar = false;
   comidas: any[] = [];
   estaEnElMismoRestaurante = false;
@@ -79,6 +77,53 @@ export class CestaComponent implements OnInit, AfterViewInit {
     if (this.carrito.obtenerNombreRestaurante() != "")
       this.estaEnElMismoRestaurante = this.carrito.obtenerNombreRestaurante() == this.carrito.obtenerPedidoActual().restaurante
 
+
+
+    
+    const pedidoActual = this.carrito.obtenerPedidoActual();
+
+    if (pedidoActual != null) {
+      const comidasActuales: any[] = pedidoActual.items;
+
+      comidasActuales.forEach(c => {
+        const nombre = c.comida.comidaPK?.ncomida;
+        const restaurante = c.comidaPK?.nrestaurante;
+        const cantidad = c.cantidad;
+   
+        const itemEnCesta = this.carrito.obtenerCesta().find(item =>
+          item.nombre == nombre &&
+          item.restaurante == restaurante &&
+          item.cantidad == cantidad
+        );
+
+   
+        if (!itemEnCesta) {
+          this.carrito.insertarCesta({
+            restaurante: restaurante,
+            nombre: nombre,
+            precio: c.comida.price,
+            imagen: c.comida.foto?.imagenUrl,
+            descripcion: c.comida.description,
+            category: c.comida.category,
+            preparationTime: c.comida.preparationTime,
+            attributes: c.comida.attributes,
+            features: c.comida.features,
+            cantidad: cantidad, 
+          });
+
+  
+          this.carrito.marcarComoEnviada({
+            nombre: nombre,
+            restaurante: restaurante,
+            cantidad: cantidad
+          });
+        }
+      });
+    }
+
+
+
+
   }
 
   obtenerPedidoActivoDeRestaurante() {
@@ -86,9 +131,11 @@ export class CestaComponent implements OnInit, AfterViewInit {
     this.http.get<any>('http://localhost:8080/api/pedidos/encontrarpedidoactivorestaurante', { params: { email: localStorage.getItem('email') ?? "" } }).subscribe({
       next: (respuesta) => {
         this.carrito.establecerPedidoCreado(respuesta);
+
         this.puedePagar = true;
       }
     })
+
   }
 
 
@@ -105,25 +152,28 @@ export class CestaComponent implements OnInit, AfterViewInit {
   // Finalizar pedido
   finalizarPedido(): void {
 
-    this.carrito.obtenerCesta().forEach(c => {
+    const comidasNuevas = this.carrito.obtenerCesta().filter(c => this.carrito.esComidaNueva(c));
+
+    comidasNuevas.forEach(comida => {
       this.http.post<any>('http://localhost:8080/api/pedidos/aniadircomidas', {}, {
         params: {
           'pedidoId': this.carrito.obtenerPedidoActual().id,
-          "nComida": c.nombre,
-          "nRestaurante": c.restaurante,
-          "cantidad": c.cantidad,
+          "nComida": comida.nombre,
+          "nRestaurante": comida.restaurante,
+          "cantidad": comida.cantidad,
           "total": this.carrito.calcularTotal()
         }
-      })
-        .subscribe({
-          next: (respuesta) => {
-          },
-          error: (error) => {
-            console.error('Error al añadir las comidas al pedido:', error);
-          }
-        });
-
+      }).subscribe({
+        next: () => {
+          // Marca como enviada solo si el POST fue exitoso
+          this.carrito.marcarComoEnviada(comida);
+        },
+        error: (error) => {
+          console.error('Error al añadir la comida al pedido:', error);
+        }
+      });
     });
+
 
     this.mostrarStepper = true;
   }

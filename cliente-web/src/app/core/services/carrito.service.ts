@@ -78,4 +78,23 @@ export class CarritoService {
   return cestaActual.length > 0 ? cestaActual[0].restaurante : '';
 }
  
+
+comidasEnviadas: { nombre: string, restaurante: string }[] = [];
+
+marcarComoEnviada(comida: any) {
+  this.comidasEnviadas.push({
+    nombre: comida.nombre,
+    restaurante: comida.restaurante
+  });
+}
+
+esComidaNueva(comida: any): boolean {
+  return !this.comidasEnviadas.some(c =>
+    c.nombre == comida.nombre &&
+    c.restaurante == comida.restaurante
+  );
+}
+
+
+
 }
