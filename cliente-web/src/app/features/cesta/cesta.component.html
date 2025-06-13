@@ -29,7 +29,7 @@
 
         <mat-form-field appearance="fill" class="w-24">
           <mat-label>Cantidad</mat-label>
-          <input matInput type="number" min="1" [(ngModel)]="item.cantidad" id="cantidad-{{item.id}}" />
+          <input matInput type="number" min="1" [value]="item.cantidad"  />
         </mat-form-field>
       </div>
 

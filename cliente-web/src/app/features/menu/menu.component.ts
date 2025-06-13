@@ -20,14 +20,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './menu.component.css'
 })
 export class MenuComponent implements OnInit {
-  
-  estaEnElMismoRestaurante=false
-  tienePedidoActivo=false
+
+  estaEnElMismoRestaurante = false
+  tienePedidoActivo = false
   ngOnInit(): void {
     this.cargarNombresDeRestaurantes();
 
-   this.obtenerPedidoActivoDeRestaurante();
-   
+    this.obtenerPedidoActivoDeRestaurante();
   }
 
   constructor(private http: HttpClient, private carrito: CarritoService, private snackBar: MatSnackBar) { }
@@ -46,12 +45,12 @@ export class MenuComponent implements OnInit {
     Authorization: localStorage.getItem('token') ?? '', 'Content-Type': 'application/json',
   });
 
-obtenerPedidoActivoDeRestaurante() {
+  obtenerPedidoActivoDeRestaurante() {
 
     this.http.get<any>('http://localhost:8080/api/pedidos/encontrarpedidoactivorestaurante', { params: { email: localStorage.getItem('email') ?? "" } }).subscribe({
       next: (respuesta) => {
         this.carrito.establecerPedidoCreado(respuesta);
-        this.tienePedidoActivo=true
+        this.tienePedidoActivo = true
       }
     })
   }
@@ -115,37 +114,37 @@ obtenerPedidoActivoDeRestaurante() {
     this.restauranteSeleccionado = evento.value;
     this.comentariosPorComida = {}
     this.mediaPuntuacion = {}
-    this.puedeComentarPorComida={}
+    this.puedeComentarPorComida = {}
     this.estaEnElMismoRestaurante = evento.value == this.carrito.obtenerPedidoActual().restaurante
     this.cargarComidaPorRestaurante();
-    
-    
+
+
   }
 
 
-    puedeInsertarComentario(comida: string) {
-    if(this.puedeComentarPorComida[comida] == undefined){
-    this.http.get<boolean>(this.urlComentario + "/puede-comentar", {
-      headers: this.headers,
-      params: {
-        comida: comida,
-        restaurante: this.restauranteSeleccionado
-      }
-    }).subscribe({
-      next: (response) => {
-        this.puedeComentarPorComida[comida] = response;
-      },
-      error: () => {
-        this.puedeComentarPorComida[comida] = false; 
-      }
-    });
+  puedeInsertarComentario(comida: string) {
+    if (this.puedeComentarPorComida[comida] == undefined) {
+      this.http.get<boolean>(this.urlComentario + "/puede-comentar", {
+        headers: this.headers,
+        params: {
+          comida: comida,
+          restaurante: this.restauranteSeleccionado
+        }
+      }).subscribe({
+        next: (response) => {
+          this.puedeComentarPorComida[comida] = response;
+        },
+        error: () => {
+          this.puedeComentarPorComida[comida] = false;
+        }
+      });
     }
   }
 
   alAbrirPanel(evento: any) {
     this.nombreComida = evento
     this.panelAbierto = evento;
-      this.puedeInsertarComentario(evento);
+    this.puedeInsertarComentario(evento);
     if (!this.comentariosPorComida[evento]) {
       this.http.get<any[]>(this.urlComentario + "/lista", {
         params: {
