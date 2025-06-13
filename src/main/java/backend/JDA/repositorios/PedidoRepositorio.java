@@ -35,7 +35,8 @@ public interface PedidoRepositorio extends JpaRepository<Pedido, String> {
 
 	@Query("SELECT p FROM Pedido p WHERE p.cliente.email = ?1 ORDER BY p.fechaCreacion DESC LIMIT 5")
 	List<Pedido> findTop5ByClienteEmailOrderByFechaCreacionDesc(String email);
-
+	@Query("SELECT p FROM Pedido p WHERE p.activo=true AND p.cliente.email = ?1" )
+	Optional<Pedido> encontrarPedidoActivoDeEseRestaurante(String email);
 
 }
 

@@ -13,12 +13,6 @@ public class ServicioChatbotImpl implements IServicioChatbot{
 
 	private final ChatClient chatClient;
 	
-	@Autowired
-	private ComidaRepositorio comidaRepositorio;
-	
-	@Autowired
-	private IServicioPedido servicioPedido;
-	
 	//Hay que iniciar el chat
 	private ServicioChatbotImpl(ChatClient.Builder builder) {
 		chatClient = builder.build();
