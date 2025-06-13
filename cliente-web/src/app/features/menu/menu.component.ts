@@ -20,12 +20,18 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './menu.component.css'
 })
 export class MenuComponent implements OnInit {
-
+  
+  estaEnElMismoRestaurante=false
+  tienePedidoActivo=false
   ngOnInit(): void {
     this.cargarNombresDeRestaurantes();
+
+   this.obtenerPedidoActivoDeRestaurante();
+   
   }
 
   constructor(private http: HttpClient, private carrito: CarritoService, private snackBar: MatSnackBar) { }
+
   panelAbierto: string | null = null;
   restauranteSeleccionado: string = ''
   nombresRestaurantes: string[] = [];
@@ -40,7 +46,15 @@ export class MenuComponent implements OnInit {
     Authorization: localStorage.getItem('token') ?? '', 'Content-Type': 'application/json',
   });
 
+obtenerPedidoActivoDeRestaurante() {
 
+    this.http.get<any>('http://localhost:8080/api/pedidos/encontrarpedidoactivorestaurante', { params: { email: localStorage.getItem('email') ?? "" } }).subscribe({
+      next: (respuesta) => {
+        this.carrito.establecerPedidoCreado(respuesta);
+        this.tienePedidoActivo=true
+      }
+    })
+  }
   cargarComidaPorRestaurante(): void {
     if (this.restauranteSeleccionado != "") {
       this.http.post<any[]>(`${this.urlComida}/obtenerPorRestaurante`, this.restauranteSeleccionado, { headers: this.headers })
@@ -102,8 +116,10 @@ export class MenuComponent implements OnInit {
     this.comentariosPorComida = {}
     this.mediaPuntuacion = {}
     this.puedeComentarPorComida={}
+    this.estaEnElMismoRestaurante = evento.value == this.carrito.obtenerPedidoActual().restaurante
     this.cargarComidaPorRestaurante();
-
+    
+    
   }
 
 
@@ -118,7 +134,6 @@ export class MenuComponent implements OnInit {
     }).subscribe({
       next: (response) => {
         this.puedeComentarPorComida[comida] = response;
-        console.log(this.puedeComentarPorComida)
       },
       error: () => {
         this.puedeComentarPorComida[comida] = false; 

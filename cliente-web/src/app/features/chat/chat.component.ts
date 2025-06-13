@@ -30,7 +30,7 @@ export class ChatComponent implements OnInit {
       this.mensajes.push({ enviado: "user", texto: this.nuevoMensaje })
       mensajeAEnviar="Buenas soy "+this.nombre+" y esta es mi pregunta:"+this.nuevoMensaje;
        this.nuevoMensaje = '';
-      this.http.post<any>('http://localhost:8080/api/chatbot/mandarMensaje',{},{ params:{'message':mensajeAEnviar},  responseType: 'text' as 'json' }).subscribe({
+      this.http.get<any>('http://localhost:8080/api/chatbot/mandarMensaje',{ params:{'message':mensajeAEnviar},  responseType: 'text' as 'json' }).subscribe({
         next: (respuesta) => {
           this.mensajes.push({ enviado: "bot", texto: respuesta })
         },
