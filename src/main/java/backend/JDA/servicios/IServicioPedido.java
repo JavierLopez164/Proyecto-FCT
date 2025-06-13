@@ -3,6 +3,8 @@ package backend.JDA.servicios;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Query;
+
 import backend.JDA.modelo.ComidaPK;
 import backend.JDA.modelo.Pedido;
 import backend.JDA.modelo.dto.PedidoCreadoDTO;
@@ -23,4 +25,5 @@ public interface IServicioPedido {
 	Optional<Pedido> aniadirComidas(String pedidoId, ComidaPK comidaPK, int cantidad,int total);
 	boolean eliminarPedido(String id);
 	List<PedidoListadoDTO> ultimos5PedidosDeUsuario(String email);
+	Optional<Pedido>encontrarPedidoActivoDeEseRestauranteYCorreo(String email);
 }

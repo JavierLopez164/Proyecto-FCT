@@ -240,24 +240,40 @@ public class ServicioPedidoImpl implements IServicioPedido {
 
 	public List<PedidoListadoDTO> listarPedidosDTO() {
 		return pedidoRepo.findByActivoTrue().stream()
-				.map(this::mapToPedidoListadoDTO) // este ya usa dtoConverter si lo cambiaste
+				.map(this::mapToPedidoListadoDTO) 
 				.collect(Collectors.toList());
 	}
 
 
 	@Override
 	public Optional<Pedido> aniadirComidas(String pedidoId, ComidaPK comidaPK, int cantidad, int total) {
-		return Optional.empty();
+		Optional<Pedido> pedidoOpt = pedidoRepo.findById(pedidoId);
+		Optional<Comida> comidaOpt = comidaRepo.findById(comidaPK);
+		
+		if (pedidoOpt.isPresent() && comidaOpt.isPresent()) {
+			
+			pedidoOpt.get().setCantidadFinal(total);
+			pedidoRepo.save(pedidoOpt.get());
+			itemPedidoRepo.save(ItemPedido.builder().pedido(pedidoOpt.get()).comida(comidaOpt.get()).cantidad(cantidad).build());
+
+		}
+		return pedidoOpt;
 	}
 
 	@Override
 	public boolean eliminarPedido(String id) {
+		boolean exito=false;
 		if (pedidoRepo.existsById(id)) {
 			pedidoRepo.deleteById(id);
-			return true;
-		} else {
-			return false;
-		}
+			exito=true;
+		} 
+		return exito;
+	}
+
+	@Override
+	public Optional<Pedido> encontrarPedidoActivoDeEseRestauranteYCorreo(String email) {
+		// TODO Auto-generated method stub
+		return pedidoRepo.encontrarPedidoActivoDeEseRestaurante(email);
 	}
 
 }

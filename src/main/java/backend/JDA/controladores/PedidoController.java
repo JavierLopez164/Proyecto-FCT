@@ -194,6 +194,15 @@ public class PedidoController {
             return ResponseEntity.status(404).body("Pedido no encontrado");
         }
     }
+    
+    @Operation(summary = "Encuentra el pedido activo de ese restaurante a ese cliente", description = "Devuelve todos los pedido registrado.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Encontrado pedido activo")
+    })
+    @GetMapping("/encontrarpedidoactivorestaurante")
+    public ResponseEntity<Pedido> encontrarPedidoActivoDeEseRestaurante(@RequestParam String email) {
+        return ResponseEntity.of(pedidoService.encontrarPedidoActivoDeEseRestauranteYCorreo(email));
+    }
 
 }
 
