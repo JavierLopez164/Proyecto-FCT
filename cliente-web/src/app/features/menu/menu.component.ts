@@ -115,7 +115,8 @@ export class MenuComponent implements OnInit {
     this.comentariosPorComida = {}
     this.mediaPuntuacion = {}
     this.puedeComentarPorComida = {}
-    this.estaEnElMismoRestaurante = evento.value == this.carrito.obtenerPedidoActual().restaurante
+    if(this.carrito.obtenerPedidoActual()!=null && this.carrito.obtenerPedidoActual()!=undefined)
+      this.estaEnElMismoRestaurante = evento.value == this.carrito.obtenerPedidoActual().restaurante
     this.cargarComidaPorRestaurante();
 
 
