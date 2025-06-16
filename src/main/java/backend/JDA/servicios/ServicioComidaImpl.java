@@ -14,6 +14,8 @@ import backend.JDA.modelo.ComidaPK;
 import backend.JDA.modelo.Foto;
 import backend.JDA.modelo.dto.ComidaGaleriaDto;
 import backend.JDA.repositorios.ComidaRepositorio;
+import backend.JDA.repositorios.ItemPedidoRepositorio;
+import jakarta.transaction.Transactional;
 
 @Service
 public class ServicioComidaImpl implements IServicioComida {
@@ -22,6 +24,10 @@ public class ServicioComidaImpl implements IServicioComida {
 	private ComidaRepositorio comidaDAO;
 	@Autowired 
 	private DtoConverter dtoConverter;
+	
+	@Autowired
+	private ItemPedidoRepositorio itemPedidoDAO;
+	
 	@Override
 	public boolean insert(Comida comida) {
 		// TODO Auto-generated method stub
@@ -54,16 +60,25 @@ public class ServicioComidaImpl implements IServicioComida {
 	}
 
 	@Override
+	@Transactional
 	public boolean delete(ComidaPK comidaPK) {
-		// TODO Auto-generated method stub
-		boolean exito = false;
+	    boolean exito = false;
 
-		if(comidaDAO.existsById(comidaPK)) {
-			comidaDAO.deleteById(comidaPK);
-			exito = true;
-		}
+	    if (comidaDAO.existsById(comidaPK)) {
+	        // Buscar la Comida
+	        Comida comida = comidaDAO.findById(comidaPK).orElse(null);
 
-		return exito;
+	        if (comida != null) {
+	            // Eliminar los ItemPedido asociados
+	        	itemPedidoDAO.deleteByComida(comida);
+
+	            // Eliminar la Comida
+	            comidaDAO.deleteById(comidaPK);
+	            exito = true;
+	        }
+	    }
+
+	    return exito;
 	}
 
 	@Override

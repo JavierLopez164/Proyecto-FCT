@@ -22,7 +22,7 @@ public class ItemPedido {
     @JsonIgnore
     private Pedido pedido;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumns({
             @JoinColumn(name = "nombre_comida", referencedColumnName = "nComida"),
             @JoinColumn(name = "restaurante_comida", referencedColumnName = "nRestaurante")
