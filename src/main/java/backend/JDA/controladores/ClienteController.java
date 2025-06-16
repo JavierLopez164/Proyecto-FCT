@@ -60,7 +60,7 @@ public class ClienteController {
 		String token;
 		Cliente copia;
 
-		if (c.isPresent() && passwordEncoder.matches(password, c.get().getContrasenia())) {
+		if (c.isPresent() && passwordEncoder.matches(password, c.get().getContrasenia()) && c.get().isActivo()) {
 			copia = c.get();
 
 			token = jwtAuthtenticationConfig.getJWTToken(c.get().getEmail(), c.get().getRol());
