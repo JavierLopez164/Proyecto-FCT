@@ -122,8 +122,6 @@ export class CestaComponent implements OnInit, AfterViewInit {
     }
 
 
-
-
   }
 
   obtenerPedidoActivoDeRestaurante() {
