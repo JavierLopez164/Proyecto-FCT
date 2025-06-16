@@ -1,5 +1,6 @@
 package backend.JDA.modelo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,7 @@ public class ItemPedido {
             @JoinColumn(name = "nombre_comida", referencedColumnName = "nComida"),
             @JoinColumn(name = "restaurante_comida", referencedColumnName = "nRestaurante")
     })
+    @JsonBackReference
     private Comida comida;
 
 

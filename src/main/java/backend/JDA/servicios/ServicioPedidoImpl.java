@@ -17,12 +17,14 @@ import backend.JDA.modelo.dto.TopComidaDTO;
 import backend.JDA.repositorios.ClienteRepositorio;
 import backend.JDA.repositorios.ComidaRepositorio;
 import backend.JDA.repositorios.ItemPedidoRepositorio;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import backend.JDA.repositorios.PedidoRepositorio;
 
 @Service
+@Transactional
 public class ServicioPedidoImpl implements IServicioPedido {
 
 	@Autowired
@@ -269,6 +271,7 @@ public class ServicioPedidoImpl implements IServicioPedido {
 		} 
 		return exito;
 	}
+
 
 	@Override
 	public Optional<Pedido> encontrarPedidoActivoDeEseRestauranteYCorreo(String email) {

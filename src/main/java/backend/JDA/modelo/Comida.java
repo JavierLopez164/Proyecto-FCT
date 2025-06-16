@@ -1,5 +1,8 @@
 package backend.JDA.modelo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -50,6 +53,10 @@ public class Comida implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "fotoId")
 	private Foto foto;
+
+	@Column(nullable = false)
+	private boolean ocultar;
+
 
 }
 

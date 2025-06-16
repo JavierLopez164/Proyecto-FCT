@@ -4,6 +4,7 @@ import java.util.List;
 
 import backend.JDA.modelo.dto.TopComidaDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -23,8 +24,12 @@ public interface ComidaRepositorio extends JpaRepository<Comida, ComidaPK> {
 	@Query("SELECT c FROM Comida c WHERE c.comidaPK.nRestaurante = ?1")
 
 	 List<Comida> obtenerComidasDeUnRestaurante(String restaurante);
-	
-	
+
+	@Modifying
+	@Query("UPDATE Comida c SET c.ocultar = NOT c.ocultar WHERE c.comidaPK = :pk")
+	void toggleOcultar(ComidaPK pk);
+
+
 	@Query("SELECT DISTINCT c.comidaPK.nRestaurante FROM Comida c ")
 	List<String>obtenerTodosLosRestaurantes();
 }

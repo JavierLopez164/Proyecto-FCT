@@ -46,7 +46,7 @@
 
     <div class="mt-6">
       <button (click)="finalizarPedido()" mat-flat-button color="primary"
-        class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 px-4 rounded-lg shadow transition" [disabled]="!estaEnElMismoRestaurante">
+        class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 px-4 rounded-lg shadow transition" >
         Hacer pedido
       </button>
     </div>
@@ -86,7 +86,7 @@
           <span>Total:</span>
           <span>{{ calcularTotal().toFixed(2) }} €</span>
         </div>
-        
+
         <div class="flex justify-between mt-6">
           <button mat-button (click)="mostrarStepper = false"
             class="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded">

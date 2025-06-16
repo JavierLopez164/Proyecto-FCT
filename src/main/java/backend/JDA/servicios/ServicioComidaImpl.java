@@ -119,6 +119,17 @@ public class ServicioComidaImpl implements IServicioComida {
 		return exito;
 	}
 
+	@Transactional
+	public boolean alternarOcultar(ComidaPK pk) {
+		Optional<Comida> comidaOpt = comidaDAO.findById(pk);
+		if (comidaOpt.isEmpty()) return false;
+
+		Comida comida = comidaOpt.get();
+		comida.setOcultar(!comida.isOcultar());  // alternar
+		comidaDAO.save(comida);
+		return true;
+	}
+
 	@Override
 	public List<Comida> obtenerComidasDeUnRestaurante(String restaurante) {
 		// TODO Auto-generated method stub

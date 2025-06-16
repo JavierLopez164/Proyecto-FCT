@@ -6,20 +6,13 @@ import java.util.Optional;
 import backend.JDA.modelo.*;
 import backend.JDA.modelo.dto.ComidaUpdateDto;
 import backend.JDA.servicios.IServicioCliente;
+import backend.JDA.servicios.IServicioPedido;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import backend.JDA.modelo.dto.ComidaGaleriaDto;
 import backend.JDA.servicios.IServicioComida;
@@ -38,6 +31,8 @@ public class ComidaController {
 
 	@Autowired
 	private IServicioCliente servicioCliente;
+	@Autowired
+	private IServicioPedido servicioPedido;
 
 	@PostMapping("/crear")
 	@Operation(
@@ -102,6 +97,17 @@ public class ComidaController {
 				? ResponseEntity.ok("Comida eliminada")
 				: ResponseEntity.status(HttpStatus.FORBIDDEN).body("No autorizado o datos inválidos");
 	}
+
+	@PutMapping("/comida/alternar-ocultar")
+	public ResponseEntity<String> alternarOcultarComida(@RequestBody ComidaPK pk) {
+		boolean resultado = servicioComida.alternarOcultar(pk);
+		if (resultado) {
+			return ResponseEntity.ok("Visibilidad de la comida actualizada correctamente.");
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Comida no encontrada.");
+		}
+	}
+
 
 	@GetMapping("/listarComidas")
 	@Operation(
