@@ -1,5 +1,8 @@
 package backend.JDA.modelo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,28 +14,49 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-
 @Entity
-public class Comida implements Serializable{
-	
+public class Comida implements Serializable {
+
 	@EqualsAndHashCode.Include
 	@EmbeddedId
-	//Nombre + restaurante
 	private ComidaPK comidaPK;
-	@Column(name = "descripcion", length = 40)
-	private String descripcion;
-	@Column(name = "precio")
-	private float precio;
-	@Column(name = "sabor")
+
+	@Column(length = 200)
+	private String description;
+
+	private int price;
+
+	@Column
+	private String category;
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "comida_attributes", joinColumns = {
+			@JoinColumn(name = "nombre", referencedColumnName = "nComida"),
+			@JoinColumn(name = "restaurante", referencedColumnName = "nRestaurante")
+	})
 	@Enumerated(EnumType.STRING)
-	private Sabor sabor;
-	@Column(name = "valoracion")
-	private int valoracion;
-	@Column(name = "alimentos")
-	@OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-	private List<Alimento> alimentos;
-	/*@JoinColumn(name = "foto")
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Foto foto;*/
+	@Column(name = "attribute")
+	private List<Sabor> attributes;
+
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "comida_features", joinColumns = {
+			@JoinColumn(name = "nombre", referencedColumnName = "nComida"),
+			@JoinColumn(name = "restaurante", referencedColumnName = "nRestaurante")
+	})
+	@Column(name = "feature")
+	private List<String> features;
+
+	@Column
+	private int preparationTime;
 	
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "fotoId")
+	private Foto foto;
+
+	@Column(nullable = false)
+	private boolean ocultar;
+
+
 }
+

@@ -1,5 +1,8 @@
 package backend.JDA.modelo;
 
+import java.time.LocalDate;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,13 +14,15 @@ import lombok.*;
 
 @Entity
 public class Foto {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
-	@Column(name = "foto_id")
-	private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer fotoId;
 
-	@Column(name = "url", nullable = false)
-	private String url;
+	@Column(name = "url")
+	private String imagenUrl;
+	
+	private LocalDate fecha;
+	
+	
 }

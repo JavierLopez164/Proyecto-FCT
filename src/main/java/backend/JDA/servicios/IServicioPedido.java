@@ -3,18 +3,27 @@ package backend.JDA.servicios;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Query;
+
+import backend.JDA.modelo.ComidaPK;
 import backend.JDA.modelo.Pedido;
+import backend.JDA.modelo.dto.PedidoCreadoDTO;
+import backend.JDA.modelo.dto.PedidoListadoDTO;
+import backend.JDA.modelo.dto.TopComidaDTO;
 
 public interface IServicioPedido {
-	
-	public boolean insert(Pedido pedido);
-	
-	public boolean update(Pedido pedido);
-	
-	public boolean delete(String id);
-	
-	public List<Pedido> findAll();
-	
-	public Optional<Pedido> findById(String id);
-	
+
+	PedidoCreadoDTO crearPedidoSimple(String email, String restaurante);
+	Optional<Pedido> añadirComida(String pedidoId, ComidaPK comidaPK);
+	Optional<Pedido> restarComida(String pedidoId, ComidaPK comidaPK);
+	Optional<Pedido> eliminarComida(String pedidoId, ComidaPK comidaPK);
+	List<TopComidaDTO> top5ComidasMasPedidas();
+	List<TopComidaDTO> top5ComidasPorRestaurante(String restaurante);
+	Optional<Pedido> cambiarEstadoPedido(String id, boolean nuevoEstado);
+	int pedidosUltimos7Dias();
+	List<PedidoListadoDTO> listarPedidosDTO();
+	Optional<Pedido> aniadirComidas(String pedidoId, ComidaPK comidaPK, int cantidad,int total);
+	boolean eliminarPedido(String id);
+	List<PedidoListadoDTO> ultimos5PedidosDeUsuario(String email);
+	Optional<Pedido>encontrarPedidoActivoDeEseRestauranteYCorreo(String email);
 }

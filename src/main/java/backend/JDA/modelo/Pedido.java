@@ -3,6 +3,8 @@ package backend.JDA.modelo;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -17,13 +19,23 @@ public class Pedido {
 	@Id
 	@Column(name = "pk_pedido")
 	private String id;
-	@JoinColumn(name = "cliente")
-	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@JoinColumn(name = "cliente", nullable = false)
 	private Cliente cliente;
-	@Column(name = "comidas")
-	@OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-	private List<Comida> comidas;
-	@Column(name = "cantidadFinal")
-	private float cantidadFinal;
+
+	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	private List<ItemPedido> items;
+
+	@Column(nullable = false)
+	private int cantidadFinal;
+
+	private boolean activo;
+	private LocalDate fechaCreacion;
+
+	private LocalDate fechaExpiracion;
+
+	private String restaurante;
+
 	
 }

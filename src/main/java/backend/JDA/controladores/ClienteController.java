@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,45 +63,19 @@ public class ClienteController {
 		if (c.isPresent() && passwordEncoder.matches(password, c.get().getContrasenia())) {
 			copia = c.get();
 
-			token = jwtAuthtenticationConfig.getJWTToken(c.get().getNombre(), c.get().getRol());
+			token = jwtAuthtenticationConfig.getJWTToken(c.get().getEmail(), c.get().getRol());
 			resJson.put("token", token);
 			resJson.put("mensaje", "Login exitoso");
 			resJson.put("nombre", copia.getNombre());
 			resJson.put("rol", copia.getRol().toString());
+			resJson.put("restaurant", copia.getRestaurante());
+			resJson.put("imageUrl", copia.getFotoPerfil().getImagenUrl());
 			return ResponseEntity.ok(resJson);
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
 					.body(Map.of("mensaje", "Email o contraseña incorrectos"));
 		}
 	}
-	
-	
-
-	@GetMapping("/acceso")
-	@Operation(summary = "Iniciar sesión con email y contraseña web")
-	@ApiResponse(responseCode = "200", description = "Acceso exitoso")
-	@ApiResponse(responseCode = "400", description = "Credenciales incorrectas")
-	public ResponseEntity<Map<String,String>> acceso(@RequestParam String email, @RequestParam String password) {
-
-		Optional<Cliente> c = servicioCliente.findById(email);
-		Map<String, String> resJson = new HashMap<>();
-		String token;
-
-		if (c.isPresent() && passwordEncoder.matches(password, c.get().getContrasenia())) {
-	
-
-			token = jwtAuthtenticationConfig.getJWTToken(c.get().getNombre(), c.get().getRol());
-			resJson.put("token", token);
-			resJson.put("mensaje", "Login exitoso");
-			return ResponseEntity.ok(resJson);
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(Map.of("mensaje", "Email o contraseña incorrectos"));
-		}
-	}
-	
-	
-	
 	
 	@PostMapping("/register")
 	@Operation(summary = "Crear un nuevo cliente registrado")
@@ -119,10 +94,16 @@ public class ClienteController {
 
 	@GetMapping("/consultar/{email}")
 	public ResponseEntity<Cliente> findById(@PathVariable String email){
+
 		Optional<Cliente> cliente = servicioCliente.findById(email);
 
 		return cliente.isPresent()?new ResponseEntity<>(cliente.get(),HttpStatus.OK):new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
 	
+	@PutMapping("/actualizar")
+	public ResponseEntity<Cliente> actualizarCliente(@RequestBody Cliente clm){
+		
+		return servicioCliente.actualizarCliente(clm)?new ResponseEntity<>(clm,HttpStatus.OK):new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }
 

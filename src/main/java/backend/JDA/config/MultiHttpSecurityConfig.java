@@ -17,38 +17,52 @@ public class MultiHttpSecurityConfig {
     private JWTAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
-     SecurityFilterChain configure(HttpSecurity http) throws Exception {
+    SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
-            .csrf((csrf) -> {
-					csrf.disable();
-			}) .cors(Customizer.withDefaults())
-           
-            .authorizeHttpRequests(authz -> authz
-                .requestMatchers(  "/api/clientes/login",
-                        "/api/clientes/register",
-                        "/api/comentarios/crear",
-                        "/api/comentarios/eliminar",
-                        "/api/comentarios/lista",
-                        "/api/clientes/acceso",
-                        "/api/comida/crear",
-                        "/api/comida/actualizar",
-                        "/api/comida/eliminar",
-                        "/api/comida/listarComidas",
-                        "/api/comida/listarComidaPorId",
-                        "/api/comida/cambiarDescripcion",
-                        "/api/comida/cambiarPrecio",
-                        "/api/comida/cambiarValoracion",
-                        "/api/comida/obtenerComidasDeUnRestaurante").permitAll()
-                .requestMatchers( "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html",
-                        "/swagger-resources/**",
-                        "/webjars/**").permitAll()
-                .requestMatchers("/api/clientes/consultar/**").hasRole("USER")).
-                
-          
-                addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
-            ;
+                .csrf(csrf -> csrf.disable())
+                .cors(Customizer.withDefaults())
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers(
+                                "/api/clientes/login",
+                                "/api/clientes/register",
+                                "/api/comentarios/lista",
+                                "api/comentarios/promedio"
+                        ).permitAll()
+
+                        // Rutas públicas
+                        .requestMatchers("/api/comida/**").permitAll()
+                        .requestMatchers("/api/pedidos/**").permitAll()
+                        .requestMatchers("/api/stripe/**").permitAll()
+                        
+                        // Swagger
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
+
+                        // Comentarios
+                        .requestMatchers("/api/comentarios/crear").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/comentarios/eliminar").hasRole("ADMIN")
+
+                        // Consultar clientes
+
+                        .requestMatchers("/api/clientes/consultar/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/clientes/actualizar").hasAnyRole("USER", "ADMIN")                   
+                        //fotos
+                        .requestMatchers("/api/fotos/**").permitAll()
+
+                        //comidas
+                        .requestMatchers("/api/comida/obtenerNombresRestaurante").hasRole("USER")
+                        .requestMatchers("/api/comida/obtenerComidasDeUnRestaurantes").hasRole("USER")
+                        //chatbot
+                        .requestMatchers("/api/chatbot/mandarMensaje").permitAll()
+                        // Cualquier otra petición requiere autenticación
+                        .anyRequest().authenticated()
+                )
+                .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

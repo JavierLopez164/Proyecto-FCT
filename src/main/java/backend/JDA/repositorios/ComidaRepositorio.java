@@ -2,26 +2,34 @@ package backend.JDA.repositorios;
 
 import java.util.List;
 
+import backend.JDA.modelo.dto.TopComidaDTO;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import backend.JDA.modelo.Comida;
 import backend.JDA.modelo.ComidaPK;
+import backend.JDA.modelo.Foto;
 
 @Repository
-public interface ComidaRepositorio extends CrudRepository<Comida, ComidaPK> {
-	
-	@Query("UPDATE Comida c SET c.descripcion = ?2 WHERE c.comidaPK = ?1")
-	public int actualizaDescripcion (ComidaPK id, String descripcion);
-	
-	@Query("UPDATE Comida c SET c.precio = ?2 WHERE c.comidaPK = ?1")
-	public int actualizarPrecio (ComidaPK id, float precio);
-	
-	@Query("UPDATE Comida c SET c.valoracion = ?2 WHERE c.comidaPK = ?1")
-	public int actualizarValoracion (ComidaPK id, int valoracion);
-	
+public interface ComidaRepositorio extends JpaRepository<Comida, ComidaPK> {
+
+	@Query("UPDATE Comida c SET c.description = ?2 WHERE c.comidaPK = ?1")
+	 int actualizaDescripcion (ComidaPK id, String description);
+
+	@Query("UPDATE Comida c SET c.price = ?2 WHERE c.comidaPK = ?1")
+	 int actualizarPrecio (ComidaPK id, float precio);
+
 	@Query("SELECT c FROM Comida c WHERE c.comidaPK.nRestaurante = ?1")
-	public List<Comida> obtenerComidasDeUnRestaurante(String restaurante);
-	
+
+	 List<Comida> obtenerComidasDeUnRestaurante(String restaurante);
+
+	@Modifying
+	@Query("UPDATE Comida c SET c.ocultar = NOT c.ocultar WHERE c.comidaPK = :pk")
+	void toggleOcultar(ComidaPK pk);
+
+
+	@Query("SELECT DISTINCT c.comidaPK.nRestaurante FROM Comida c ")
+	List<String>obtenerTodosLosRestaurantes();
 }

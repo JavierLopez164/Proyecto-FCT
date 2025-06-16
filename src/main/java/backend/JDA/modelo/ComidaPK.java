@@ -3,7 +3,9 @@ package backend.JDA.modelo;
 import java.io.Serializable;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.JoinColumn;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,12 +16,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-
 @Embeddable
-public class ComidaPK implements Serializable{
-	
-	private String nComida;
-	private String nRestaurante;
-	
+public class ComidaPK implements Serializable {
+    @Column(name = "nComida", nullable = false)
+    private String nComida;
+
+    @Column(name = "nRestaurante", nullable = false)
+    private String nRestaurante;
 }
