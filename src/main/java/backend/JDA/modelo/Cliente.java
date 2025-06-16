@@ -49,5 +49,11 @@ public class Cliente {
 	private Foto fotoPerfil=Foto.builder().fecha(LocalDate.now()).imagenUrl("/img/imagen_usuario_por_defecto.jpg").build();
 	 @Column(name = "restaurante", length = 50, nullable = true)
 	 private String restaurante;
+	 
+	 @Builder.Default
+	 private boolean activo = false;
+	 
+	 @Builder.Default
+	 private LocalDateTime fecha= LocalDateTime.now();
 
 }

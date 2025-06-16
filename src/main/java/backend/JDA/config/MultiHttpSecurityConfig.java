@@ -59,6 +59,8 @@ public class MultiHttpSecurityConfig {
                         .requestMatchers("/api/comida/obtenerComidasDeUnRestaurantes").hasRole("USER")
                         //chatbot
                         .requestMatchers("/api/chatbot/mandarMensaje").permitAll()
+                        //verificacion al crear un usuario
+                        .requestMatchers("api/verificacion/verificar").permitAll()
                         // Cualquier otra petición requiere autenticación
                         .anyRequest().authenticated()
                 )
