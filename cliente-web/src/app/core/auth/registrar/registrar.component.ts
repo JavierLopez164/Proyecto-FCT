@@ -41,7 +41,7 @@ export class RegistrarComponent {
         console.error('Error al registrar:', err)
       }
     });
- this.snackBar.open('Registro hecho con éxito', 'Cerrar', {
+ this.snackBar.open('Verifica tu email desde tu correo para iniciar Sesión', 'Cerrar', {
         duration: 3000
       });
 

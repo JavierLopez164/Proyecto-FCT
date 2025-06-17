@@ -33,7 +33,9 @@ export class AjusteComponent implements OnInit {
     rol:"",
     fechaCreacion:"",
     fotoPerfil:null,
-    restaurante:""
+    restaurante:"",
+    activo:false,
+    fecha:""
   };
   constructor(private perfilServicio: PerfilService, private snackBar: MatSnackBar, private http: HttpClient) { }
   ngOnInit(): void {
@@ -46,6 +48,8 @@ export class AjusteComponent implements OnInit {
         this.perfil.fechaCreacion=res.fechaCreacion;
         this.perfil.fotoPerfil=res.fotoPerfil;
         this.perfil.restaurante=res.restaurante;
+        this.perfil.activo=res.activo;
+        this.perfil.fecha=res.fecha;
       }
     )
   }
