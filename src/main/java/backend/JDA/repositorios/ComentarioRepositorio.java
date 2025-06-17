@@ -1,7 +1,7 @@
 package backend.JDA.repositorios;
 
 import backend.JDA.modelo.Comentario;
-
+import backend.JDA.modelo.Comida;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,6 +24,6 @@ public interface ComentarioRepositorio extends JpaRepository<Comentario, Long> {
 
     @Query("SELECT COUNT(ip) > 0 FROM Pedido p JOIN p.items ip WHERE p.cliente.email = :email AND ip.comida.comidaPK.nComida = :nombreComida AND ip.comida.comidaPK.nRestaurante = :restaurante")
     boolean clientePidioComida(String email, String nombreComida, String restaurante);
-
+	void deleteByComida(Comida comida);
 
 }
