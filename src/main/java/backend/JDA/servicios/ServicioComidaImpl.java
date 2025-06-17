@@ -13,6 +13,7 @@ import backend.JDA.modelo.Comida;
 import backend.JDA.modelo.ComidaPK;
 import backend.JDA.modelo.Foto;
 import backend.JDA.modelo.dto.ComidaGaleriaDto;
+import backend.JDA.repositorios.ComentarioRepositorio;
 import backend.JDA.repositorios.ComidaRepositorio;
 import backend.JDA.repositorios.ItemPedidoRepositorio;
 import jakarta.transaction.Transactional;
@@ -27,7 +28,7 @@ public class ServicioComidaImpl implements IServicioComida {
 	
 	@Autowired
 	private ItemPedidoRepositorio itemPedidoDAO;
-	
+	@Autowired private ComentarioRepositorio comentarioDao;
 	@Override
 	public boolean insert(Comida comida) {
 		// TODO Auto-generated method stub
@@ -71,7 +72,7 @@ public class ServicioComidaImpl implements IServicioComida {
 	        if (comida != null) {
 	            // Eliminar los ItemPedido asociados
 	        	itemPedidoDAO.deleteByComida(comida);
-
+	        	comentarioDao.deleteByComida(comida);
 	            // Eliminar la Comida
 	            comidaDAO.deleteById(comidaPK);
 	            exito = true;
