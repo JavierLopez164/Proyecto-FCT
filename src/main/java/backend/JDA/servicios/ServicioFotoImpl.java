@@ -41,8 +41,8 @@ public class ServicioFotoImpl implements IServicioFoto {
 	private DtoConverter dtoConverter;
 	@Autowired 
 	private ComidaRepositorio comidaDao;
-	private String cloudName="dmljwxole";
-	private String uploadPreset="ml_default";
+	private String cloudName="";
+	private String uploadPreset="";
 	private String url= "https://api.cloudinary.com/v1_1/" + cloudName + "/image/upload";
 
 
