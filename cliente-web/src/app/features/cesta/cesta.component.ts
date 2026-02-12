@@ -38,7 +38,7 @@ export class CestaComponent implements OnInit, AfterViewInit {
   }
   async ngAfterViewInit() {
 
-    const stripeInstance = await loadStripe('pk_test_51RRZ062cdmCzxJrf4ullXjgQ8CRmXXhGxDZ9rJTc1hmV2J91kzAGeBJBKzSdgKlzE6N7BBMQJN6IX98kwhXoyT0E00DoxIWgOx');
+    const stripeInstance = await loadStripe('');
 
     if (!stripeInstance) {
       console.error('No se pudo cargar Stripe.');
